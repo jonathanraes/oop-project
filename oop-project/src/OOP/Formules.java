@@ -1,194 +1,217 @@
 package OOP;
 
-	public class Formules {
-		public double AVERAGE(){
-			double avg = 0;
-			return avg;
+public class Formules {
+
+	public double AVERAGE(double[] array){
+		double res = 0;
+		for(double value: array){
+			res =+ value;
 		}
-		public int COUNT(){
-			int aantal = 0;
-			return aantal;
-		}
-		public int COUNTA(){
-			int aantal = 0;
-			return aantal;
-		}
-		public int COUNTIF(String criteria){
-			int aantal = 0;
-			//Evalueer en werk de criteria uit
-			return aantal;
-		}
-		public int INT(double){
-			
-		}
-	    public double MIN(double a, double b){
-	        // minimale waarde uitzoeken
-	        double minimum = 0;
+		return res;
+	}
+
+	public int COUNT(){
+		int aantal = 0;
+		return aantal;
+	}
+
+	public int COUNTA(){
+		int aantal = 0;
+		return aantal;
+	}
+
+	public int COUNTIF(String criteria){
+		int aantal = 0;
+		//Evalueer en werk de criteria uit
+		return aantal;
+	}
+
+	public int INT(double d){
+
+		return 0;
+	}
+
+	/*public double MIN(double a, double b){
+	         // minimale waarde uitzoeken
+	         double minimum = 0;
 	         if (a>b){
-	             minimum = b;
+	         minimum = b;
 	         }
 	         if (a<b){
-	             minimum = a;
+	         minimum = a;
 	         }
-	        return minimum;
-	    }
-	    
-	    public double MIN(double a,double b,double c){
-	        // minimale waarde uitzoeken
-	        double minimum = 0;
+	         return minimum;
+	         }
+
+		public double MIN(double a,double b,double c){
+	         // minimale waarde uitzoeken
+	         double minimum = 0;
 	         if (a>b && c>b){
-	             minimum = b;
+	         minimum = b;
 	         }
 	         if (a>c && b>c){
-	             minimum = c;
+	         minimum = c;
 	         }
 	         if(c>a && b>a){
-	             minimum = a;
+	         minimum = a;
 	         }
-	        return minimum;
-	    }
-	    
-	    public int MOD(int number,int divisor){
-	        int modulus = 0;
-	        //the MOD function only gives you the remainder as an answer MOD(5,2)=1
-	        return modulus;
-	    }
-	    
-	    public boolean NOT(boolean x){
-	        /**
-	         * geeft de inverse waarde terug true wordt false
-	         *    true wordt omgezet in false
-	         *    false wordt omgezet in true
-	         */
-	        boolean temp=false;
-	        if(x=true){
-	            temp=false;
-	        }else{
-	            temp=true;
-	        }
-	        
-	        return temp;
-	    }
-	    
-	    public boolean OR(){
-	        /**
-	         * er mogen meerdere parameters worden gegven
-	         *    Er wordt een true geretourneerd als er tenminste 1 parametere een 'true oplevert
-	         */    
-	        boolean waarde=false;
-	        
-	        
-	        return waarde;
-	    }
-	    
-	    
-	    
-	    public double POWER(double num, double p){
-	        // Deze methode geeft berekent de waarde van de 1ste parameter tot de macht van de 2de parameter
-	        
-	        return Math.pow(num, p);
-	    }
-	    
-	    
-	    public double PRODUCT(double a, double b){
-	        // Product van de twee parameters
-	        double ans=0;
-	        
-	        ans = a * b;
-	        
-	        return ans;
-	    }
-	    
-	    public String PROPER(String upper){    
-	        /**
-	         * als een string uit alleen hoofdletters kan je met deze methode
-	         * tot de normale vorm brengen met de eerste letter als hoofdletter en de rest met kleine letters
-	         */
-	        String result = null;
-	        
-	        return result;
-	    }
-	    
-	    public double ROUNDDOWN(double num,int aantal){
-	        /**
-	         * deze methode rondt het getal af naar beneden.
-	         * De tweede parameter geeft aan hoeveel cijfers na de komma mogen blijven en de rest van de cijfers worden weg gelaten.
-	         * De nieuwe getal wordt geretourneerd
-	         */
-	        double ans=0;
-	        
-	        return ans;
-	    }
-	    
-	    public double ROUNDUP(double num,int aantal){
-	        /**
-	         * Deze methode rondt het getal af naar boven.
-	         * De tweede parameter geeft aan hoeveel cijfers na de komma mogen blijven en de rest van de cijfers worden weg gelaten.
-	         * Er wordt dan dan 1 opgeteld bij de nieuwe getal en het wordt geretourneerd
-	         */
-	        double ans=0;
-	        
-	        return ans;
-	    }
-	    
-	    
-	    
-	    public int SIGN(double number){
-	        /**
-	         * Het doel van deze methode is om te kijken of de parameter negatief of positief is.
-	         *    Als het getal een positief is, wordt er een 1 geretourneerd
-	         *    Als het getal een negatief is, wordt er een -1 geretourneerd
-	         *    Als het getal een 0 is, wordt er een 0 geretourneerd
-	         */
-	        int result=0;
-	    
-	        if(number>0){
-	            result=1;
-	        }
-	        if(number<0){
-	            result=-1;
-	        }
-	        
-	        return result;
-	    }
-	    
-	    public double SQRT(double number){
-	        /**
-	         * Deze methode geeft de wortel terug van de parameter
-	         *
-	         */
-	        return Math.sqrt(number);
-	    }
-	    
-	    public double SUM(double a,double b){
-	        /**
-	         * retourneert som van parameters
-	         */
-	        double ans=0;
-	        
-	        ans = a+b;
-	        
-	        return ans;        
-	    }
+	         return minimum;
+	         }*/
 
-	    public double SUM(double a,double b,double c){
-	        /**
-	         * retourneert som van parameters
-	         */
-	        double ans=0;
-	        
-	        ans = a+b+c;
-	        
-	        return ans;
-	        }
-	    
-	    
-	    public double SUMIF(){
-	        /**
-	         *
-	         */
-	        double ans=0;
-	        return ans;
-	    }
-	    
+	public double MIN(double[] array){
+		// minimale waarde uitzoeken
+		double minimum = Double.MAX_VALUE;
+		for(double value: array){
+			if(value < minimum){
+				minimum = value;
+			}
+		}
+		return minimum;
 	}
+
+	public int MOD(int number,int divisor){
+		//the MOD function only gives you the remainder as an answer MOD(5,2)=1
+		return number % divisor;
+	}
+
+	public boolean NOT(boolean x){
+		/**
+		 * geeft de inverse waarde terug true wordt false
+		 *    true wordt omgezet in false
+		 *    false wordt omgezet in true
+		 */
+		boolean temp=false;
+		if(x=true){
+			temp=false;
+		}else{
+			temp=true;
+		}
+
+		return temp;
+	}
+
+	public boolean OR(boolean[] array){
+		/**
+		 * er mogen meerdere parameters worden gegven
+		 *    Er wordt een true geretourneerd als er tenminste 1 parametere een 'true oplevert
+		 */    
+		for(boolean b: array){
+			if(b == true){
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+
+	public double POWER(double num, double p){
+		// Deze methode geeft berekent de waarde van de 1ste parameter tot de macht van de 2de parameter
+
+		return Math.pow(num, p);
+	}
+
+
+	public double PRODUCT(double a, double b){
+		// Product van de twee parameters
+		return a * b;
+	}
+
+	public static String PROPER(String upper){    
+		/**
+		 * als een string uit alleen hoofdletters kan je met deze methode
+		 * tot de normale vorm brengen met de eerste letter als hoofdletter en de rest met kleine letters
+		 */
+		//Deze implementatie werkt alleen voor een enkele zin waarvan de eerste char de eerste letter van de zin is.
+		String result = upper.toLowerCase();
+		String eersteletter = "" + result.charAt(0);
+		result = result.substring(1);
+		eersteletter = eersteletter.toUpperCase();
+		result = eersteletter + result;
+		return result;
+	}
+
+	public double ROUNDDOWN(double num,int aantal){
+		/**
+		 * deze methode rondt het getal af naar beneden.
+		 * De tweede parameter geeft aan hoeveel cijfers na de komma mogen blijven en de rest van de cijfers worden weg gelaten.
+		 * De nieuwe getal wordt geretourneerd
+		 */
+		double ans=0;
+		
+		return ans;
+	}
+
+	public double ROUNDUP(double num,int aantal){
+		/**
+		 * Deze methode rondt het getal af naar boven.
+		 * De tweede parameter geeft aan hoeveel cijfers na de komma mogen blijven en de rest van de cijfers worden weg gelaten.
+		 * Er wordt dan dan 1 opgeteld bij de nieuwe getal en het wordt geretourneerd
+		 */
+		double ans=0;
+
+		return ans;
+	}
+
+
+
+	public int SIGN(double number){
+		/**
+		 * Het doel van deze methode is om te kijken of de parameter negatief of positief is.
+		 *    Als het getal een positief is, wordt er een 1 geretourneerd
+		 *    Als het getal een negatief is, wordt er een -1 geretourneerd
+		 *    Als het getal een 0 is, wordt er een 0 geretourneerd
+		 */
+		int result=0;
+
+		if(number>0){
+			result=1;
+		}
+		if(number<0){
+			result=-1;
+		}
+
+		return result;
+	}
+
+	public double SQRT(double number){
+		/**
+		 * Deze methode geeft de wortel terug van de parameter
+		 *
+		 */
+		return Math.sqrt(number);
+	}
+
+	public double SUM(double a,double b){
+		//met array?
+		/**
+		 * retourneert som van parameters
+		 */
+		double ans=0;
+
+		ans = a+b;
+
+		return ans;        
+	}
+
+	public double SUM(double a,double b,double c){
+		/**
+		 * retourneert som van parameters
+		 */
+		double ans=0;
+
+		ans = a+b+c;
+
+		return ans;
+	}
+
+
+	public double SUMIF(){
+		/**
+		 *
+		 */
+		double ans=0;
+		return ans;
+	}
+
+}
