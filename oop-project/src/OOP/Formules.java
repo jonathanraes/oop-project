@@ -7,6 +7,7 @@ public class Formules {
 		for(double value: array){
 			res =+ value;
 		}
+		res = res / array.length;
 		return res;
 	}
 
