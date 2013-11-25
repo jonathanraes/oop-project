@@ -1,6 +1,26 @@
 package OOP;
 
 	public class Formules {
+		public double AVERAGE(){
+			double avg = 0;
+			return avg;
+		}
+		public int COUNT(){
+			int aantal = 0;
+			return aantal;
+		}
+		public int COUNTA(){
+			int aantal = 0;
+			return aantal;
+		}
+		public int COUNTIF(String criteria){
+			int aantal = 0;
+			//Evalueer en werk de criteria uit
+			return aantal;
+		}
+		public int INT(double){
+			
+		}
 	    public double MIN(double a, double b){
 	        // minimale waarde uitzoeken
 	        double minimum = 0;
@@ -172,4 +192,3 @@ package OOP;
 	    }
 	    
 	}
-}
