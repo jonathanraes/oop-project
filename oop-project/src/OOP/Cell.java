@@ -1,6 +1,12 @@
 package OOP;
 
-
+/**
+ * The Class Cell represents a Cell object.
+ * It contains an integer representing the row number, and one representing the column number.
+ * It also contains a String holding the content
+ * @author Jonathan
+ *
+ */
 public class Cell {
 	private int row;
 	private int col;
@@ -9,10 +15,10 @@ public class Cell {
 
 	
 	/**
-	 * Constructor.
-	 * @param row
-	 * @param col
-	 * @param content
+	 * Constructor for the Cell.
+	 * @param row int - row number
+	 * @param col int - column number
+	 * @param content String - contents 
 	 */
 	public Cell(int row, int col, String content){
 		setRow(row);
@@ -20,7 +26,7 @@ public class Cell {
 		setContent(content);
 	}
 	/**
-	 * This methode returns the private row.
+	 * This method returns the private row.
 	 * @return int row
 	 */
 	public int getRow(){
@@ -28,7 +34,7 @@ public class Cell {
 	}
 	
 	/**
-	 * This methode returns the private col.
+	 * This method returns the private col.
 	 * @return int col
 	 */
 	public int getCol(){
@@ -36,7 +42,7 @@ public class Cell {
 	}
 	
 	/**
-	 * This methode returns the private content of the cell
+	 * This method returns the private content of the cell
 	 * @return String content
 	 */
 	public String getContent(){
@@ -44,14 +50,14 @@ public class Cell {
 	}
 	
 	/**
-	 * This methode sets the content of Cell this.
+	 * This method sets the content of Cell this.
 	 * @param String content
 	 */
 	public void setContent(String content){
 		this.content = content;
 	}
 	/**
-	 * This methode sets the value of row of Cell this.
+	 * This method sets the value of row of Cell this.
 	 * @param int row
 	 */
 	public void setRow(int row){
@@ -67,17 +73,21 @@ public class Cell {
 	}
 	
 	/**
-	 * This methode makes a String representation of the Cell this.
-	 * @return String
+	 * This method makes a String representation of the Cell 'this'.
+	 * @return String - String representation of the Cell.
 	 */
 	public String toString(){
 		return "Rij: " + row + "\nKolom: " + col + "\nContents: " + content;
 	}
 
+	/**
+	 * The equals method checks if the Cell is the same as an other Cell by checking if the cell contents match
+	 * @param Object other - The cell that 'this' is compared to
+	 */
 	public boolean equals(Object other){
 		if(other instanceof Cell){
 			Cell that = (Cell) other;
-			if(this.row == that.row && this.col == that.col && this.content.equals(that.content)){
+			if(this.content.equals(that.content)){
 				return true;
 			}
 		}
