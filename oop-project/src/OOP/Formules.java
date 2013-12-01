@@ -1,8 +1,11 @@
 package OOP;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class Formules {
 
-	public double AVERAGE(double[] array){
+	public static double AVERAGE(double[] array){
 		double res = 0;
 		for(double value: array){
 			res =+ value;
@@ -11,25 +14,25 @@ public class Formules {
 		return res;
 	}
 
-	public int COUNT(){
+	public static int COUNT(){
 		int aantal = 0;
 		return aantal;
 	}
 
-	public int COUNTA(){
+	public static int COUNTA(){
 		int aantal = 0;
 		return aantal;
 	}
 
-	public int COUNTIF(String criteria){
+	public static int COUNTIF(String criteria){
 		int aantal = 0;
 		//Evalueer en werk de criteria uit
 		return aantal;
 	}
 
-	public int INT(double d){
+	public static double INT(double d){
 
-		return 0;
+		return Math.round(d);
 	}
 
 	/*public double MIN(double a, double b){
@@ -59,7 +62,7 @@ public class Formules {
 	         return minimum;
 	         }*/
 
-	public double MIN(double[] array){
+	public static double MIN(double[] array){
 		// minimale waarde uitzoeken
 		double minimum = Double.MAX_VALUE;
 		for(double value: array){
@@ -70,28 +73,26 @@ public class Formules {
 		return minimum;
 	}
 
-	public int MOD(int number,int divisor){
+	public static int MOD(int number,int divisor){
 		//the MOD function only gives you the remainder as an answer MOD(5,2)=1
 		return number % divisor;
 	}
 
-	public boolean NOT(boolean x){
+	public static boolean NOT(boolean x){
 		/**
 		 * geeft de inverse waarde terug true wordt false
 		 *    true wordt omgezet in false
 		 *    false wordt omgezet in true
 		 */
-		boolean temp=false;
-		if(x=true){
-			temp=false;
-		}else{
-			temp=true;
+		if(x == true){
+			return false;
 		}
-
-		return temp;
+		else{
+			return true;
+		}
 	}
 
-	public boolean OR(boolean[] array){
+	public static boolean OR(boolean[] array){
 		/**
 		 * er mogen meerdere parameters worden gegven
 		 *    Er wordt een true geretourneerd als er tenminste 1 parametere een 'true oplevert
@@ -104,16 +105,13 @@ public class Formules {
 		return false;
 	}
 
-
-
-	public double POWER(double num, double p){
+	public static double POWER(double num, double p){
 		// Deze methode geeft berekent de waarde van de 1ste parameter tot de macht van de 2de parameter
 
 		return Math.pow(num, p);
 	}
 
-
-	public double PRODUCT(double a, double b){
+	public static double PRODUCT(double a, double b){
 		// Product van de twee parameters
 		return a * b;
 	}
@@ -132,29 +130,26 @@ public class Formules {
 		return result;
 	}
 
-	public double ROUNDDOWN(double num,int aantal){
+	public static double ROUNDDOWN(double num,int aantal){
 		/**
 		 * deze methode rondt het getal af naar beneden.
 		 * De tweede parameter geeft aan hoeveel cijfers na de komma mogen blijven en de rest van de cijfers worden weg gelaten.
 		 * De nieuwe getal wordt geretourneerd
 		 */
-		double ans=0;
-		
-		return ans;
+		BigDecimal b = new BigDecimal(num).setScale(aantal, RoundingMode.DOWN);
+		double res = b.doubleValue();		
+		return res;
 	}
 
-	public double ROUNDUP(double num,int aantal){
+	public static double ROUNDUP(double num,int aantal){
 		/**
 		 * Deze methode rondt het getal af naar boven.
 		 * De tweede parameter geeft aan hoeveel cijfers na de komma mogen blijven en de rest van de cijfers worden weg gelaten.
-		 * Er wordt dan dan 1 opgeteld bij de nieuwe getal en het wordt geretourneerd
 		 */
-		double ans=0;
-
-		return ans;
+		BigDecimal b = new BigDecimal(num).setScale(aantal, RoundingMode.UP);
+		double res = b.doubleValue();
+		return res;
 	}
-
-
 
 	public int SIGN(double number){
 		/**
