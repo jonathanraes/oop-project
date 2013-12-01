@@ -2,6 +2,7 @@ package OOP;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Observable;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -11,11 +12,18 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.w3c.dom.*;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-public class Spreadsheet {
-	
+/**
+ * Spreadsheet is the Class that holds all the Cells in an ArrayList.
+ * It is the model class and handles the reading and writing of the xml files.
+ */
+public class Spreadsheet extends Observable{
 	
 	private static ArrayList<Cell> Spreadsheet;
 
@@ -29,8 +37,7 @@ public class Spreadsheet {
 	/**
 	 * This method checks if the Object is a Cell object. If this is true it
 	 * will add the cell to the ArrayList.
-	 * @param Object Cell
-	 * 
+	 * @param Object Cell 
 	 */
 	public void add(Object cell) {
 		if (cell instanceof Cell) {
@@ -42,7 +49,6 @@ public class Spreadsheet {
 
 	/**
 	 * This method will return the Cell object that is on index i.
-	 * 
 	 * @param int index
 	 * @return Cell on index
 	 */
@@ -51,7 +57,7 @@ public class Spreadsheet {
 	}
 	
 	/**
-	 * This methode returns the size of this
+	 * This method returns the size of this
 	 * @return int size
 	 */
 	public int size(){
@@ -59,12 +65,11 @@ public class Spreadsheet {
 	}
 
 	/**
-	 * Reads the contents of the xml file and creates a static ArrayList of it
-	 * @param String of the filename
+	 * Reads the contents of the xml file and creates Cells which it puts in the ArrayList
+	 * @param String - the filename
 	 * @return Spreadsheet
 	 */
-	public static Spreadsheet readXML(String filename){
-		
+	public static Spreadsheet readXML(String filename) {
 		Spreadsheet readSheet = new Spreadsheet();
 		try {
 			// Maakt de Parser aan.
@@ -155,7 +160,7 @@ public class Spreadsheet {
 			System.out.println("De file is geschreven.");
 			
 		}catch(Exception e){
-			// TO-DO: precieze exception/ per exception apparte prints.
+			// TODO: precieze exception/ per exception apparte prints.
 			System.out.println("Foutmelding in writeXML");
 		}
 	}
