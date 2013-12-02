@@ -2,6 +2,8 @@ package Gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.AbstractListModel;
 import javax.swing.JFrame;
@@ -14,14 +16,16 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListModel;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
-public class View extends JFrame {
+public class View extends JFrame{
 	private JMenuBar menubar;
 	private JPanel panel;
 	private JTable table;
 	private JTableHeader header;
 	private JScrollPane pane;
+	DefaultTableModel model;
 	
 	public View(){
 		final String headers[] = new String[100];
@@ -32,14 +36,13 @@ public class View extends JFrame {
 		createPanel();
 		createPane();
 		createMenu();
-		setVisible(true);
+		
 		ListModel lm = new AbstractListModel() {
 			String[] headerf = headers;
-
 			public int getSize() {
 				return headers.length;
 			}
-
+			
 			public Object getElementAt(int index) {
 				return headers[index];
 			}
@@ -47,9 +50,13 @@ public class View extends JFrame {
 		JList rowHeader = new JList(lm);
 		rowHeader.setFixedCellWidth(30);
 		rowHeader.setFixedCellHeight(16);		
-	    rowHeader.setCellRenderer(new RowHeaderRenderer(table));
-	    pane.setRowHeaderView(rowHeader);
-	    getContentPane().add(pane, BorderLayout.CENTER);
+		rowHeader.setCellRenderer(new RowHeaderRenderer(table));
+		pane.setRowHeaderView(rowHeader);
+		getContentPane().add(pane, BorderLayout.CENTER);
+		
+		setVisible(true);	//Dit moet aan het eind blijven!!!
+	
+
 	}
 
 	public void createPanel(){
@@ -60,6 +67,27 @@ public class View extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
+	public void createTable(){
+		model = new DefaultTableModel();
+		table = new JTable(100,100);
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+	    table.setRowSelectionAllowed(false);
+	    table.setCellSelectionEnabled(true);
+	}
+	
+	public void createPane(){
+		createTable();
+		createHeader();
+		pane = new JScrollPane(table, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		panel.add(pane);
+	}
+	
+	public void createHeader(){
+		header = table.getTableHeader();
+		header.setOpaque(true);
+		header.setBackground(Color.yellow);
+	}
+
 	public void createMenu(){
 		//Create menubar
 		menubar = new JMenuBar();
@@ -88,7 +116,7 @@ public class View extends JFrame {
 		fileMenu.add(save);
 		fileMenu.add(close);
 		fileMenu.add(exit);
-		
+
 		editMenu.add(cut);
 		editMenu.add(copy);
 		editMenu.add(paste);
@@ -96,24 +124,8 @@ public class View extends JFrame {
 		editMenu.add(find);
 		editMenu.add(deletecontents);
 		editMenu.add(deletecells);	
+
 	}
-	
-	public void createTable(){
-		table = new JTable(100,100);
-		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		
-	}
-	
-	public void createPane(){
-		createTable();
-		createHeader();
-		pane = new JScrollPane(table, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		panel.add(pane);
-	}
-	
-	public void createHeader(){
-		header = table.getTableHeader();
-		header.setOpaque(true);
-		header.setBackground(Color.yellow);
-	}
+
+
 }
