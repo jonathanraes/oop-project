@@ -2,38 +2,63 @@ package Gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+
+import javax.swing.AbstractListModel;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.table.JTableHeader;
 
 public class View extends JFrame {
-	JMenuBar menubar;
-	JPanel panel;
-	JTable table;
-	JScrollPane scrollpane;
+	private JMenuBar menubar;
+	private JPanel panel;
+	private JTable table;
+	private JTableHeader header;
+	private JScrollPane pane;
+	
 	public View(){
-		panel = new JPanel();
-		JTable table = new JTable(100,100);
-		JTableHeader header = table.getTableHeader();
-		header.setBackground(Color.yellow);
-		JScrollPane pane = new JScrollPane(table, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		panel.setLayout(new BorderLayout());
-		panel.add(pane);
-		add(panel);
-		setSize(500,500);
-		createMenu();
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setVisible(true);
+		final String headers[] = new String[100];
 		
+		for(int i = 0; i < 100; i++){
+			headers[i] = "" + (i+1);
+		}
+		createPanel();
+		createPane();
+		createMenu();
+		setVisible(true);
+		ListModel lm = new AbstractListModel() {
+			String[] headerf = headers;
+
+			public int getSize() {
+				return headers.length;
+			}
+
+			public Object getElementAt(int index) {
+				return headers[index];
+			}
+		};
+		JList rowHeader = new JList(lm);
+		rowHeader.setFixedCellWidth(30);
+		rowHeader.setFixedCellHeight(16);		
+	    rowHeader.setCellRenderer(new RowHeaderRenderer(table));
+	    pane.setRowHeaderView(rowHeader);
+	    getContentPane().add(pane, BorderLayout.CENTER);
 	}
 
+	public void createPanel(){
+		panel = new JPanel();
+		panel.setLayout(new BorderLayout());
+		add(panel);
+		setSize(500,500);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
 	
 	public void createMenu(){
 		//Create menubar
@@ -43,7 +68,6 @@ public class View extends JFrame {
 	    JMenu editMenu = new JMenu("Edit");
 	    menubar.add(fileMenu);
 	    menubar.add(editMenu);
-		add(panel);
 		//menuitems
 		JMenuItem newfile = new JMenuItem("New");
 	    JMenuItem open = new JMenuItem("Open");
@@ -71,9 +95,25 @@ public class View extends JFrame {
 		editMenu.add(selectall);
 		editMenu.add(find);
 		editMenu.add(deletecontents);
-		editMenu.add(deletecells);
-		
+		editMenu.add(deletecells);	
+	}
+	
+	public void createTable(){
+		table = new JTable(100,100);
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
 	}
-
+	
+	public void createPane(){
+		createTable();
+		createHeader();
+		pane = new JScrollPane(table, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		panel.add(pane);
+	}
+	
+	public void createHeader(){
+		header = table.getTableHeader();
+		header.setOpaque(true);
+		header.setBackground(Color.yellow);
+	}
 }
