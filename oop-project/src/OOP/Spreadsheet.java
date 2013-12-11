@@ -164,5 +164,9 @@ public class Spreadsheet extends Observable{
 			System.out.println("Foutmelding in writeXML");
 		}
 	}
+	
+	public ArrayList<Cell> getCells(){
+		return Spreadsheet;
+	}
 
 }

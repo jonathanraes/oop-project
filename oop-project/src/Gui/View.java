@@ -8,6 +8,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JMenu;
@@ -22,6 +23,7 @@ import javax.swing.ListModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
 
 import Controller.ColorEditor;
 import Controller.Controller;
@@ -35,7 +37,7 @@ public class View extends JFrame{
 	private JTable table;
 	private JTableHeader header;
 	private JScrollPane pane;
-	DefaultTableModel model;
+	private DefaultTableModel model;
 	JTextPane textpane;
 	JColorChooser colorChooser;
 	JDialog dialog;
@@ -71,25 +73,25 @@ public class View extends JFrame{
 	public void createTopPanel(){
 		topPanel = new JPanel();
 		JButton colorbutton = new JButton("Set Color");
-		JButton addRows = new JButton("+10 Rows");
-		JButton addColumns = new JButton("+10 Columns");
+//		JButton addRows = new JButton("+10 Rows");
+//		JButton addColumns = new JButton("+10 Columns");
 				
 		textpane = new JTextPane();
 		JTextField f = new JTextField(30);
 		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
 		
-		addRows.addActionListener(controller);
-		addColumns.addActionListener(controller);
+//		addRows.addActionListener(controller);
+//		addColumns.addActionListener(controller);
 		colorbutton.addActionListener(colorEditor);
 		colorbutton.setActionCommand("edit");
 		colorbutton.setBorderPainted(false);
-		addRows.setBorderPainted(false);
-		addColumns.setBorderPainted(false);
+//		addRows.setBorderPainted(false);
+//		addColumns.setBorderPainted(false);
 		
 		topPanel.add(f);
 		topPanel.add(colorbutton);
-		topPanel.add(addRows);
-		topPanel.add(addColumns);
+//		topPanel.add(addRows);
+//		topPanel.add(addColumns);
 		add(topPanel, BorderLayout.NORTH);
 	}
 	
@@ -100,14 +102,17 @@ public class View extends JFrame{
 	public void createTable(){
 		tablePanel = new JPanel();
 		tablePanel.setLayout(new BorderLayout());
-		model = new DefaultTableModel(10,10);
-		
-		table = new JTable(model);
-		table.setAutoCreateColumnsFromModel(true);
+		model = new DefaultTableModel(10,10000);
+		table = new JTable(10,10);
+		table.setAutoCreateColumnsFromModel(false);
+		table.setModel(model);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 	    table.setRowSelectionAllowed(false);
 	    table.setCellSelectionEnabled(true);
+	    table.setColumnSelectionAllowed(true);
 	    add(tablePanel);
+	    
+	    table.addKeyListener(controller);
 	}
 	
 	/**
@@ -172,28 +177,28 @@ public class View extends JFrame{
 		editMenu.add(changecolor);
 		
 		//TODO add actionlisteners to all the menu items
+		open.addActionListener(controller);
 	}
 	
 	/**
-	 * add10Columns updates the table's model to add 10 extra columns
+	 * addColumns adds a new column object to the JTable passing in the table's current column as parameter to set the header correctly
 	 */
-	public void add10Columns(){
-		model.setColumnCount(model.getColumnCount() + 10);
-		
+	public void addColumns(){
+		table.addColumn(new TableColumn(table.getColumnCount()));
 	}
 	
 	/**
-	 * add10Rows updates the table's model to add 10 extra rows
+	 * addRows updates the table's model to add an extra row
 	 */
-	public void add10Rows(){
-		model.setRowCount(model.getRowCount() + 10);
+	public void addRows(){
+		model.setRowCount(model.getRowCount() + 1);
 	}
 	
 	/**
 	 * createRowHeader creates a Row Header using an anonymous Abstract List Model and an array of strings representing the line numbers.
 	 */
 	public void createRowHeader(){
-		for(int i = 0; i < model.getColumnCount(); i++){
+		for(int i = 0; i < model.getRowCount(); i++){
 			headers[i] = "" + (i+1);
 		}
 		
@@ -221,9 +226,17 @@ public class View extends JFrame{
 	 * It assumes an addition of 10 rows and adds 10 line numbers to the row header.
 	 */
 	public void updateRowHeader(){
-		for(int i = model.getRowCount(); i < model.getRowCount()+10; i++){
+		for(int i = model.getRowCount(); i < model.getRowCount()+1; i++){
 			headers[i] = "" + (i+1);
 		}
 		rowHeader.repaint();
+	}
+	
+	public void setCell(int row, int col, String value){
+		model.setValueAt(value, row, col);
+	}
+	
+	public JTable getTable(){
+		return table;
 	}
 }
