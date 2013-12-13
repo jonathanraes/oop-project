@@ -2,6 +2,9 @@ package Gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.AbstractListModel;
 import javax.swing.BoxLayout;
@@ -45,6 +48,8 @@ public class View extends JFrame{
 	ColorEditor colorEditor;
 	final String headers[];
 	JList rowHeader;
+	JFrame fileChooserFrame;
+	final JFileChooser fileChooser = new JFileChooser();
 	
 	public View(Spreadsheet spreadsheet){
 		controller = new Controller(this, spreadsheet);
@@ -63,6 +68,7 @@ public class View extends JFrame{
 		setSize(500,500);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);	//Dit moet aan het eind blijven!!!
+		
 	}
 	
 	/**
@@ -102,16 +108,17 @@ public class View extends JFrame{
 	public void createTable(){
 		tablePanel = new JPanel();
 		tablePanel.setLayout(new BorderLayout());
-		model = new DefaultTableModel(10,10000);
-		table = new JTable(10,10);
+		model = new DefaultTableModel(15,10000);
+		table = new JTable(1,5);
 		table.setAutoCreateColumnsFromModel(false);
+		table.addHierarchyBoundsListener(controller);
 		table.setModel(model);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 	    table.setRowSelectionAllowed(false);
 	    table.setCellSelectionEnabled(true);
 	    table.setColumnSelectionAllowed(true);
 	    add(tablePanel);
-	    
+	    	    
 	    table.addKeyListener(controller);
 	}
 	
@@ -177,6 +184,7 @@ public class View extends JFrame{
 		editMenu.add(changecolor);
 		
 		//TODO add actionlisteners to all the menu items
+		open.setActionCommand("openfilechooser");
 		open.addActionListener(controller);
 	}
 	
@@ -232,11 +240,62 @@ public class View extends JFrame{
 		rowHeader.repaint();
 	}
 	
+	/**
+	 * setCell sets the value of a cell as specified
+	 * @param row int: Row number of the cell that is edited
+	 * @param col int: Column number of the cell that is edited
+	 * @param value String: String containing the cell's contents.
+	 */
 	public void setCell(int row, int col, String value){
 		model.setValueAt(value, row, col);
 	}
 	
+	/**
+	 * returns the JTable of the view
+	 * @return JTable
+	 */
 	public JTable getTable(){
 		return table;
 	}
+	
+	/**
+	 * openFileChooser creates a JFrame for the JFileChooser, adds it and sets visible.
+	 */
+	public void openFileChooser(){
+		fileChooserFrame = new JFrame();
+		fileChooserFrame.add(fileChooser);
+		fileChooser.addActionListener(controller);
+		fileChooserFrame.setSize(800, 500);
+		fileChooserFrame.setVisible(true);
+		
+	}
+	
+	/**
+	 * returns the amount of columns currently in the table.
+	 */
+	public int getColumnCount(){
+		return table.getColumnCount();
+	}
+	
+	/**
+	 * returns the amount of rows currently in the table
+	 */
+	public int getRowCount(){
+		return model.getRowCount();
+	}
+	
+	/**
+	 * Closes the file chooser's frame.
+	 */
+	public void closeFileChooser(){
+		fileChooserFrame.dispose();
+	}
+	
+	/**
+	 * returns the file chooser
+	 */
+	public JFileChooser getFileChooser(){
+		return fileChooser;
+	}
+	
 }

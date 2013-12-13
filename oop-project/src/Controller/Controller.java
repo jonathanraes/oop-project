@@ -1,17 +1,21 @@
 package Controller;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.HierarchyBoundsListener;
+import java.awt.event.HierarchyEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
+import java.io.File;
 import java.util.ArrayList;
 
 import Gui.View;
 import OOP.Cell;
 import OOP.Spreadsheet;
 
-public class Controller extends MouseAdapter implements ActionListener, KeyListener{
+public class Controller extends MouseAdapter implements ActionListener, KeyListener, HierarchyBoundsListener{
 	View view;
 	Spreadsheet spreadsheet;
 
@@ -22,7 +26,6 @@ public class Controller extends MouseAdapter implements ActionListener, KeyListe
 		
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
 //		if(e.getActionCommand().equals("+10 Rows")){
 //			view.updateRowHeader();
 //			view.addRows();
@@ -32,6 +35,16 @@ public class Controller extends MouseAdapter implements ActionListener, KeyListe
 //		}
 //		above is not needed as long as the buttons are disabled
 		
+		if(e.getActionCommand().equals("openfilechooser")){
+			//the open button from the menubar is pressed
+			view.openFileChooser();
+		}
+		if(e.getActionCommand().equals("ApproveSelection")){
+			//user presses open in the filechooser menu
+			File file =	view.getFileChooser().getSelectedFile();
+			loadFile(file);
+			view.closeFileChooser();
+	}
 	}
 
 	@Override
@@ -49,7 +62,6 @@ public class Controller extends MouseAdapter implements ActionListener, KeyListe
 				view.addRows();
 			}
 		}
-
 	}
 
 	@Override
@@ -64,7 +76,26 @@ public class Controller extends MouseAdapter implements ActionListener, KeyListe
 		
 	}
 	
-	public void loadFile(){
+	@Override
+	public void ancestorMoved(HierarchyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void ancestorResized(HierarchyEvent e) {
+		Dimension size = view.getSize();
+		while(view.isActive() && view.getRowCount() < (size.height / 18)){
+			view.updateRowHeader();
+			view.addRows();
+		}
+		while(view.isActive() && view.getColumnCount() < (size.width / 75)){
+			view.addColumns();
+		}
+	}
+	
+	public void loadFile(File file){
+		Spreadsheet.readXML(file.toString());
 		ArrayList<Cell> list = spreadsheet.getCells();
 		for(int i =0; i < list.size(); i++){
 			int row = list.get(i).getRow() - 1;
