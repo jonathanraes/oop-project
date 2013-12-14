@@ -6,8 +6,6 @@ import java.awt.Color;
 import javax.swing.AbstractListModel;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JColorChooser;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -17,7 +15,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
 import javax.swing.ScrollPaneConstants;
@@ -31,24 +28,20 @@ import Controller.Controller;
 import OOP.Spreadsheet;
 
 public class View extends JFrame{
-	Spreadsheet spreadsheet;
 	private JMenuBar menubar;
 	private JPanel tablePanel;
-	JPanel topPanel;
+	private JPanel topPanel;
 	private JTable table;
 	private JTableHeader header;
 	private JScrollPane pane;
 	private DefaultTableModel model;
-	JColorChooser colorChooser;
-	JDialog dialog;
-	Controller controller;
-	ColorEditor colorEditor;
-	final String headers[];
-	JList rowHeader;
-	JFrame fileChooserFrame;
-	final JFileChooser fileChooser = new JFileChooser();
-	public JTextField f;
-	
+	private Controller controller;
+	private ColorEditor colorEditor;
+	private final String headers[];
+	private JList rowHeader;
+	private JFrame fileChooserFrame;
+	private final JFileChooser fileChooser = new JFileChooser();
+	private JTextField textfield;
 	
 	public View(Spreadsheet spreadsheet){
 		controller = new Controller(this, spreadsheet);
@@ -67,38 +60,40 @@ public class View extends JFrame{
 		setSize(500,500);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);	//Dit moet aan het eind blijven!!!
-		
 	}
 	
+//	Creation Methods----------------------------------------------------------------------------------------------
+	
 	/**
-	 * createTopPanel creates a panel with a textpane and buttons to be displayed above the JTable.
-	 * The textpane in the TopPanel is used for entering text and formulas in the table's cells.
+	 * createTopPanel creates a panel with a textfield and buttons to be displayed above the JTable.
+	 * The textfield in the TopPanel is used for entering text and formulas in the table's cells.
 	 * The buttons are used to set a cell's background color and to add additional rows and columns in the table
 	 */
 	public void createTopPanel(){
+/*		JButton addRows = new JButton("+10 Rows");
+		JButton addColumns = new JButton("+10 Columns");
+		addRows.addActionListener(controller);
+		addColumns.addActionListener(controller);
+		addRows.setBorderPainted(false);
+		addColumns.setBorderPainted(false);
+		topPanel.add(addRows);
+		topPanel.add(addColumns);	*/
+//		Above is the creation of an AddRows and AddColumns buttons in the TopPanel.
+		
 		topPanel = new JPanel();
 		JButton colorbutton = new JButton("Set Color");
-//		JButton addRows = new JButton("+10 Rows");
-//		JButton addColumns = new JButton("+10 Columns");
 				
-
-		f = new JTextField();
+		textfield = new JTextField();
 		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
-		
-//		addRows.addActionListener(controller);
-//		addColumns.addActionListener(controller);
-		colorbutton.addActionListener(colorEditor);
 		colorbutton.setActionCommand("edit");
 		colorbutton.setBorderPainted(false);
-//		addRows.setBorderPainted(false);
-//		addColumns.setBorderPainted(false);
 		
-		topPanel.add(f);
+		topPanel.add(textfield);
 		topPanel.add(colorbutton);
-//		topPanel.add(addRows);
-//		topPanel.add(addColumns);
 		add(topPanel, BorderLayout.NORTH);
-		f.getDocument().addDocumentListener(controller);
+
+		colorbutton.addActionListener(colorEditor);
+		textfield.getDocument().addDocumentListener(controller);
 	}
 	
 	/**
@@ -111,7 +106,6 @@ public class View extends JFrame{
 		model = new DefaultTableModel(15,10000);
 		table = new JTable(1,5);
 		table.setAutoCreateColumnsFromModel(false);
-		table.addHierarchyBoundsListener(controller);
 		table.setModel(model);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 	    table.setRowSelectionAllowed(true);
@@ -119,6 +113,7 @@ public class View extends JFrame{
 	    table.setColumnSelectionAllowed(true);
 	    add(tablePanel);
 	    	    
+	    table.addHierarchyBoundsListener(controller);
 	    table.addKeyListener(controller);
 	}
 	
@@ -188,20 +183,6 @@ public class View extends JFrame{
 	}
 	
 	/**
-	 * addColumns adds a new column object to the JTable passing in the table's current column as parameter to set the header correctly
-	 */
-	public void addColumns(){
-		table.addColumn(new TableColumn(table.getColumnCount()));
-	}
-	
-	/**
-	 * addRows updates the table's model to add an extra row
-	 */
-	public void addRows(){
-		model.setRowCount(model.getRowCount() + 1);
-	}
-	
-	/**
 	 * createRowHeader creates a Row Header using an anonymous Abstract List Model and an array of strings representing the line numbers.
 	 */
 	public void createRowHeader(){
@@ -210,7 +191,6 @@ public class View extends JFrame{
 		}
 		
 		ListModel lm = new AbstractListModel() {
-			String[] headerf = headers;
 			public int getSize() {
 				return headers.length;
 			}
@@ -227,7 +207,23 @@ public class View extends JFrame{
 		pane.setRowHeaderView(rowHeader);
 		getContentPane().add(pane, BorderLayout.CENTER);
 	}
-
+	
+//	Adding Methods----------------------------------------------------------------------------------------------------------------
+	
+	/**
+	 * addColumns adds a new column object to the JTable passing in the table's current column as parameter to set the header correctly
+	 */
+	public void addColumns(){
+		table.addColumn(new TableColumn(table.getColumnCount()));
+	}
+	
+	/**
+	 * addRows updates the table's model to add an extra row
+	 */
+	public void addRows(){
+		model.setRowCount(model.getRowCount() + 1);
+	}
+	
 	/**
 	 * updateRowHeader updates the headers array to include the newly added rows in the tablemodel. 
 	 * It assumes an addition of 10 rows and adds 10 line numbers to the row header.
@@ -239,23 +235,7 @@ public class View extends JFrame{
 		rowHeader.repaint();
 	}
 	
-	/**
-	 * setCell sets the value of a cell as specified
-	 * @param row int: Row number of the cell that is edited
-	 * @param col int: Column number of the cell that is edited
-	 * @param value String: String containing the cell's contents.
-	 */
-	public void setCell(int row, int col, String value){
-		model.setValueAt(value, row, col);
-	}
-	
-	/**
-	 * returns the JTable of the view
-	 * @return JTable
-	 */
-	public JTable getTable(){
-		return table;
-	}
+//	File Chooser methods--------------------------------------------------------------------------------------------------------
 	
 	/**
 	 * openFileChooser creates a JFrame for the JFileChooser, adds it and sets visible.
@@ -272,31 +252,60 @@ public class View extends JFrame{
 	}
 	
 	/**
-	 * returns the amount of columns currently in the table.
-	 */
-	public int getColumnCount(){
-		return table.getColumnCount();
-	}
-	
-	/**
-	 * returns the amount of rows currently in the table
-	 */
-	public int getRowCount(){
-		return model.getRowCount();
-	}
-	
-	/**
 	 * Closes the file chooser's frame.
 	 */
 	public void closeFileChooser(){
 		fileChooserFrame.dispose();
 	}
 	
+//	Setters---------------------------------------------------------------------------------------------------------------------
+	
+	/**
+	 * setCell sets the value of a cell as specified
+	 * @param row int: Row number of the cell that is edited
+	 * @param col int: Column number of the cell that is edited
+	 * @param value String: String containing the cell's contents.
+	 */
+	public void setCell(int row, int col, String value){
+		model.setValueAt(value, row, col);
+	}
+	
+//	Getters---------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * returns the JTable of the view
+	 * @return JTable
+	 */
+	public JTable getTable(){
+		return table;
+	}
+
+	/**
+	 * returns the amount of columns currently in the table.
+	 */
+	public int getColumnCount(){
+		return table.getColumnCount();
+	}
+
+	/**
+	 * returns the amount of rows currently in the table
+	 */
+	public int getRowCount(){
+		return model.getRowCount();
+	}
+
 	/**
 	 * returns the file chooser
 	 */
 	public JFileChooser getFileChooser(){
 		return fileChooser;
+	}
+	
+	/**
+	 * Returns the TopPanel's JTextField
+	 */
+	public JTextField getTextField(){
+		return textfield;
 	}
 	
 }

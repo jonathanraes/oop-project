@@ -19,14 +19,16 @@ import OOP.Cell;
 import OOP.Spreadsheet;
 
 public class Controller extends MouseAdapter implements ActionListener, KeyListener, HierarchyBoundsListener, DocumentListener{
-	View view;
-	Spreadsheet spreadsheet;
+	private View view;
+	private Spreadsheet spreadsheet;
 
 	public Controller(View view, Spreadsheet spreadsheet){
 		this.view = view;
 		this.spreadsheet = spreadsheet;
 	}
-		
+	
+//	ActionListener-----------------------------------------------------------------------------------------------------------
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 //		if(e.getActionCommand().equals("+10 Rows")){
@@ -53,6 +55,8 @@ public class Controller extends MouseAdapter implements ActionListener, KeyListe
 		}
 	}
 
+//	KeyListener--------------------------------------------------------------------------------------------------------------
+	
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if(e.getExtendedKeyCode() == 39){
@@ -72,15 +76,15 @@ public class Controller extends MouseAdapter implements ActionListener, KeyListe
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub	
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub	
 	}
+	
+//	HierarchyBoundsListener----------------------------------------------------------------------------------------------------
 	
 	@Override
 	public void ancestorMoved(HierarchyEvent e) {
@@ -100,6 +104,41 @@ public class Controller extends MouseAdapter implements ActionListener, KeyListe
 		}
 	}
 	
+//	DocumentListener--------------------------------------------------------------------------------------------------------
+
+	@Override
+	public void insertUpdate(DocumentEvent e) {
+		try{
+			//Insert the TextField's contents to the selected cell.
+			int col = view.getTable().getSelectedColumn();				
+			int row = view.getTable().getSelectedRow();
+			view.setCell(row, col, view.getTextField().getText());			
+		}
+		catch(ArrayIndexOutOfBoundsException ex){
+			//No cell was selected while text was put in the TextField: the first cell will be used.
+			view.getTable().setColumnSelectionInterval(0, 0);
+			view.getTable().setRowSelectionInterval(0, 0);
+			int col = view.getTable().getSelectedColumn();				
+			int row = view.getTable().getSelectedRow();
+			view.setCell(row, col, view.getTextField().getText());			
+		}
+	}
+
+	@Override
+	public void removeUpdate(DocumentEvent e) {
+		//When text is removed from the TextField the selected cell is also updated.
+		int col = view.getTable().getSelectedColumn();				
+		int row = view.getTable().getSelectedRow();
+		view.setCell(row, col, view.getTextField().getText());			
+	}
+	
+	@Override
+	public void changedUpdate(DocumentEvent e) {
+		//Event is never fired
+	}
+
+//	-------------------------------------------------------------------------------------------------------------------------
+	
 	public void loadFile(File file){
 		Spreadsheet.readXML(file.toString());
 		ArrayList<Cell> list = spreadsheet.getCells();
@@ -109,34 +148,5 @@ public class Controller extends MouseAdapter implements ActionListener, KeyListe
 			String value = list.get(i).getContent();
 			view.setCell(row, col, value);
 		}
-	}
-
-	@Override
-	public void insertUpdate(DocumentEvent e) {
-		try{
-			int col = view.getTable().getSelectedColumn();				
-			int row = view.getTable().getSelectedRow();
-			view.setCell(row, col, view.f.getText());			
-		}
-		catch(ArrayIndexOutOfBoundsException ex){
-			view.getTable().setColumnSelectionInterval(0, 0);
-			view.getTable().setRowSelectionInterval(0, 0);
-			int col = view.getTable().getSelectedColumn();				
-			int row = view.getTable().getSelectedRow();
-			view.setCell(row, col, view.f.getText());			
-		}
-	}
-
-	@Override
-	public void removeUpdate(DocumentEvent e) {
-		int col = view.getTable().getSelectedColumn();				
-		int row = view.getTable().getSelectedRow();
-		view.setCell(row, col, view.f.getText());			
-		
-	}
-	
-	@Override
-	public void changedUpdate(DocumentEvent e) {
-		//Event is never fired
 	}
 }
