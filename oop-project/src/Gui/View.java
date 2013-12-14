@@ -2,9 +2,6 @@ package Gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
 
 import javax.swing.AbstractListModel;
 import javax.swing.BoxLayout;
@@ -20,10 +17,11 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
 import javax.swing.ListModel;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
@@ -41,7 +39,6 @@ public class View extends JFrame{
 	private JTableHeader header;
 	private JScrollPane pane;
 	private DefaultTableModel model;
-	JTextPane textpane;
 	JColorChooser colorChooser;
 	JDialog dialog;
 	Controller controller;
@@ -50,6 +47,8 @@ public class View extends JFrame{
 	JList rowHeader;
 	JFrame fileChooserFrame;
 	final JFileChooser fileChooser = new JFileChooser();
+	public JTextField f;
+	
 	
 	public View(Spreadsheet spreadsheet){
 		controller = new Controller(this, spreadsheet);
@@ -82,8 +81,8 @@ public class View extends JFrame{
 //		JButton addRows = new JButton("+10 Rows");
 //		JButton addColumns = new JButton("+10 Columns");
 				
-		textpane = new JTextPane();
-		JTextField f = new JTextField(30);
+
+		f = new JTextField();
 		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
 		
 //		addRows.addActionListener(controller);
@@ -99,6 +98,7 @@ public class View extends JFrame{
 //		topPanel.add(addRows);
 //		topPanel.add(addColumns);
 		add(topPanel, BorderLayout.NORTH);
+		f.getDocument().addDocumentListener(controller);
 	}
 	
 	/**
@@ -114,7 +114,7 @@ public class View extends JFrame{
 		table.addHierarchyBoundsListener(controller);
 		table.setModel(model);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-	    table.setRowSelectionAllowed(false);
+	    table.setRowSelectionAllowed(true);
 	    table.setCellSelectionEnabled(true);
 	    table.setColumnSelectionAllowed(true);
 	    add(tablePanel);
@@ -135,7 +135,6 @@ public class View extends JFrame{
 	 */
 	public void createColumnHeader(){
 		header = table.getTableHeader();
-		header.setOpaque(true);
 		header.setBackground(Color.yellow);
 	}
 
@@ -263,6 +262,8 @@ public class View extends JFrame{
 	 */
 	public void openFileChooser(){
 		fileChooserFrame = new JFrame();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("XML Files", "xml");
+		fileChooser.setFileFilter(filter);
 		fileChooserFrame.add(fileChooser);
 		fileChooser.addActionListener(controller);
 		fileChooserFrame.setSize(800, 500);

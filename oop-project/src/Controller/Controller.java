@@ -11,11 +11,14 @@ import java.awt.event.MouseAdapter;
 import java.io.File;
 import java.util.ArrayList;
 
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
 import Gui.View;
 import OOP.Cell;
 import OOP.Spreadsheet;
 
-public class Controller extends MouseAdapter implements ActionListener, KeyListener, HierarchyBoundsListener{
+public class Controller extends MouseAdapter implements ActionListener, KeyListener, HierarchyBoundsListener, DocumentListener{
 	View view;
 	Spreadsheet spreadsheet;
 
@@ -41,10 +44,13 @@ public class Controller extends MouseAdapter implements ActionListener, KeyListe
 		}
 		if(e.getActionCommand().equals("ApproveSelection")){
 			//user presses open in the filechooser menu
-			File file =	view.getFileChooser().getSelectedFile();
-			loadFile(file);
+			loadFile(view.getFileChooser().getSelectedFile());
 			view.closeFileChooser();
-	}
+		}
+		if(e.getActionCommand().equals("CancelSelection")){
+			//user presses cancel in the filechooser menu
+			view.closeFileChooser();
+		}
 	}
 
 	@Override
@@ -103,5 +109,34 @@ public class Controller extends MouseAdapter implements ActionListener, KeyListe
 			String value = list.get(i).getContent();
 			view.setCell(row, col, value);
 		}
+	}
+
+	@Override
+	public void insertUpdate(DocumentEvent e) {
+		try{
+			int col = view.getTable().getSelectedColumn();				
+			int row = view.getTable().getSelectedRow();
+			view.setCell(row, col, view.f.getText());			
+		}
+		catch(ArrayIndexOutOfBoundsException ex){
+			view.getTable().setColumnSelectionInterval(0, 0);
+			view.getTable().setRowSelectionInterval(0, 0);
+			int col = view.getTable().getSelectedColumn();				
+			int row = view.getTable().getSelectedRow();
+			view.setCell(row, col, view.f.getText());			
+		}
+	}
+
+	@Override
+	public void removeUpdate(DocumentEvent e) {
+		int col = view.getTable().getSelectedColumn();				
+		int row = view.getTable().getSelectedRow();
+		view.setCell(row, col, view.f.getText());			
+		
+	}
+	
+	@Override
+	public void changedUpdate(DocumentEvent e) {
+		//Event is never fired
 	}
 }
