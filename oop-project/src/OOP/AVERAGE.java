@@ -11,9 +11,9 @@ public class AVERAGE extends Formule {
 		 * geparsed mbv een for-loop.
 		 */
 		for(int i=0; i < a.length ;i++){
-			// double parser per String[] a element.
+			double parse = Double.parseDouble(a[i]);
 			// Vervolgens wordt aan de ArrayList waardes de geparsde doubles toegevoegd.
-			waardes.add();
+			waardes.add(parse);
 		}
 		
 		// Totaal wordt op 0 geinitializeerd

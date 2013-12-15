@@ -12,7 +12,7 @@ public class COUNT extends Formule {
 		 */
 		for(int i=0; i<a.length; i++){
 			try{
-				// parse double
+				Double.parseDouble(a[i]);
 				countnumbers = countnumbers + 1;
 			}catch(NumberFormatException e){
 			}

@@ -4,10 +4,10 @@ public class INT extends Formule {
 
 	public String executable(String[] a) {
 		/* Stap 1: De double parser (INT kan gewoon geparsed worden als double) in de abstracte klasse Formule wordt aangeroepen. 
-		Hoeft maar 1x. 
+		Hoeft maar 1x.
+		 De double wordt hier uit de array gehaald + toegewezen aan 'getal'.
 		*/
-		// De double wordt hier uit de array gehaald + toegewezen aan 'getal'.
-		double getal = 0;
+		double getal = Double.parseDouble(a[0]);
 		int intgedeelte = 0;
 		// Hiervan moeten we de INT-waarde weten.
 		
