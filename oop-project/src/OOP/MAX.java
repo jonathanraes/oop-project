@@ -4,7 +4,6 @@ import java.util.*;
 
 public class MAX extends Formule {
 
-	@Override
 	public String executable(String[] a) {
 		ArrayList<Double> waardes = new ArrayList<Double>();
 		for(int i=0; i<a.length; i++){

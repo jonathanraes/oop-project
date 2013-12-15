@@ -10,18 +10,16 @@ public class ISEVEN extends Formule {
 			return "#VALUE!";
 		}
 		if(waarde >= 0){
-			
-			for(int i = 0; waarde >= 2; i++){
-				waarde = waarde - 2;
-			}
-		}if(waarde<0){
-			
+			if(waarde % 2 >= 1)
+				return "FALSE";
+			else
+				return "TRUE";
+		}else{
+			if(waarde % 2 < -1)
+				return "TRUE";
+			else
+				return "FALSE";	
 		}
-		
-		if(waarde == 0)
-			return "TRUE";
-		else
-			return "FALSE";
 	}
 
 }
