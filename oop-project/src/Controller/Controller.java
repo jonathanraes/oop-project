@@ -146,6 +146,15 @@ public class Controller extends MouseAdapter implements ActionListener, KeyListe
 			int row = list.get(i).getRow() - 1;
 			int col = list.get(i).getCol() - 1;
 			String value = list.get(i).getContent();
+			
+			if(row >= view.getTable().getRowCount()){
+				//If the amount of rows in the table is not enough
+				int extraRowsNeeded = row - view.getModel().getRowCount();
+				for(int j = 0; j <= extraRowsNeeded; j++){
+					view.updateRowHeader();
+					view.getModel().setRowCount(view.getRowCount()+1);
+				}
+			}
 			view.setCell(row, col, value);
 		}
 	}

@@ -308,4 +308,10 @@ public class View extends JFrame{
 		return textfield;
 	}
 	
+	/**
+	 * returns the DefaultTableModel
+	 */
+	public DefaultTableModel getModel(){
+		return model;
+	}
 }
