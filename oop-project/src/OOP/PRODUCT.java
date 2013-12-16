@@ -12,7 +12,7 @@ public class PRODUCT extends Formule {
 				double parse = Double.parseDouble(a[i]);
 				numbers.add(parse);
 			}catch(NumberFormatException e){
-				return "Error tijdens parseDouble bij PRODUCT!";
+				return "Error: parseDouble bij PRODUCT!";
 			}	
 		}
 		
