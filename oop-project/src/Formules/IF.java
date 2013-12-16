@@ -1,8 +1,8 @@
-package OOP;
+package Formules;
 
-public class ISLOGICAL extends Formule{
 
-	@Override
+public class IF extends Formule {
+
 	public String executable(String[] a) {
 		// TODO Auto-generated method stub
 		return null;

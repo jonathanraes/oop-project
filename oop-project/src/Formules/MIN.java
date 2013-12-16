@@ -1,9 +1,13 @@
-package OOP;
+package Formules;
 import java.util.*;
 
 
-public class MAX extends Formule {
+public class MIN extends Formule {
 
+	/**
+	 * Deze methode wordt gebruikt om een minimale waarde uit te zoeken van een verzameling van getallen.
+	 */
+	
 	public String executable(String[] a) {
 		ArrayList<Double> waardes = new ArrayList<Double>();
 		for(int i=0; i<a.length; i++){
@@ -14,12 +18,12 @@ public class MAX extends Formule {
 				waardes.add(0.0);
 			}	
 		}
-		double max = waardes.get(0);
+		double min = waardes.get(0);
 		for(int i = 1; i < waardes.size(); i++){
-			if(waardes.get(i) > max)
-				max = waardes.get(i);
+			if(waardes.get(i) < min)
+				min = waardes.get(i);
 		}
-		return "" + max + "";
+		return "" + min + "";
 	}
 	
 }

@@ -1,4 +1,4 @@
-package OOP;
+package Formules;
 import java.util.*;
 import java.math.BigDecimal;
 

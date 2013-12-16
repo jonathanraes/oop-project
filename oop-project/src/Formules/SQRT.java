@@ -1,4 +1,5 @@
-package OOP;
+package Formules;
+
 
 public class SQRT extends Formule  {
 	public String executable(String[] a) {
