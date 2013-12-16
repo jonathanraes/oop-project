@@ -1,4 +1,5 @@
-package OOP;
+package Formules;
+
 
 public class LOWER extends Formule {
 

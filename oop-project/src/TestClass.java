@@ -1,4 +1,4 @@
-import OOP.Formule;
+import Formules.Formule;
 
 abstract class Instance{
 	public abstract void print();

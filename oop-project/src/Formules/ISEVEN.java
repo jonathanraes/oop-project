@@ -1,4 +1,5 @@
-package OOP;
+package Formules;
+
 
 public class ISEVEN extends Formule {
 

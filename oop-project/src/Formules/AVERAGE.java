@@ -1,4 +1,4 @@
-package OOP;
+package Formules;
 import java.util.*;
 
 public class AVERAGE extends Formule {
