@@ -39,12 +39,19 @@ public class Spreadsheet extends Observable{
 	 * will add the cell to the ArrayList.
 	 * @param Object Cell 
 	 */
-	public void add(Object cell) {
+	public boolean add(Object cell) {
 		if (cell instanceof Cell) {
 			Cell add = (Cell) cell;
-
+			for(int i = 0; i< Spreadsheet.size(); i++){
+				if(Spreadsheet.get(i).equals(cell)){
+					Spreadsheet.add(i, add);
+					return false;
+				}
+			}
 			Spreadsheet.add(add);
+			return true;
 		}
+		return false;
 	}
 
 	/**
@@ -168,5 +175,4 @@ public class Spreadsheet extends Observable{
 	public ArrayList<Cell> getCells(){
 		return Spreadsheet;
 	}
-
 }
