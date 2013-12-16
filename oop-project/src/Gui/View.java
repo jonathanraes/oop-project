@@ -78,12 +78,12 @@ public class View extends JFrame{
 		addColumns.setBorderPainted(false);
 		topPanel.add(addRows);
 		topPanel.add(addColumns);	*/
-//		Above is the creation of an AddRows and AddColumns buttons in the TopPanel.
+		//		Above is the creation of an AddRows and AddColumns buttons in the TopPanel.
 		
-		topPanel = new JPanel();
 		JButton colorbutton = new JButton("Set Color");
 				
 		textfield = new JTextField();
+		topPanel = new JPanel();
 		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
 		colorbutton.setActionCommand("edit");
 		colorbutton.setBorderPainted(false);
@@ -91,7 +91,6 @@ public class View extends JFrame{
 		topPanel.add(textfield);
 		topPanel.add(colorbutton);
 		add(topPanel, BorderLayout.NORTH);
-
 		colorbutton.addActionListener(colorEditor);
 		textfield.getDocument().addDocumentListener(controller);
 	}
@@ -111,10 +110,12 @@ public class View extends JFrame{
 	    table.setRowSelectionAllowed(true);
 	    table.setCellSelectionEnabled(true);
 	    table.setColumnSelectionAllowed(true);
+	    tablePanel.add(table);
 	    add(tablePanel);
 	    	    
 	    table.addHierarchyBoundsListener(controller);
 	    table.addKeyListener(controller);
+	    model.addTableModelListener(controller);
 	}
 	
 	/**
@@ -205,7 +206,6 @@ public class View extends JFrame{
 		rowHeader.setFixedCellHeight(16);		
 		rowHeader.setCellRenderer(new RowHeaderRenderer(table));
 		pane.setRowHeaderView(rowHeader);
-		getContentPane().add(pane, BorderLayout.CENTER);
 	}
 	
 //	Adding Methods----------------------------------------------------------------------------------------------------------------
@@ -313,5 +313,9 @@ public class View extends JFrame{
 	 */
 	public DefaultTableModel getModel(){
 		return model;
+	}
+	
+	public JScrollPane getPane(){
+		return pane;
 	}
 }

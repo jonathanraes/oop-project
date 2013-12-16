@@ -8,17 +8,21 @@ import java.awt.event.HierarchyEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 
 import Gui.View;
 import OOP.Cell;
 import OOP.Spreadsheet;
 
-public class Controller extends MouseAdapter implements ActionListener, KeyListener, HierarchyBoundsListener, DocumentListener{
+public class Controller implements ActionListener, KeyListener, HierarchyBoundsListener, DocumentListener, TableModelListener{
 	private View view;
 	private Spreadsheet spreadsheet;
 
@@ -137,6 +141,19 @@ public class Controller extends MouseAdapter implements ActionListener, KeyListe
 		//Event is never fired
 	}
 
+//	TableModelListener-------------------------------------------------------------------------------------------------------
+
+	@Override
+	public void tableChanged(TableModelEvent e) {
+		try{
+			Cell newCell = new Cell(e.getFirstRow(), e.getColumn(), view.getModel().getValueAt(e.getFirstRow(), e.getColumn()).toString());
+			spreadsheet.add(newCell);
+		}
+		catch(Exception ex){
+		}
+	}
+	
+	
 //	-------------------------------------------------------------------------------------------------------------------------
 	
 	public void loadFile(File file){

@@ -87,7 +87,7 @@ public class Cell {
 	public boolean equals(Object other){
 		if(other instanceof Cell){
 			Cell that = (Cell) other;
-			if(this.content.equals(that.content)){
+			if(this.row == that.row && this.col == that.col){
 				return true;
 			}
 		}
