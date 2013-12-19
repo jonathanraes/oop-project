@@ -157,6 +157,7 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 //	-------------------------------------------------------------------------------------------------------------------------
 	
 	public void loadFile(File file){
+		view.getModel().removeTableModelListener(this);
 		Spreadsheet.readXML(file.toString());
 		ArrayList<Cell> list = spreadsheet.getCells();
 		for(int i =0; i < list.size(); i++){
@@ -174,5 +175,6 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 			}
 			view.setCell(row, col, value);
 		}
+		view.getModel().addTableModelListener(this);
 	}
 }
