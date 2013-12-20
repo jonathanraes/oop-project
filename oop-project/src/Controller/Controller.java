@@ -7,9 +7,6 @@ import java.awt.event.HierarchyBoundsListener;
 import java.awt.event.HierarchyEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -18,6 +15,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
+import Formules.Formule;
 import Gui.View;
 import OOP.Cell;
 import OOP.Spreadsheet;
@@ -146,16 +144,29 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 	@Override
 	public void tableChanged(TableModelEvent e) {
 		try{
-			Cell newCell = new Cell(e.getFirstRow(), e.getColumn(), view.getModel().getValueAt(e.getFirstRow(), e.getColumn()).toString());
-			spreadsheet.add(newCell);
+			String formule = view.getModel().getValueAt(e.getFirstRow(), e.getColumn()).toString();
+			String content = parseFunction(formule);
+			if(content != null){
+				Cell newCell = new Cell(e.getFirstRow(), e.getColumn(), content, formule);
+				view.setCell(e.getFirstRow(), e.getColumn(), content);
+				spreadsheet.add(newCell);
+			}
+			else{
+				Cell newCell = new Cell(e.getFirstRow(), e.getColumn(), view.getModel().getValueAt(e.getFirstRow(), e.getColumn()).toString());
+				spreadsheet.add(newCell);
+			}
 		}
-		catch(Exception ex){
+		catch(ArrayIndexOutOfBoundsException ex){
 		}
 	}
 	
 	
 //	-------------------------------------------------------------------------------------------------------------------------
 	
+	/**
+	 * This method will take a file, use the readXML method to parse the file, then it will use the Spreadsheet list to add all the values to the Table
+	 * @param file File: File to be loaded into the application
+	 */
 	public void loadFile(File file){
 		view.getModel().removeTableModelListener(this);
 		Spreadsheet.readXML(file.toString());
@@ -177,4 +188,60 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 		}
 		view.getModel().addTableModelListener(this);
 	}
+	
+	/**
+	 * This method takes a String. It will try to parse this string into a function and, when succeeded, call the function to calculate the requested value and return it.
+	 * When it fails, it will either return null, when there was no function in the first place,
+	 * or it will return a string indicating that the function is not recognized.
+	 * @param function String: String to be parsed
+	 */
+	public String parseFunction(String function){
+		try{
+			String formule = function;
+			if(formule.substring(0, 1).equals("=")){ //Check to see if there is a function at all
+				//getting the required function
+				function = function.substring(1);
+				String[] formula = function.split("\\(|\\)");
+				String functionname = "Formules."+formula[0];
+				Class c = Class.forName(functionname);
+				Object o = c.newInstance();
+				Formule f = (Formule)o;
+				
+				//getting the range of cells
+				String[] cellrange = formula[1].split(":");
+				String firstcell = cellrange[0];
+				String lastcell = cellrange[1];
+				int startColumn = firstcell.substring(0, 1).toLowerCase().charAt(0) - 'a' +  1;
+				int startRow = Integer.parseInt(firstcell.substring(1));
+				int lastColumn = lastcell.substring(0, 1).toLowerCase().charAt(0) - 'a' +  1;
+				int lastRow = Integer.parseInt(lastcell.substring(1));
+				
+				//retrieving the cell contents'
+				String[] values = new String[(lastColumn - startColumn + 1)*(lastRow - startRow + 1)];
+				for(int i = 0; i < (lastColumn - startColumn + 1)*(lastRow - startRow + 1); i++){
+						int row = i % (lastRow - startRow + 1);
+						int col = i % (lastColumn - startColumn + 1);
+						try{
+							values[i] = spreadsheet.getCellAt(row, col).getContent();
+						}catch(NullPointerException ex){ 
+							//The cell did not exist, empty string is inserted
+							values[i] = "";
+						}
+					}
+				String content = f.executable(values);
+				return content;
+			}
+	} 
+	catch (ClassNotFoundException ex) { //The function class was not found
+		return "No such function";
+	} 
+	catch (InstantiationException | IllegalAccessException ex) {
+		//There was an error in initiating the class.
+		return "Error";
+	} 
+	catch(ArrayIndexOutOfBoundsException | StringIndexOutOfBoundsException ex ){ 
+		//The call was empty, so a substring could not be created
+	}
+		return null; //this is reached if the input string was not a function (did not start with '=')
+}
 }

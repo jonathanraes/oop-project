@@ -1,5 +1,7 @@
 package OOP;
 
+import Formules.Formule;
+
 /**
  * The Class Cell represents a Cell object.
  * It contains an integer representing the row number, and one representing the column number.
@@ -11,8 +13,8 @@ public class Cell {
 	private int row;
 	private int col;
 	private String content;
+	private String formule;
 	//color
-
 	
 	/**
 	 * Constructor for the Cell.
@@ -24,6 +26,13 @@ public class Cell {
 		setRow(row);
 		setCol(col);		
 		setContent(content);
+	}
+	
+	public Cell(int row, int col, String content, String function){
+		setRow(row);
+		setCol(col);		
+		setContent(content);
+		this.formule = function;
 	}
 	/**
 	 * This method returns the private row.
@@ -92,6 +101,10 @@ public class Cell {
 			}
 		}
 		return false;
+	}
+	
+	public void addFunction(String function){
+		this.formule = function;
 	}
 }
 

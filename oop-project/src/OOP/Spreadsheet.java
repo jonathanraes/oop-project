@@ -172,7 +172,30 @@ public class Spreadsheet extends Observable{
 		}
 	}
 	
+	/**
+	 * Returns the spreadsheet's list of Cells
+	 * @return ArrayList<Cell> ArrayList containing the cells.
+	 */
 	public ArrayList<Cell> getCells(){
 		return Spreadsheet;
 	}
+	
+	/**
+	 * Returns the cell at the specified row and column.
+	 * If there is no cell at the specified location, null is returned
+	 * @param row int: row number of requested cell
+	 * @param col int: column number of requested cell
+	 * @return Cell: cell at the specified location
+	 */
+	public Cell getCellAt(int row, int col){
+		for(int i = 0; i< Spreadsheet.size(); i++){
+			if(Spreadsheet.get(i).getRow() == row){
+				if(Spreadsheet.get(i).getCol() == col){
+					return Spreadsheet.get(i);
+				}
+			}
+		}
+		return null;
+	}
+	
 }
