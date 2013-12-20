@@ -218,16 +218,19 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 				
 				//retrieving the cell contents'
 				String[] values = new String[(lastColumn - startColumn + 1)*(lastRow - startRow + 1)];
-				for(int i = 0; i < (lastColumn - startColumn + 1)*(lastRow - startRow + 1); i++){
-						int row = i % (lastRow - startRow + 1);
-						int col = i % (lastColumn - startColumn + 1);
+				int i = 0;
+				for(int row = 0; row < (lastRow - startRow + 1); row++){
+					for(int col = 0; col < (lastColumn - startColumn + 1); col++){
 						try{
 							values[i] = spreadsheet.getCellAt(row, col).getContent();
 						}catch(NullPointerException ex){ 
 							//The cell did not exist, empty string is inserted
 							values[i] = "";
+						}finally{
+							i++;
 						}
 					}
+				}
 				String content = f.executable(values);
 				return content;
 			}
