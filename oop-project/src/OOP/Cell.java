@@ -106,5 +106,9 @@ public class Cell {
 	public void addFunction(String function){
 		this.formule = function;
 	}
+	
+	public String getFunction(){
+		return formule;
+	}
 }
 

@@ -112,10 +112,12 @@ public class View extends JFrame{
 	    table.setColumnSelectionAllowed(true);
 	    tablePanel.add(table);
 	    add(tablePanel);
-	    	    
+	    
 	    table.addHierarchyBoundsListener(controller);
 	    table.addKeyListener(controller);
 	    model.addTableModelListener(controller);
+	    table.getSelectionModel().addListSelectionListener(controller);
+	    table.getColumnModel().getSelectionModel().addListSelectionListener(controller);
 	}
 	
 	/**
@@ -268,6 +270,15 @@ public class View extends JFrame{
 	 */
 	public void setCell(int row, int col, String value){
 		model.setValueAt(value, row, col);
+	}
+	
+	public void setTextFieldText(String text){
+		try{
+		textfield.setText(text);
+		}
+		catch(IllegalStateException e){
+			
+		}
 	}
 	
 //	Getters---------------------------------------------------------------------------------------------------------------------

@@ -12,6 +12,8 @@ import java.util.ArrayList;
 
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
@@ -20,7 +22,7 @@ import Gui.View;
 import OOP.Cell;
 import OOP.Spreadsheet;
 
-public class Controller implements ActionListener, KeyListener, HierarchyBoundsListener, DocumentListener, TableModelListener{
+public class Controller implements ActionListener, KeyListener, HierarchyBoundsListener, DocumentListener, TableModelListener, ListSelectionListener{
 	private View view;
 	private Spreadsheet spreadsheet;
 
@@ -140,7 +142,7 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 	}
 
 //	TableModelListener-------------------------------------------------------------------------------------------------------
-
+	
 	@Override
 	public void tableChanged(TableModelEvent e) {
 		try{
@@ -161,6 +163,34 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 	}
 	
 	
+//	ListSelectionListener-----------------------------------------------------------------------------------------------------
+	
+	/**
+	 * The valueChanged method listens to changed in the selection model of the table, when there is a change it will place the text or function from the 
+	 * selected cell into the textfield
+	 */
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+		//getting selected cells
+		int[] rows = view.getTable().getSelectedRows();
+		int[] columns = view.getTable().getSelectedColumns();
+		try{
+			if(rows.length == 1 && columns.length == 1){
+				//if only one cell is selected the value or function is send to the textfield
+				if(spreadsheet.getCellAt(rows[0], columns[0]).getFunction() != null){
+					view.setTextFieldText(spreadsheet.getCellAt(rows[0], columns[0]).getFunction());
+				}
+				else{
+					view.setTextFieldText(view.getTable().getValueAt(rows[0], columns[0]).toString());
+				}
+	
+			}
+		}catch(NullPointerException ex){
+			view.setTextFieldText("");
+		}
+		
+	}
+
 //	-------------------------------------------------------------------------------------------------------------------------
 	
 	/**
@@ -198,7 +228,7 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 	public String parseFunction(String function){
 		try{
 			String formule = function;
-			if(formule.substring(0, 1).equals("=")){ //Check to see if there is a function at all
+			if(function.substring(0, 1).equals("=")){ //Check to see if there is a function at all
 				//getting the required function
 				function = function.substring(1);
 				String[] formula = function.split("\\(|\\)");
@@ -216,7 +246,7 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 				int lastColumn = lastcell.substring(0, 1).toLowerCase().charAt(0) - 'a' +  1;
 				int lastRow = Integer.parseInt(lastcell.substring(1));
 				
-				//retrieving the cell contents'
+				//retrieving the cells contents
 				String[] values = new String[(lastColumn - startColumn + 1)*(lastRow - startRow + 1)];
 				int i = 0;
 				for(int row = 0; row < (lastRow - startRow + 1); row++){
@@ -234,17 +264,17 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 				String content = f.executable(values);
 				return content;
 			}
-	} 
-	catch (ClassNotFoundException ex) { //The function class was not found
-		return "No such function";
-	} 
-	catch (InstantiationException | IllegalAccessException ex) {
-		//There was an error in initiating the class.
-		return "Error";
-	} 
-	catch(ArrayIndexOutOfBoundsException | StringIndexOutOfBoundsException ex ){ 
-		//The call was empty, so a substring could not be created
+		} 
+		catch (ClassNotFoundException ex) { //The function class was not found
+			return "No such function";
+		} 
+		catch (InstantiationException | IllegalAccessException ex) {
+			//There was an error in initiating the class.
+			return "Error";
+		} 
+		catch(ArrayIndexOutOfBoundsException | StringIndexOutOfBoundsException | NumberFormatException ex){ 
+			//The cell was empty or function was wrong format or incomplete, return null
+		}
+		return null; //this is reached if the input string was not a (complete) function
 	}
-		return null; //this is reached if the input string was not a function (did not start with '=')
-}
 }
