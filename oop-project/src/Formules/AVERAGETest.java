@@ -41,7 +41,7 @@ public class AVERAGETest {
 	public void test5() {
 		String[] test5 = {"doet het niet","22","17"};
 		AVERAGE ave = new AVERAGE();
-		assertEquals(ave.executable(test5),"");
+		assertEquals(ave.executable(test5),"19.5");
 	}
 	//test met 3 verschillende double waar een komma getal uit komt.
 	@Test

@@ -5,7 +5,6 @@ package Formules;
  * Indien het niet leeg is, en dus ongelijk aan "" en null, dan wordt het meegerekent met de counter.
  */
 
-
 public class COUNTA extends Formule {
 /**
  * executable, hierin wordt de inhoudelijk werking van COUNTA uitgevoerd
@@ -25,7 +24,6 @@ public class COUNTA extends Formule {
 				countnummer = countnummer + 1;
 			}
 		}
-		return "" + countnummer + "";
+		return countnummer + "";
 	}
-
 }
