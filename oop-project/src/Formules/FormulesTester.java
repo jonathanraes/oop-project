@@ -8,7 +8,7 @@ package Formules;
 public class FormulesTester {
 	public static void main(String[]args){
 		int testInt = 10;
-		String testSt = hoi;
+		String testSt = "hoi";
 		double testDouble = 10.54;
 		String[] test = {"3","",null + "","","1","10cvb"};
 		COUNTA ave = new COUNTA();
