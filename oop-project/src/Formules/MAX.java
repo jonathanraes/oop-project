@@ -15,7 +15,7 @@ public class MAX extends Formule {
 		/*  
 		 * 	In deze for-loop wordt gekeken of elke waarde in de binnenkomende StringLijst een getal is. 
 		 *	Als het een getal is, wordt het toegevoegd aan de waardes ArrayList<Double>. Als het niet een getal is,
-		 *  wordt er niets mee gedaan.
+		 *  wordt er niets mee gedaan. 
 		**/
 		for(int i=0; i<a.length; i++){
 			try{
