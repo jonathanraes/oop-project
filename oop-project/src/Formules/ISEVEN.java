@@ -16,7 +16,7 @@ public class ISEVEN extends Formule {
 			else
 				return "TRUE";
 		}else{
-			if(waarde % 2 < -1)
+			if(waarde % 2 > -1)
 				return "TRUE";
 			else
 				return "FALSE";	
