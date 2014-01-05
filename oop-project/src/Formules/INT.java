@@ -1,7 +1,7 @@
 package Formules;
 /**
  * INT klasse. Hier wordt de formule INT uitgevoerd. INT returnt het integer gedeelte van het ingevoerde getal.
- * Bijv: INT(5.6) = 5. INT(-4.6) = -4. Indien de ingevoerde waarde geen getal is, wordt er "NaN" gereturnt.
+ * Bijv: INT(5.6) = 5. INT(-4.6) = -5. Indien de ingevoerde waarde geen getal is, wordt er "NaN" gereturnt.
  * 
  */
 
@@ -32,7 +32,7 @@ public class INT extends Formule {
 			 * wordt aan variabel intgedeelte de waarde i toegekent + 1 (omdat 0 ook meetelt
 			 * in de for-loop, maar wij vanaf 1 beginnen te tellen.
 			*/
-				for(int i = 0; getal > 1.0; i++){
+				for(int i = 0; getal >= 1.0; i++){
 					getal = getal - 1;
 					intgedeelte = i + 1;
 				
@@ -53,8 +53,9 @@ public class INT extends Formule {
 			 * 
 			 */
 				if(getal <= -0.5){
-				intgedeelte = intgedeelte + 1;
+					intgedeelte = intgedeelte + 1;
 				}
+				intgedeelte = 0 - intgedeelte;
 			}
 			return "" + intgedeelte + "";
 		}catch(NumberFormatException NFE){
