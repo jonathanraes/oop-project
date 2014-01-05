@@ -22,9 +22,11 @@ public class COUNT extends Formule {
 		 * Het parsen van een lege String levert ook een NumberFormatException op, dus wat we nu hebben telt lege cellen niet mee.
 		 */
 		for(int i=0; i<waardes.length; i++){
-			try{Double.parseDouble(waardes[i]);
-			countnumbers = countnumbers + 1;
+			try{
+				Double.parseDouble(waardes[i]);
+				countnumbers = countnumbers + 1;
 			}catch(NumberFormatException e){
+			}catch(NullPointerException NPE){
 			}
 		}
 		return "" + countnumbers;
