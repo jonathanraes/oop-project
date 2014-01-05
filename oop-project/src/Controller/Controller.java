@@ -10,6 +10,7 @@ import java.awt.event.KeyListener;
 import java.io.File;
 import java.util.ArrayList;
 
+import javax.swing.JComboBox;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
@@ -18,10 +19,15 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
 import Formules.Formule;
+import Gui.Graph;
 import Gui.View;
 import OOP.Cell;
 import OOP.Spreadsheet;
-
+/**
+ * The Controller class takes care of any listener methods. It listens for all changes and takes care of them.
+ * It also contains methods for parsing, loading files and retrieving cell data.
+ *
+ */
 public class Controller implements ActionListener, KeyListener, HierarchyBoundsListener, DocumentListener, TableModelListener, ListSelectionListener{
 	private View view;
 	private Spreadsheet spreadsheet;
@@ -43,7 +49,7 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 //			view.addColumns();
 //		}
 //		above is not needed as long as the buttons are disabled
-		
+		String command = e.getActionCommand();
 		if(e.getActionCommand().equals("openfilechooser")){
 			//the open button from the menubar is pressed
 			view.openFileChooser();
@@ -56,6 +62,37 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 		if(e.getActionCommand().equals("CancelSelection")){
 			//user presses cancel in the filechooser menu
 			view.closeFileChooser();
+		}
+		if(e.getActionCommand().equals("Graph")){
+			view.graphChooser();
+			view.resetGraphChooser();
+		}
+		if(e.getActionCommand().equals("CreateGraph")){
+			if(view.getSelectedGraph().equals("Pie Chart")){
+				String graphname = view.getGraphTitle();
+				String[] columnNames = view.getColumnNames().split(";");
+				String[] data = parseCellData(view.getStartCell(), view.getEndCell());
+				double[] parsedData = new double[data.length];
+				boolean legend = view.getLegendSetting();
+				boolean d3 = view.get3DSetting();
+				for(int i = 0; i < data.length; i++){
+					try{
+						parsedData[i] = Double.parseDouble(data[i]);
+					}
+					catch(NumberFormatException ex){
+					}
+				}
+				Graph newGraph = new Graph(columnNames, parsedData, graphname);
+				newGraph.createPieChart(legend, d3);
+				view.closeGraphChooser();
+			}
+		}
+		if(e.getSource() instanceof JComboBox){
+			view.resetGraphChooser();
+		}
+		if(e.getActionCommand().equals("CancelGraph")){
+			//User presses the cancel button in the graph chooser window
+			view.closeGraphChooser();
 		}
 	}
 
@@ -149,12 +186,12 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 			String formule = view.getModel().getValueAt(e.getFirstRow(), e.getColumn()).toString();
 			String content = parseFunction(formule);
 			if(content != null){
-				Cell newCell = new Cell(e.getFirstRow(), e.getColumn(), content, formule);
+				Cell newCell = new Cell(e.getFirstRow()+1, e.getColumn()+1, content, formule);
 				view.setCell(e.getFirstRow(), e.getColumn(), content);
 				spreadsheet.add(newCell);
 			}
 			else{
-				Cell newCell = new Cell(e.getFirstRow(), e.getColumn(), view.getModel().getValueAt(e.getFirstRow(), e.getColumn()).toString());
+				Cell newCell = new Cell(e.getFirstRow()+1, e.getColumn()+1, view.getModel().getValueAt(e.getFirstRow(), e.getColumn()).toString());
 				spreadsheet.add(newCell);
 			}
 		}
@@ -216,7 +253,7 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 			}
 			view.setCell(row, col, value);
 		}
-		view.getModel().addTableModelListener(this);
+	view.getModel().addTableModelListener(this);
 	}
 	
 	/**
@@ -241,26 +278,10 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 				String[] cellrange = formula[1].split(":");
 				String firstcell = cellrange[0];
 				String lastcell = cellrange[1];
-				int startColumn = firstcell.substring(0, 1).toLowerCase().charAt(0) - 'a' +  1;
-				int startRow = Integer.parseInt(firstcell.substring(1));
-				int lastColumn = lastcell.substring(0, 1).toLowerCase().charAt(0) - 'a' +  1;
-				int lastRow = Integer.parseInt(lastcell.substring(1));
-				
+			
 				//retrieving the cells contents
-				String[] values = new String[(lastColumn - startColumn + 1)*(lastRow - startRow + 1)];
-				int i = 0;
-				for(int row = 0; row < (lastRow - startRow + 1); row++){
-					for(int col = 0; col < (lastColumn - startColumn + 1); col++){
-						try{
-							values[i] = spreadsheet.getCellAt(row, col).getContent();
-						}catch(NullPointerException ex){ 
-							//The cell did not exist, empty string is inserted
-							values[i] = "";
-						}finally{
-							i++;
-						}
-					}
-				}
+				String[] values = parseCellData(firstcell,lastcell);
+				
 				String content = f.executable(values);
 				return content;
 			}
@@ -277,4 +298,38 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 		}
 		return null; //this is reached if the input string was not a (complete) function
 	}
+	
+	/**
+	 * ParseCellData gets two cells as parameter. It retrieves the cells' locations and then retrieves all the cells' contents that are 
+	 * in between the two cells specified. This is stored in a String array and returned.
+	 * @param firstCell String: Sting representation of the first cell
+	 * @param lastCell String: String representation of the second cell
+	 * @return values String[] Strings with all the cells contents
+	 */
+	public String[] parseCellData(String firstCell, String lastCell){
+		int startColumn = firstCell.substring(0, 1).toLowerCase().charAt(0) - 'a' +  1;
+		int startRow = Integer.parseInt(firstCell.substring(1));
+		int lastColumn = lastCell.substring(0, 1).toLowerCase().charAt(0) - 'a' +  1;
+		int lastRow = Integer.parseInt(lastCell.substring(1));
+		
+		//retrieving the cells contents
+		String[] values = new String[(lastColumn - startColumn + 1)*(lastRow - startRow + 1)];
+		int i = 0;
+		for(int row = startRow; row <= lastRow; row++){
+			for(int col = startColumn; col <= lastColumn; col++){
+				try{
+					values[i] = spreadsheet.getCellAt(row, col).getContent();
+				}catch(NullPointerException ex){ 
+					//The cell did not exist, empty string is inserted
+					values[i] = "";
+				}finally{
+					i++;
+				}
+			}
+		}
+		return values;
+	}
+	
+	
+	
 }

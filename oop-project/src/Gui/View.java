@@ -2,10 +2,13 @@ package Gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 
 import javax.swing.AbstractListModel;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -22,6 +25,12 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PiePlot;
+import org.jfree.data.general.DefaultPieDataset;
 
 import Controller.ColorEditor;
 import Controller.Controller;
@@ -41,7 +50,23 @@ public class View extends JFrame{
 	private JList rowHeader;
 	private JFrame fileChooserFrame;
 	private final JFileChooser fileChooser = new JFileChooser();
+	
+	//Graph Chooser window attributes
 	private JTextField textfield;
+	private JFrame graphchooserframe;
+	JPanel graphpanel;
+	JTextField columnNames;
+	JCheckBox includeLegend;
+	JCheckBox d3Graph;
+	JTextField titlefield;
+	JTextField enternamefield;
+	JTextField fromcell;
+	JTextField untilcell;
+	JComboBox<String> graphlist;
+	JTextField namefield;
+	JTextField cellrange;
+	JButton ok;
+	JButton cancel;
 	
 	public View(Spreadsheet spreadsheet){
 		controller = new Controller(this, spreadsheet);
@@ -49,6 +74,8 @@ public class View extends JFrame{
 		headers = new String[100000];
 		
 		setLayout(new BorderLayout());
+		
+		
 		
 		createTable();
 		createPane();
@@ -79,7 +106,7 @@ public class View extends JFrame{
 		topPanel.add(addRows);
 		topPanel.add(addColumns);	*/
 		//		Above is the creation of an AddRows and AddColumns buttons in the TopPanel.
-		
+		JButton graph = new JButton("Graph");
 		JButton colorbutton = new JButton("Set Color");
 				
 		textfield = new JTextField();
@@ -87,11 +114,14 @@ public class View extends JFrame{
 		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
 		colorbutton.setActionCommand("edit");
 		colorbutton.setBorderPainted(false);
+		graph.setBorderPainted(false);
 		
 		topPanel.add(textfield);
 		topPanel.add(colorbutton);
+		topPanel.add(graph);
 		add(topPanel, BorderLayout.NORTH);
 		colorbutton.addActionListener(colorEditor);
+		graph.addActionListener(controller);
 		textfield.getDocument().addDocumentListener(controller);
 	}
 	
@@ -210,6 +240,86 @@ public class View extends JFrame{
 		pane.setRowHeaderView(rowHeader);
 	}
 	
+	public void graphChooser(){
+		graphchooserframe = new JFrame();
+		graphpanel = new JPanel();
+		graphpanel.setLayout(null);
+		
+		Font font = new Font("Arial", Font.BOLD, 18);
+		titlefield = new JTextField();
+		titlefield.setFont(font);
+		titlefield.setText("What Graph would you like to make?");
+		titlefield.setEditable(false);
+		titlefield.setBackground(null);
+		titlefield.setSize(500, 50);
+		titlefield.setBorder(null);
+		
+		graphlist = new JComboBox<>();
+		graphlist.addItem("Pie Chart");
+		graphlist.addItem("Bar Chart");
+		graphlist.addItem("Line Graph");
+		graphlist.setSize(100, 45);
+		graphlist.setBounds(0, 50, 485, 40);
+		graphlist.addActionListener(controller);
+		
+		namefield = new JTextField("Enter the name of your graph:");
+		namefield.setEditable(false);
+		namefield.setBackground(null);
+		namefield.setBorder(null);
+		namefield.setBounds(0, 90, 485, 40);
+		
+		enternamefield = new JTextField();
+		enternamefield.setBackground(null);
+		enternamefield.setBounds(0, 130, 485, 40);
+		
+		cellrange = new JTextField("Enter range of cells to be in the graph:");
+		cellrange.setEditable(false);
+		cellrange.setBackground(null);
+		cellrange.setBorder(null);
+		cellrange.setBounds(0, 170, 485, 35);
+		
+		int [] columns = table.getSelectedColumns();
+		int[] rows = table.getSelectedRows();
+		
+		fromcell = new JTextField();
+		untilcell = new JTextField();
+		try{
+			char startcol = (char)(columns[0] + 'A');
+			char endcol = (char)(columns[columns.length-1] + 'A');
+			int startrow = rows[0]+1;
+			int endrow = rows[rows.length-1]+1;
+			fromcell.setText(startcol + "" +startrow + "");
+			untilcell.setText(endcol +"" + endrow + "");
+		}
+		catch(IndexOutOfBoundsException e){
+			
+		}
+		
+		fromcell.setBackground(null);
+		fromcell.setBounds(50, 210, 60, 40);
+		
+		untilcell.setBackground(null);
+		untilcell.setBounds(130, 210, 60, 40);
+		
+		includeLegend = new JCheckBox("Include Legend");
+		includeLegend.setBackground(null);
+		includeLegend.setBounds(235, 205, 150, 15);
+		
+		d3Graph = new JCheckBox("3D");
+		d3Graph.setBackground(null);
+		d3Graph.setBounds(235, 220, 150, 25);
+		
+		ok = new JButton("OK");
+		ok.setActionCommand("CreateGraph");
+		ok.setBounds(414, 332, 70, 30);
+		ok.addActionListener(controller);
+		
+		cancel = new JButton("Cancel");
+		cancel.setActionCommand("CancelGraph");
+		cancel.setBounds(300, 332, 80, 30);
+		cancel.addActionListener(controller);
+	}
+	
 //	Adding Methods----------------------------------------------------------------------------------------------------------------
 	
 	/**
@@ -326,7 +436,117 @@ public class View extends JFrame{
 		return model;
 	}
 	
+	/**
+	 * returns the table's scrollpane.
+	 */
 	public JScrollPane getPane(){
 		return pane;
+	}
+	
+	/**
+	 * Returns the current legend setting
+	 */
+	public boolean getLegendSetting(){
+		return includeLegend.isSelected();
+	}
+	
+	/**
+	 * Returns the current 3D setting
+	 */
+	public boolean get3DSetting(){
+		return d3Graph.isSelected();
+	}
+	
+	/**
+	 * Returns the String value for the graph's title
+	 */
+	public String getGraphTitle(){
+		return enternamefield.getText();
+	}
+	
+	/**
+	 * Returns the cell to start parsing.
+	 */
+	public String getStartCell(){
+		return fromcell.getText();
+	}
+	
+	/**
+	 * Returns the cell to end parsing.
+	 */
+	public String getEndCell(){
+		String gg = untilcell.getText();
+		return untilcell.getText();
+	}
+	
+	/**
+	 * Returns the current graph selected in the JComboBox
+	 */
+	public String getSelectedGraph(){
+		return graphlist.getSelectedItem().toString();
+	}
+	
+	/**
+	 * Returns the value put in the textfield for column names.
+	 */
+	public String getColumnNames(){
+		return columnNames.getText();
+	}
+	
+// --------------------------------------------------------------------------------------------------------------------------
+		
+	/**
+	 * This method resets the graph chooser frame to account for any extra or less settings and or textfield that should be added if the selection
+	 * in the JComboBox changes. It removes all components and adds the right ones.
+	 */
+	public void resetGraphChooser(){
+		String graph = graphlist.getSelectedItem().toString();
+		graphpanel.removeAll();
+		
+		JTextField enterColumnNames = null;
+		columnNames = null;
+		if(graph.equals("Pie Chart")){
+			enterColumnNames = new JTextField("Please enter your column names seperated by a ;");
+			enterColumnNames.setEditable(false);
+			enterColumnNames.setBackground(null);
+			enterColumnNames.setBorder(null);
+			enterColumnNames.setBounds(0, 250, 485, 40);
+	
+			columnNames = new JTextField();
+			columnNames.setBackground(null);
+			columnNames.setBounds(0, 290, 485, 40);
+		}
+		
+		enternamefield.setText("New " + graph);
+		
+		graphpanel.add(graphlist);
+		graphpanel.add(titlefield);
+		graphpanel.add(ok);
+		graphpanel.add(cancel);
+		graphpanel.add(namefield);
+		graphpanel.add(enternamefield);
+		graphpanel.add(cellrange);
+		graphpanel.add(fromcell);
+		graphpanel.add(untilcell);
+		graphpanel.add(includeLegend);
+		graphpanel.add(d3Graph);
+		graphpanel.setBackground(Color.white);
+		if(graph.equals("Pie Chart")){
+			graphpanel.add(enterColumnNames);
+			graphpanel.add(columnNames);
+		}
+		graphpanel.setSize(500, 400);
+		graphchooserframe.setSize(500, 400);
+		graphchooserframe.add(graphpanel);
+		graphchooserframe.setResizable(false);
+		graphchooserframe.setVisible(true);
+
+	}
+
+	/**
+	 * closes the graph chooser window
+	 */
+	public void closeGraphChooser(){
+		graphchooserframe.dispose();
 	}
 }
