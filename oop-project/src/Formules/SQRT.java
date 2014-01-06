@@ -14,6 +14,10 @@ public class SQRT extends Formule  {
 			return "Error: parseDouble bij SQRT!";
 		}
 		
+		if(number>=0){		
 		return "" + Math.sqrt(number) + "";
+		}else{
+			return"Error: Het getal waarvan de wortel moet berekend worden is negatief!";
+		}
 	}
 }
