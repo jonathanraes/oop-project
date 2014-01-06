@@ -335,16 +335,19 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 							valuesList.add("");
 						}
 						valuesList.add(celvalue[0]);
-					}else if(parameters[i].matches("[0-9]+")){
-						if(i==0){
-							valuesList.add("");
-						}
-						valuesList.add(parameters[i]);
 					}else{
-						if(i==0){
-							valuesList.add("");
+						try{
+							Double.parseDouble(parameters[i]);
+							if(i==0){
+								valuesList.add("");
+							}
+							valuesList.add(parameters[i]);
+						}catch(NumberFormatException NFE){
+							if(i==0){
+								valuesList.add("");
+							}
+							valuesList.set(0, parameters[i]);
 						}
-						valuesList.set(0, parameters[i]);
 					}
 				}
 				// valuesList -> values
