@@ -335,6 +335,11 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 							valuesList.add("");
 						}
 						valuesList.add(celvalue[0]);
+					}else if(parameters[i].matches("[0-9]+")){
+						if(i==0){
+							valuesList.add("");
+						}
+						valuesList.add(parameters[i]);
 					}else{
 						if(i==0){
 							valuesList.add("");
