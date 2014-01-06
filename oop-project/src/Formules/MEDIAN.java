@@ -33,19 +33,24 @@ public class MEDIAN extends Formule {
 					
 			}
 		}
-		// Lengte van de ArrayList modulo 2, als er een restant van 0 overblijft, is het een geheel getal, anders oneven.
-		if(waardes.size() % 2 == 0){
-			/*
-			 * Bij een even aantal moet het de middelste 2 getallen nemen. Ex:8. 0/1/2/3/4/5/6/7. Middelste twee getallen zijn
-			 * 3 en 4. 8/2 = 4. 4-1 = 3. Dit wordt hieronder aan de variabelen "een" en "twee" toegewezen. Het gemiddelde van deze waarden
-			 * wordt gereturnt in de variabele.
-			 */
-			int een = waardes.size() / 2;
-			int twee = een - 1;
-			return "" + ((waardes.get(een) + waardes.get(twee))/2) + "";
-		}else{
-			// Bij oneven aantal getallen returnt de formule het middelste getal. Ex: 5. (5-1)/2=2. 0/1/2/3/4. 2 is hier het middelste getal.
-			return "" + waardes.get((waardes.size() - 1)/2) + "";
-		}
+		
+		if(waardes.size() > 0){
+			// Lengte van de ArrayList modulo 2, als er een restant van 0 overblijft, is het een geheel getal, anders oneven.
+			if(waardes.size() % 2 == 0){
+				/*
+				 * Bij een even aantal moet het de middelste 2 getallen nemen. Ex:8. 0/1/2/3/4/5/6/7. Middelste twee getallen zijn
+				 * 3 en 4. 8/2 = 4. 4-1 = 3. Dit wordt hieronder aan de variabelen "een" en "twee" toegewezen. Het gemiddelde van deze waarden
+				 * wordt gereturnt in de variabele.
+				 */
+				int een = waardes.size() / 2;
+				int twee = een - 1;
+				return "" + ((waardes.get(een) + waardes.get(twee))/2) + "";
+			}else{
+				// Bij oneven aantal getallen returnt de formule het middelste getal. Ex: 5. (5-1)/2=2. 0/1/2/3/4. 2 is hier het middelste getal.
+				return "" + waardes.get((waardes.size() - 1)/2) + "";
+			}
+		}else
+			return "NO NUMBERS FOUND";
+	
 	}
 }
