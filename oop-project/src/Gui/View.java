@@ -6,6 +6,7 @@ import java.awt.Font;
 
 import javax.swing.AbstractListModel;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -16,6 +17,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -25,12 +27,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
-
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PiePlot;
-import org.jfree.data.general.DefaultPieDataset;
 
 import Controller.ColorEditor;
 import Controller.Controller;
@@ -56,8 +52,10 @@ public class View extends JFrame{
 	private JFrame graphchooserframe;
 	JPanel graphpanel;
 	JTextField columnNames;
+	JTextField rowNames;
 	JCheckBox includeLegend;
 	JCheckBox d3Graph;
+	JCheckBox stacked;
 	JTextField titlefield;
 	JTextField enternamefield;
 	JTextField fromcell;
@@ -67,6 +65,10 @@ public class View extends JFrame{
 	JTextField cellrange;
 	JButton ok;
 	JButton cancel;
+	JTextField xAxisName;
+	JTextField yAxisName;
+	JRadioButton horizontal;
+	JRadioButton vertical;
 	
 	public View(Spreadsheet spreadsheet){
 		controller = new Controller(this, spreadsheet);
@@ -360,7 +362,6 @@ public class View extends JFrame{
 		fileChooser.addActionListener(controller);
 		fileChooserFrame.setSize(800, 500);
 		fileChooserFrame.setVisible(true);
-		
 	}
 	
 	/**
@@ -384,7 +385,7 @@ public class View extends JFrame{
 	
 	public void setTextFieldText(String text){
 		try{
-		textfield.setText(text);
+			textfield.setText(text);
 		}
 		catch(IllegalStateException e){
 			
@@ -493,6 +494,31 @@ public class View extends JFrame{
 		return columnNames.getText();
 	}
 	
+	public String getRowNames(){
+		return rowNames.getText();
+	}
+	
+	public String getOrientation(){
+		if(horizontal.isSelected()){
+			return "horizontal";
+		}
+		else{
+			return "vertical";
+		}
+	}
+	
+	public String getXAxisName(){
+		return xAxisName.getText();
+	}
+	
+	public String getYAxisName(){
+		return yAxisName.getText();
+	}
+	
+	public boolean getStackedSetting(){
+		return stacked.isSelected();
+	}
+	
 // --------------------------------------------------------------------------------------------------------------------------
 		
 	/**
@@ -515,8 +541,77 @@ public class View extends JFrame{
 			columnNames = new JTextField();
 			columnNames.setBackground(null);
 			columnNames.setBounds(0, 290, 485, 40);
+			
+			ok.setBounds(414, 332, 70, 30);
+			cancel.setBounds(300, 332, 80, 30);
+			graphpanel.setSize(500, 400);
+			graphchooserframe.setSize(500, 400);
 		}
-		
+		JTextField enterRowNames=null;
+		JTextField enterXAxisName=null;
+		JTextField enterYAxisName=null;
+		if(graph.equals("Bar Chart")){
+			enterRowNames = new JTextField("Please enter names for the series (for all the rows) seperated by a ;");
+			enterRowNames.setEditable(false);
+			enterRowNames.setBackground(null);
+			enterRowNames.setBorder(null);
+			enterRowNames.setBounds(0, 260, 485, 40);
+	
+			rowNames = new JTextField();
+			rowNames.setBackground(null);
+			rowNames.setBounds(0, 300, 485, 40);
+			
+			enterColumnNames = new JTextField("Please enter names for the categories (for all the columns) seperated by a ;");
+			enterColumnNames.setEditable(false);
+			enterColumnNames.setBackground(null);
+			enterColumnNames.setBorder(null);
+			enterColumnNames.setBounds(0, 350, 485, 40);
+			
+			columnNames = new JTextField();
+			columnNames.setBackground(null);
+			columnNames.setBounds(0, 390, 485, 40);
+			
+			enterXAxisName = new JTextField("Enter a name for the x-Axis");
+			enterXAxisName.setEditable(false);
+			enterXAxisName.setBackground(null);
+			enterXAxisName.setBorder(null);
+			enterXAxisName.setBounds(0, 430, 485, 40);
+			
+			xAxisName = new JTextField();
+			xAxisName.setBackground(null);
+			xAxisName.setBounds(0, 470, 485, 40);
+			
+			enterYAxisName = new JTextField("Enter a name for the y-Axis");
+			enterYAxisName.setEditable(false);
+			enterYAxisName.setBackground(null);
+			enterYAxisName.setBorder(null);
+			enterYAxisName.setBounds(0, 510, 485, 40);
+			
+			yAxisName = new JTextField();
+			yAxisName.setBackground(null);
+			yAxisName.setBounds(0, 550, 485, 40);
+			
+			horizontal = new JRadioButton("Horizontal");
+			horizontal.setBackground(null);
+			horizontal.setBounds(385, 205, 150, 15);
+			
+			vertical = new JRadioButton("Vertical");
+			vertical.setBackground(null);
+			vertical.setBounds(385, 220, 150, 15);
+			
+			stacked = new JCheckBox("Stacked");
+			stacked.setBackground(null);
+			stacked.setBounds(235, 245, 150, 15);
+			
+			ButtonGroup group = new ButtonGroup();
+			group.add(horizontal);
+			group.add(vertical);
+			
+			ok.setBounds(414, 590, 70, 30);
+			cancel.setBounds(300, 590, 80, 30);
+			graphpanel.setSize(500, 655);
+			graphchooserframe.setSize(500, 655);
+		}
 		enternamefield.setText("New " + graph);
 		
 		graphpanel.add(graphlist);
@@ -535,12 +630,22 @@ public class View extends JFrame{
 			graphpanel.add(enterColumnNames);
 			graphpanel.add(columnNames);
 		}
-		graphpanel.setSize(500, 400);
-		graphchooserframe.setSize(500, 400);
+		if(graph.equals("Bar Chart")){
+			graphpanel.add(enterColumnNames);
+			graphpanel.add(columnNames);
+			graphpanel.add(enterRowNames);
+			graphpanel.add(rowNames);
+			graphpanel.add(xAxisName);
+			graphpanel.add(enterXAxisName);
+			graphpanel.add(yAxisName);
+			graphpanel.add(enterYAxisName);
+			graphpanel.add(horizontal);
+			graphpanel.add(vertical);
+			graphpanel.add(stacked);
+		}
 		graphchooserframe.add(graphpanel);
 		graphchooserframe.setResizable(false);
 		graphchooserframe.setVisible(true);
-
 	}
 
 	/**

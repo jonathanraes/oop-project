@@ -82,8 +82,37 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 					catch(NumberFormatException ex){
 					}
 				}
-				Graph newGraph = new Graph(columnNames, parsedData, graphname);
-				newGraph.createPieChart(legend, d3);
+				Graph newGraph = new Graph(parsedData, graphname);
+				newGraph.createPieChart(legend, d3, columnNames);
+				view.closeGraphChooser();
+			}
+			if(view.getSelectedGraph().equals("Bar Chart")){
+				int startColumn = view.getStartCell().substring(0, 1).toLowerCase().charAt(0) - 'a' +  1;
+				int startRow = Integer.parseInt(view.getStartCell().substring(1));
+				int lastColumn = view.getEndCell().substring(0, 1).toLowerCase().charAt(0) - 'a' +  1;
+				int lastRow = Integer.parseInt(view.getEndCell().substring(1));
+				int rowsAmount = lastRow - startRow;
+				int columnsAmount = lastColumn - startColumn;
+				String graphName = view.getGraphTitle();
+				String xAxisName = view.getXAxisName();
+				String yAxisName = view.getYAxisName();
+				String orientation = view.getOrientation();
+				String[] columnNames = view.getColumnNames().split(";");
+				String[] rowNames = view.getRowNames().split(";");
+				String[] data = parseCellData(view.getStartCell(), view.getEndCell());
+				double[] parsedData = new double[data.length];
+				boolean legend = view.getLegendSetting();
+				boolean d3 = view.get3DSetting();
+				boolean stacked = view.getStackedSetting();
+				for(int i = 0; i < data.length; i++){
+					try{
+						parsedData[i] = Double.parseDouble(data[i]);
+					}
+					catch(NumberFormatException ex){
+					}
+				}
+				Graph newGraph = new Graph(parsedData, graphName);
+				newGraph.createBarChart(legend, d3, rowsAmount, columnsAmount, rowNames, columnNames, xAxisName, yAxisName, orientation, stacked);
 				view.closeGraphChooser();
 			}
 		}
@@ -191,6 +220,8 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 				spreadsheet.add(newCell);
 			}
 			else{
+				int row = e.getFirstRow()+1;
+				int col = e.getColumn()+1;
 				Cell newCell = new Cell(e.getFirstRow()+1, e.getColumn()+1, view.getModel().getValueAt(e.getFirstRow(), e.getColumn()).toString());
 				spreadsheet.add(newCell);
 			}
@@ -214,11 +245,11 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 		try{
 			if(rows.length == 1 && columns.length == 1){
 				//if only one cell is selected the value or function is send to the textfield
-				if(spreadsheet.getCellAt(rows[0], columns[0]).getFunction() != null){
-					view.setTextFieldText(spreadsheet.getCellAt(rows[0], columns[0]).getFunction());
+				if(spreadsheet.getCellAt(rows[0]+1, columns[0]+1).getFunction() != null){
+					view.setTextFieldText(spreadsheet.getCellAt(rows[0]+1, columns[0]+1).getFunction());
 				}
 				else{
-					view.setTextFieldText(view.getTable().getValueAt(rows[0], columns[0]).toString());
+					view.setTextFieldText(spreadsheet.getCellAt(rows[0]+1, columns[0]+1).getContent());
 				}
 	
 			}

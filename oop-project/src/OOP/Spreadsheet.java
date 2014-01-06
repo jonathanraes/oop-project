@@ -44,7 +44,7 @@ public class Spreadsheet extends Observable{
 			Cell add = (Cell) cell;
 			for(int i = 0; i< Spreadsheet.size(); i++){
 				if(Spreadsheet.get(i).equals(cell)){
-					Spreadsheet.add(i, add);
+					Spreadsheet.set(i, add);
 					return false;
 				}
 			}

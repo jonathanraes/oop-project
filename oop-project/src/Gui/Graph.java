@@ -15,18 +15,16 @@ import org.jfree.data.general.DefaultPieDataset;
 
 public class Graph extends JFrame{
 	
-	String[] names;
 	double[] data;
 	String title;
 	
-	public Graph(String[] names, double[] values, String title){
-		this.names = names;
+	public Graph(double[] values, String title){
 		this.data = values;
 		this.title = title;
 	}
 
 	
-	public void createPieChart(boolean legend, boolean d3){
+	public void createPieChart(boolean legend, boolean d3, String[] names){
 		JFrame chartFrame = new JFrame();
 		 DefaultPieDataset dataset = new DefaultPieDataset();
 	      for(int i = 0 ; i < data.length; i++){
@@ -41,7 +39,7 @@ public class Graph extends JFrame{
 	     if(d3){
 	    	 chart = ChartFactory.createPieChart3D(title, dataset, legend,              
 	              true, //tooltips
-	              false //urls
+	              true //urls
 	          );
 	     }
 	     else{
@@ -61,26 +59,76 @@ public class Graph extends JFrame{
 	        chartFrame.setVisible(true);
 	}
 
-	public void createBarChart(int rows, int columns){
+	public void createBarChart(boolean legend, boolean d3, int rows, int columns, String[] series, String[] categories, String horizontalAxis, String verticalAxis, String orientation, boolean stacked){
+		JFrame chartFrame = new JFrame();
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 		int count = 0;
+		//rows = series
+		//cols = categories
 		
-		for(int row = 0; row < rows; row++){
-			for(int col = 0; col < columns; col++){
-				dataset.setValue(data[count], ""+row, ""+col);
+		for(int row = 0; row <= rows; row++){
+			for(int col = 0; col <= columns; col++){
+				dataset.setValue(data[count], series[row], categories[col]);
 				count++;
 			}			
 		}
-		JFreeChart chart = ChartFactory.createBarChart(
-		            title,         // chart title
-		            "Category",               // domain axis label
-		            "Value",                  // range axis label
-		            dataset,                  // data
-		            PlotOrientation.VERTICAL, // orientation
-		            true,                     // include legend
-		            true,                     // tooltips?
-		            false                     // URLs?
+		 JFreeChart chart = null;
+		if(d3){
+			if(stacked){
+				chart = ChartFactory.createStackedBarChart3D(
+			            title,         			       // chart title
+			            horizontalAxis,               // domain axis label
+			            verticalAxis,                  // range axis label
+			            dataset,                  // data
+			            orientation.equals("horizontal") ? PlotOrientation.HORIZONTAL : PlotOrientation.VERTICAL, // orientation
+			            legend,                     // include legend
+			            true,                     // tooltips?
+			            false                     // URLs?
+			        );
+			}
+			else{
+				chart = ChartFactory.createBarChart3D(
+			            title,         			       // chart title
+			            horizontalAxis,               // domain axis label
+			            verticalAxis,                  // range axis label
+			            dataset,                  // data
+			            orientation.equals("horizontal") ? PlotOrientation.HORIZONTAL : PlotOrientation.VERTICAL, // orientation
+			            legend,                     // include legend
+			            true,                     // tooltips?
+			            false                     // URLs?
 		        );
+			}
+		}
+		else{
+			if(stacked){
+				chart = ChartFactory.createStackedBarChart(
+			            title,         // chart title
+			            horizontalAxis,               // domain axis label
+			            verticalAxis,                  // range axis label
+			            dataset,                  // data
+			            orientation.equals("horizontal") ? PlotOrientation.HORIZONTAL : PlotOrientation.VERTICAL, // orientation
+			            legend,                     // include legend
+			            true,                     // tooltips?
+			            false                     // URLs?
+			       );
+			}
+			else{
+				chart = ChartFactory.createBarChart(
+			            title,         // chart title
+			            horizontalAxis,               // domain axis label
+			            verticalAxis,                  // range axis label
+			            dataset,                  // data
+			            orientation.equals("horizontal") ? PlotOrientation.HORIZONTAL : PlotOrientation.VERTICAL, // orientation
+			            legend,                     // include legend
+			            true,                     // tooltips?
+			            false                     // URLs?
+		        );
+			}
+		}
+        JPanel panel = new ChartPanel(chart);
+        chartFrame.add(panel);
+        chartFrame.setSize(400, 400);
+        chartFrame.setVisible(true);
 		
 	}
 	
