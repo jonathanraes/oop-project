@@ -306,13 +306,56 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 				Formule f = (Formule)o;
 				
 				//getting the range of cells
+				/*
 				String[] cellrange = formula[1].split(":");
 				String firstcell = cellrange[0];
 				String lastcell = cellrange[1];
 			
 				//retrieving the cells contents
 				String[] values = parseCellData(firstcell,lastcell);
-				
+				*/
+				ArrayList<String> valuesList = new ArrayList<String>();
+				String[] parameters = formula[1].split(", |,");
+				int counter = 0;
+				for(int i=0; i<parameters.length; i++){
+					if(parameters[i].contains(":")){
+						String[] cellrange = parameters[i].split(":");
+						String firstcell = cellrange[0];
+						String lastcell = cellrange[1];
+						String[] interval = parseCellData(firstcell, lastcell);
+						for(int j = 0; j<interval.length;j++){
+							if(i==0&&j==0){
+								valuesList.add("");
+							}
+							valuesList.add(interval[j]);
+						}
+					}else if(parameters[i].matches("[a-zA-Z]+[0-9]+")){
+						String[] celvalue = parseCellData(parameters[i],parameters[i]);
+						if(i==0){
+							valuesList.add("");
+						}
+						valuesList.add(celvalue[0]);
+					}else{
+						if(i==0){
+							valuesList.add("");
+						}
+						valuesList.set(0, parameters[i]);
+					}
+				}
+				// valuesList -> values
+				String[] values;
+				if(valuesList.get(0).isEmpty()){
+					values = new String[valuesList.size() - 1];
+					for(int i=0;i<valuesList.size()-1;i++){
+						values[i] = valuesList.get(i+1);
+					}
+				}else{
+					values = new String[valuesList.size()];
+					for(int i=0;i<valuesList.size();i++){
+						values[i] = valuesList.get(i);
+					}
+				}
+	// --------------------------------Einde nieuwe code------------------------------------------------
 				String content = f.executable(values);
 				return content;
 			}
