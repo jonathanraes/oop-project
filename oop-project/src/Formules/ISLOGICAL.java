@@ -98,9 +98,10 @@ public class ISLOGICAL extends Formule{
 				// Eerst wordt gekeken naar of deel1 een cel is.
 				if(celcontrole(deel1)){
 					// Als deel1 een cel is, wordt gekeken naar of deel2 een cel is.
-					if(celcontrole(deel2))
+					if(celcontrole(deel2)){
 						// Als deel1 en deel2 beide cellen blijken te zijn, returnt de formule TRUE.
 						return "TRUE";
+					}
 					/*
 					 * Indien deel2 geen cel blijkt te zijn, moet er gecontroleerd worden of deel2 geen getal is. Wederom met een parse.
 					 * Indien de parse lukt zal de return statement bereikt worden en returnt de formule "TRUE".
@@ -128,7 +129,7 @@ public class ISLOGICAL extends Formule{
 		/* Controleert of de eerste character van de String een letter is en of de laatste character een getal is.
 		 * Indien dit waar is returnt deze methode de boolean true, indien niet dan returnt de methode de boolean false.
 		 */
-		if(cel.matches("[a-zA-Z]+[1-99]")){
+		if(cel.matches("[a-zA-Z]+[1-9]+")){
 			return true;
 		}else
 			return false;
