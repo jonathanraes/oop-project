@@ -26,7 +26,6 @@ public class COUNT extends Formule {
 				Double.parseDouble(waardes[i]);
 				countnumbers = countnumbers + 1;
 			}catch(NumberFormatException e){
-			}catch(NullPointerException NPE){
 			}
 		}
 		return "" + countnumbers;
