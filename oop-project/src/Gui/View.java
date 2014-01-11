@@ -68,7 +68,9 @@ public class View extends JFrame{
 	JTextField xAxisName;
 	JTextField yAxisName;
 	JRadioButton horizontal;
-	JRadioButton vertical;
+	JRadioButton vertical;	
+	JRadioButton ring;
+	JRadioButton pie;
 	
 	public View(Spreadsheet spreadsheet){
 		controller = new Controller(this, spreadsheet);
@@ -113,7 +115,7 @@ public class View extends JFrame{
 				
 		textfield = new JTextField();
 		topPanel = new JPanel();
-		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
+		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.LINE_AXIS));
 		colorbutton.setActionCommand("edit");
 		colorbutton.setBorderPainted(false);
 		graph.setBorderPainted(false);
@@ -310,7 +312,7 @@ public class View extends JFrame{
 		d3Graph = new JCheckBox("3D");
 		d3Graph.setBackground(null);
 		d3Graph.setBounds(235, 220, 150, 25);
-		
+				
 		ok = new JButton("OK");
 		ok.setActionCommand("CreateGraph");
 		ok.setBounds(414, 332, 70, 30);
@@ -519,6 +521,15 @@ public class View extends JFrame{
 		return stacked.isSelected();
 	}
 	
+	public String getPieChartType(){
+		if(pie.isSelected()){
+			return "pie";
+		}
+		else{
+			return "ring";
+		}
+	}
+	
 // --------------------------------------------------------------------------------------------------------------------------
 		
 	/**
@@ -531,6 +542,7 @@ public class View extends JFrame{
 		
 		JTextField enterColumnNames = null;
 		columnNames = null;
+		d3Graph.setEnabled(true);
 		if(graph.equals("Pie Chart")){
 			enterColumnNames = new JTextField("Please enter your column names seperated by a ;");
 			enterColumnNames.setEditable(false);
@@ -546,6 +558,21 @@ public class View extends JFrame{
 			cancel.setBounds(300, 332, 80, 30);
 			graphpanel.setSize(500, 400);
 			graphchooserframe.setSize(500, 400);
+			
+			pie = new JRadioButton("Pie");
+			pie.setBackground(null);
+			pie.setBounds(385, 205, 150, 15);
+			pie.setSelected(true);
+			pie.addActionListener(controller);
+						
+			ring = new JRadioButton("Ring");
+			ring.setBackground(null);
+			ring.setBounds(385, 220, 150, 15);
+			ring.addActionListener(controller);
+			
+			ButtonGroup group = new ButtonGroup();
+			group.add(pie);
+			group.add(ring);
 		}
 		JTextField enterRowNames=null;
 		JTextField enterXAxisName=null;
@@ -594,10 +621,11 @@ public class View extends JFrame{
 			horizontal = new JRadioButton("Horizontal");
 			horizontal.setBackground(null);
 			horizontal.setBounds(385, 205, 150, 15);
-			
+						
 			vertical = new JRadioButton("Vertical");
 			vertical.setBackground(null);
 			vertical.setBounds(385, 220, 150, 15);
+			vertical.setSelected(true);
 			
 			stacked = new JCheckBox("Stacked");
 			stacked.setBackground(null);
@@ -629,6 +657,8 @@ public class View extends JFrame{
 		if(graph.equals("Pie Chart")){
 			graphpanel.add(enterColumnNames);
 			graphpanel.add(columnNames);
+			graphpanel.add(pie);
+			graphpanel.add(ring);
 		}
 		if(graph.equals("Bar Chart")){
 			graphpanel.add(enterColumnNames);
@@ -653,5 +683,16 @@ public class View extends JFrame{
 	 */
 	public void closeGraphChooser(){
 		graphchooserframe.dispose();
+	}
+	
+	public void enable3D(boolean enabled){
+		if(enabled){
+			d3Graph.setEnabled(true);
+			graphpanel.repaint();
+		}
+		else{
+			d3Graph.setSelected(false);
+			d3Graph.setEnabled(false);
+		}
 	}
 }

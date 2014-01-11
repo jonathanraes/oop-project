@@ -75,6 +75,7 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 				double[] parsedData = new double[data.length];
 				boolean legend = view.getLegendSetting();
 				boolean d3 = view.get3DSetting();
+				String type = view.getPieChartType();
 				for(int i = 0; i < data.length; i++){
 					try{
 						parsedData[i] = Double.parseDouble(data[i]);
@@ -83,7 +84,7 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 					}
 				}
 				Graph newGraph = new Graph(parsedData, graphname);
-				newGraph.createPieChart(legend, d3, columnNames);
+				newGraph.createPieChart(legend, d3, type, columnNames);
 				view.closeGraphChooser();
 			}
 			if(view.getSelectedGraph().equals("Bar Chart")){
@@ -122,6 +123,12 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 		if(e.getActionCommand().equals("CancelGraph")){
 			//User presses the cancel button in the graph chooser window
 			view.closeGraphChooser();
+		}
+		if(e.getActionCommand().equals("Ring")){
+			view.enable3D(false);
+		}
+		if(e.getActionCommand().equals("Pie")){
+			view.enable3D(true);
 		}
 	}
 
@@ -395,7 +402,16 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 		int lastRow = Integer.parseInt(lastCell.substring(1));
 		
 		//retrieving the cells contents
-		String[] values = new String[(lastColumn - startColumn + 1)*(lastRow - startRow + 1)];
+		String[] values = null;
+		try{
+			values = new String[(lastColumn - startColumn + 1)*(lastRow - startRow + 1)];
+		}
+		catch(NegativeArraySizeException e){
+			values = new String[1];
+			values[0] = "";
+			return values;
+			
+		}
 		int i = 0;
 		for(int row = startRow; row <= lastRow; row++){
 			for(int col = startColumn; col <= lastColumn; col++){

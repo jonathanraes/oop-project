@@ -24,7 +24,7 @@ public class Graph extends JFrame{
 	}
 
 	
-	public void createPieChart(boolean legend, boolean d3, String[] names){
+	public void createPieChart(boolean legend, boolean d3, String style, String[] names){
 		JFrame chartFrame = new JFrame();
 		 DefaultPieDataset dataset = new DefaultPieDataset();
 	      for(int i = 0 ; i < data.length; i++){
@@ -37,16 +37,23 @@ public class Graph extends JFrame{
 	      }
 	      JFreeChart chart = null;
 	     if(d3){
-	    	 chart = ChartFactory.createPieChart3D(title, dataset, legend,              
+	    	chart = ChartFactory.createPieChart3D(title, dataset, legend,              
 	              true, //tooltips
 	              true //urls
 	          );
 	     }
 	     else{
+	    	 if(style.equals("ring")){
+	    		 chart = ChartFactory.createRingChart(title, dataset, legend,              
+	   	              true, //tooltips
+	   	              true //urls
+	   	              );
+	    	 }else{
 	    	 chart = ChartFactory.createPieChart(title, dataset, legend,               
 		              true, //tooltips
 		              false //urls
 		          );
+	    	 }	
 	     }
 	     	PiePlot plot = (PiePlot) chart.getPlot();
 	        plot.setLabelFont(new Font("SansSerif", Font.PLAIN, 12));
@@ -129,7 +136,6 @@ public class Graph extends JFrame{
         chartFrame.add(panel);
         chartFrame.setSize(400, 400);
         chartFrame.setVisible(true);
-		
 	}
 	
 }
