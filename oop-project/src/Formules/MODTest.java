@@ -54,4 +54,11 @@ public class MODTest {
 		assertEquals(mod.executable(test), "1.0");
 	}
 	
+	@Test
+	public void test6(){
+		String[] test = {"0", "1"};
+		MOD mod = new MOD();
+		assertEquals(mod.executable(test), "Error: Het getal dat moet gedeeld worden is 0");
+	}
+	
 }
