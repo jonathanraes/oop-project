@@ -110,7 +110,7 @@ public class COUNTIF extends Formule{
 						}
 					}
 				// Zelfde gedeelte als hierboven, maar dan voor operator =
-				}else if(operator.equals("=")){
+				}else{
 					for(int i=1; i<a.length;i++){
 						try{
 							if(Double.parseDouble(a[i]) == waardegetal)
@@ -130,7 +130,7 @@ public class COUNTIF extends Formule{
 				 * 
 				 */
 				if(waarde.matches("[a-zA-Z]+[1-99]")){
-					String cel = ; // = getcel(waarde) ofzo. <- Waarde ophalen uit cel.
+					String cel = "abc"; // = getcel(waarde) ofzo. <- Waarde ophalen uit cel.
 					if(cel.matches("[0-9]+")){
 						double celgetal = Double.parseDouble(cel);
 						if(operator.equals("<>")){
