@@ -1,4 +1,5 @@
 package Formules;
+import Controller.Controller;
 
 /**
  * IF klasse. Hierin wordt de formule IF uitgevoerd. Bij de formule moet je 3 parameters specificeren.
@@ -15,8 +16,8 @@ public class IF extends Formule {
 	 */
 	public String executable(String[] a) {
 		String logicalexpression = a[0];
-		String value_if_true = a[1];
-		String value_if_false = a[2];
+		String value_if_true = a[3];
+		String value_if_false = a[4];
 		String operator;
 		String deel1;
 		String deel2;
@@ -26,37 +27,37 @@ public class IF extends Formule {
 			int plvindex1 = logicalexpression.indexOf(operator.substring(0, 1));
 			deel1 = logicalexpression.substring(0, plvindex1);
 			deel2 = logicalexpression.substring(plvindex1+2, logicalexpression.length());
-			uitkomst = expression(deel1, deel2, operator);
+			uitkomst = expression(a, deel1, deel2, operator);
 		}else if(logicalexpression.contains("<=")){
 			operator = "<=";
 			int plvindex1 = logicalexpression.indexOf(operator.substring(0, 1));
 			deel1 = logicalexpression.substring(0, plvindex1);
 			deel2 = logicalexpression.substring(plvindex1+2, logicalexpression.length());
-			uitkomst = expression(deel1, deel2, operator);
+			uitkomst = expression(a, deel1, deel2, operator);
 		}else if(logicalexpression.contains(">=")){
 			operator = ">=";
 			int plvindex1 = logicalexpression.indexOf(operator.substring(0, 1));
 			deel1 = logicalexpression.substring(0, plvindex1);
 			deel2 = logicalexpression.substring(plvindex1+2, logicalexpression.length());
-			uitkomst = expression(deel1, deel2, operator);
+			uitkomst = expression(a, deel1, deel2, operator);
 		}else if(logicalexpression.contains("<")){
 			operator = "<";
 			int plvindex = logicalexpression.indexOf(operator);
 			deel1 = logicalexpression.substring(0,plvindex);
 			deel2 = logicalexpression.substring(plvindex+1, logicalexpression.length());
-			uitkomst = expression(deel1, deel2, operator);
+			uitkomst = expression(a, deel1, deel2, operator);
 		}else if(logicalexpression.contains(">")){
 			operator = ">";
 			int plvindex = logicalexpression.indexOf(operator);
 			deel1 = logicalexpression.substring(0,plvindex);
 			deel2 = logicalexpression.substring(plvindex+1, logicalexpression.length());
-			uitkomst = expression(deel1, deel2, operator);
+			uitkomst = expression(a, deel1, deel2, operator);
 		}else if(logicalexpression.contains("=")){
 			operator = "=";
 			int plvindex = logicalexpression.indexOf(operator);
 			deel1 = logicalexpression.substring(0,plvindex);
 			deel2 = logicalexpression.substring(plvindex+1, logicalexpression.length());
-			uitkomst = expression(deel1, deel2, operator);
+			uitkomst = expression(a, deel1, deel2, operator);
 		}else{
 			return "NO LOGICAL EXPRESSION FOUND";
 		}
@@ -67,7 +68,7 @@ public class IF extends Formule {
 			return value_if_false;
 		
 	}
-	public boolean expression(String deel1, String deel2, String operator){
+	public boolean expression(String[] a, String deel1, String deel2, String operator){
 		try{
 			// Eerst wordt gekeken naar of deel1 een getal is, zo ja dan wordt het try-block vervolgd, zo niet dan wordt er een exception opgegooid die opgevangen wordt in het catch-blok.
 			double deel1getal = Double.parseDouble(deel1);
@@ -76,7 +77,7 @@ public class IF extends Formule {
 			 *  de formule TRUE.
 			 */
 				if(celcontrole(deel2)){
-					String deel2cel = null; // Ophalen van de waarde uit de cel.
+					String deel2cel = a[2]; // Ophalen van de waarde uit de cel.
 					try{
 						double deel2getal = Double.parseDouble(deel2cel); 
 						return compare(deel1getal, deel2getal, operator);
@@ -87,7 +88,7 @@ public class IF extends Formule {
 					
 			/*
 			 * Indien deel2 geen cel is, wordt er gekeken of deel2 een getal is mbv parseDouble(). Indien de parse lukt en deel2 dus een getal is,
-			 * gaat het try-blok verder en wordt er TRUE gereturnt door de formule, want deel1 en deel2 zijn beide geldige informatie.
+	 		 * gaat het try-blok verder en wordt er TRUE gereturnt door de formule, want deel1 en deel2 zijn beide geldige informatie.
 			 * Indien 2 geen getal is, wordt er een exception opgegooid en opgevangen verderop.
 			 */
 			double deel2getal = Double.parseDouble(deel2);
@@ -98,12 +99,13 @@ public class IF extends Formule {
 			try{
 				// Eerst wordt gekeken naar of deel1 een cel is.
 				if(celcontrole(deel1)){
-						double deel1getal = Double.parseDouble(); // Haal String op uit cel
 					
+					String deel1cel = a[1]; // Haal String op uit cel
+					double deel1getal = Double.parseDouble(deel1cel);
 					// Als deel1 een cel is, wordt gekeken naar of deel2 een cel is.
 						double deel2getal;
 						if(celcontrole(deel2)){
-							deel2getal = Double.parseDouble("abc"); // Haal String op uit cel
+							deel2getal = Double.parseDouble(a[2]); // Haal String op uit cel
 							return compare(deel1getal, deel2getal, operator);		
 						}
 						
@@ -141,7 +143,7 @@ public class IF extends Formule {
 			}else if(operator.equals(">")){
 				if(deel1getal > deel2getal)
 					return true;
-			}else if(operator.equals("=")){
+			}else{
 				if(deel1getal == deel2getal)
 					return true;
 			}
@@ -155,7 +157,7 @@ public class IF extends Formule {
 		/* Controleert of de eerste character van de String een letter is en of de laatste character een getal is.
 		 * Indien dit waar is returnt deze methode de boolean true, indien niet dan returnt de methode de boolean false.
 		 */
-		if(cel.matches("[a-zA-Z]+[1-99]")){
+		if(cel.matches("[a-zA-Z]+[0-9]+")){
 			return true;
 		}else
 			return false;
