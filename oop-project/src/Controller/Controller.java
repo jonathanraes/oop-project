@@ -46,12 +46,10 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 	private Spreadsheet spreadsheet;
 	private int currentSearchRow = 0;
 	private int currentSearchColumn = 0;
-	private CellRenderer cellrenderer;
 
-	public Controller(View view, Spreadsheet spreadsheet, CellRenderer cellrenderer){
+	public Controller(View view, Spreadsheet spreadsheet){
 		this.view = view;
 		this.spreadsheet = spreadsheet;
-		this.cellrenderer = cellrenderer;
 	}
 	
 //	ActionListener-----------------------------------------------------------------------------------------------------------

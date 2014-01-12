@@ -86,8 +86,7 @@ public class View extends JFrame{
 	
 	CellRenderer cellrenderer;
 	public View(Spreadsheet spreadsheet){
-//		cellrenderer = new CellRenderer();
-		controller = new Controller(this, spreadsheet, cellrenderer);
+		controller = new Controller(this, spreadsheet);
 		colorEditor = new ColorEditor(this);
 		headers = new String[100000];
 		setLayout(new BorderLayout());
