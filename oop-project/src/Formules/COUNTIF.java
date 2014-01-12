@@ -61,7 +61,7 @@ public class COUNTIF extends Formule{
 				 * Indien die waarde een getal is, lukt de parse hierboven en bereiken we dit gedeelte. 
 				 */
 				if(operator.equals("<>")){
-					for(int i=1; i<a.length;i++){
+					for(int i=3; i<a.length;i++){
 						/*	Elke waarde uit de binnenkomende selectie wordt geprobeerd te parsen als een getal en vervolgens vergeleken met het getal
 						 * waardegetal afhankelijk van de operator die in het vorige deel is gevonden. Indien de parse niet lukt wordt de onstaande
 						 * NumberFormatException opgevangen. In het catch-blok wordt niets gedaan omdat we alleen iets willen doen met getallen.
@@ -75,7 +75,7 @@ public class COUNTIF extends Formule{
 					}
 				// Zelfde gedeelte als hierboven, maar dan voor operator <=
 				}else if(operator.equals("<=")){
-					for(int i=1; i<a.length;i++){
+					for(int i=3; i<a.length;i++){
 						try{
 							if(Double.parseDouble(a[i]) <= waardegetal)
 								countnumber++;
@@ -93,7 +93,7 @@ public class COUNTIF extends Formule{
 					}
 				// Zelfde gedeelte als hierboven, maar dan voor operator >
 				}else if(operator.equals(">")){
-					for(int i=1; i<a.length;i++){
+					for(int i=3; i<a.length;i++){
 						try{
 							if(Double.parseDouble(a[i]) > waardegetal)
 								countnumber++;
@@ -102,7 +102,7 @@ public class COUNTIF extends Formule{
 					}
 				// Zelfde gedeelte als hierboven, maar dan voor operator <	
 				}else if(operator.equals("<")){
-					for(int i=1; i<a.length;i++){
+					for(int i=3; i<a.length;i++){
 						try{
 							if(Double.parseDouble(a[i]) < waardegetal)
 								countnumber++;
@@ -111,7 +111,7 @@ public class COUNTIF extends Formule{
 					}
 				// Zelfde gedeelte als hierboven, maar dan voor operator =
 				}else{
-					for(int i=1; i<a.length;i++){
+					for(int i=3; i<a.length;i++){
 						try{
 							if(Double.parseDouble(a[i]) == waardegetal)
 								countnumber++;
@@ -129,12 +129,12 @@ public class COUNTIF extends Formule{
 				 * moet gelden over de hele String. Als het een cel is, wordt de inhoud van de cel
 				 * 
 				 */
-				if(waarde.matches("[a-zA-Z]+[1-99]")){
-					String cel = "abc"; // = getcel(waarde) ofzo. <- Waarde ophalen uit cel.
-					if(cel.matches("[0-9]+")){
+				if(waarde.matches("[a-zA-Z]+[0-9]+")){
+					String cel = a[2]; // a[2] is de celinhoud, opgehaald vanuit de Controller en al meegegeven.
+					if(cel.matches("[0-9]+|[0-9]+.[0-9]+|-[0-9]+|-[0-9]+.[0-9]+")){
 						double celgetal = Double.parseDouble(cel);
 						if(operator.equals("<>")){
-							for(int i=1; i<a.length;i++){
+							for(int i=3; i<a.length;i++){
 								/*	Elke waarde uit de binnenkomende selectie wordt geprobeerd te parsen als een getal en vervolgens vergeleken met het getal
 								 * celgetal afhankelijk van de operator die in het vorige deel is gevonden. Indien de parse niet lukt wordt de onstaande
 								 * NumberFormatException opgevangen. In het catch-blok wordt niets gedaan omdat we alleen iets willen doen met getallen.
@@ -148,7 +148,7 @@ public class COUNTIF extends Formule{
 							}
 						// Zelfde gedeelte als hierboven, maar dan voor operator <=
 						}else if(operator.equals("<=")){
-							for(int i=1; i<a.length;i++){
+							for(int i=3; i<a.length;i++){
 								try{
 									if(Double.parseDouble(a[i]) <= celgetal)
 										countnumber++;
@@ -157,7 +157,7 @@ public class COUNTIF extends Formule{
 							}
 						// Zelfde gedeelte als hierboven, maar dan voor operator >=
 						}else if(operator.equals(">=")){
-							for(int i=1; i<a.length;i++){
+							for(int i=3; i<a.length;i++){
 								try{
 									if(Double.parseDouble(a[i]) >= celgetal)
 										countnumber++;
@@ -166,7 +166,7 @@ public class COUNTIF extends Formule{
 							}
 						// Zelfde gedeelte als hierboven, maar dan voor operator >
 						}else if(operator.equals(">")){
-							for(int i=1; i<a.length;i++){
+							for(int i=3; i<a.length;i++){
 								try{
 									if(Double.parseDouble(a[i]) > celgetal)
 										countnumber++;
@@ -175,7 +175,7 @@ public class COUNTIF extends Formule{
 							}
 						// Zelfde gedeelte als hierboven, maar dan voor operator <	
 						}else if(operator.equals("<")){
-							for(int i=1; i<a.length;i++){
+							for(int i=3; i<a.length;i++){
 								try{
 									if(Double.parseDouble(a[i]) < celgetal)
 										countnumber++;
@@ -183,8 +183,8 @@ public class COUNTIF extends Formule{
 								}
 							}
 						// Zelfde gedeelte als hierboven, maar dan voor operator =
-						}else if(operator.equals("=")){
-							for(int i=1; i<a.length;i++){
+						}else{
+							for(int i=3; i<a.length;i++){
 								try{
 									if(Double.parseDouble(a[i]) == celgetal)
 										countnumber++;
@@ -196,20 +196,24 @@ public class COUNTIF extends Formule{
 					 * en kleine letters, vergeleken worden met alle waardes uit de binnenkomende selectie.
 					 * 
 					 */
-					}else{
-						for(int i=1;i<a.length;i++){
+					}else if(operator.equals("=")){
+						for(int i=3;i<a.length;i++){
 							if(a[i].equalsIgnoreCase(cel))
 								countnumber++;
 						}
+					}else{
+						return "0";
 					}
 				/*	Als de waarde uit de logische expressie geen getal en geen cel is, moet het dus een String zijn. Hier vergelijken we zonder te letten op 
 				 * hoofdletters en kleine letters of de inhoud van de String en de binnenkomende String hetzelfde zijn. Zo ja, dan wordt de counter verhoogd.
 				 */
-				}else{
-					for(int i=1; i<a.length; i++){
+				}else if(operator.equals("=")){
+					for(int i=3; i<a.length; i++){
 						if(a[i].equalsIgnoreCase(waarde))
 							countnumber++;
 					}
+				}else{
+					return "0";
 				}
 			}
 			// Als laatste wordt dan de counter gereturnt als een String tussen aanhalingstekens.

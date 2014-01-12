@@ -454,6 +454,8 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 						for(int j = 0; j<interval.length;j++){
 							if(i==0&&j==0){
 								valuesList.add("");
+								valuesList.add("");
+								valuesList.add("");
 							}
 							valuesList.add(interval[j]);
 						}
@@ -461,29 +463,56 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 						String[] celvalue = parseCellData(parameters[i],parameters[i]);
 						if(i==0){
 							valuesList.add("");
+							valuesList.add("");
+							valuesList.add("");
 						}
 						valuesList.add(celvalue[0]);
+						
 					}else{
 						try{
 							Double.parseDouble(parameters[i]);
 							if(i==0){
+								valuesList.add("");
+								valuesList.add("");
 								valuesList.add("");
 							}
 							valuesList.add(parameters[i]);
 						}catch(NumberFormatException NFE){
 							if(i==0){
 								valuesList.add("");
+								valuesList.add("");
+								valuesList.add("");
 							}
 							valuesList.set(0, parameters[i]);
+							
+							// Hier moet ik zijn <------------------------------------------------------
+							
+							// Split de String met een operator. 
+							String[] cellen = parameters[i].split("<>|<=|>=|<|>|=");
+							/* Als het geen logische expressie is, krijg je maar een array van 1 lang, hierop controleren we hier.
+							 * Als het namelijk wel een logische expressie is, ontstaat er een array met een lengte van 2.
+							 */
+							if(cellen.length == 2){
+								// Echter als de expressie een 1 cellige expressie is, bijv "<B4", dan is de eerste leeg of een aantal spaties afhankelijk van de invoer.
+								if(cellen[0].isEmpty() || cellen[0].matches("[ ]+")){
+									for(int count = 0; count<cellen.length;count++){
+										if(cellen[count].matches("[a-zA-Z]+[0-9]+")){
+											valuesList.set(count+1, parseCellData(cellen[count],cellen[count])[0]);
+										}
+										
+									}
+								}
+							}
+							
 						}
 					}
 				}
 				// valuesList -> values
 				String[] values;
 				if(valuesList.get(0).isEmpty()){
-					values = new String[valuesList.size() - 1];
-					for(int i=0;i<valuesList.size()-1;i++){
-						values[i] = valuesList.get(i+1);
+					values = new String[valuesList.size() - 3];
+					for(int i=0;i<valuesList.size()-3;i++){
+						values[i] = valuesList.get(i+3);
 					}
 				}else{
 					values = new String[valuesList.size()];
