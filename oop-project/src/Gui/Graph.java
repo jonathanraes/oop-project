@@ -24,7 +24,7 @@ public class Graph extends JFrame{
 	}
 
 	
-	public void createPieChart(boolean legend, boolean d3, String style, String[] names){
+	public JFreeChart createPieChart(boolean legend, boolean d3, String style, String[] names){
 		JFrame chartFrame = new JFrame();
 		 DefaultPieDataset dataset = new DefaultPieDataset();
 	      for(int i = 0 ; i < data.length; i++){
@@ -64,6 +64,7 @@ public class Graph extends JFrame{
 	        chartFrame.add(panel);
 	        chartFrame.setSize(400, 400);
 	        chartFrame.setVisible(true);
+	        return chart;
 	}
 
 	public void createBarChart(boolean legend, boolean d3, int rows, int columns, String[] series, String[] categories, String horizontalAxis, String verticalAxis, String orientation, boolean stacked){

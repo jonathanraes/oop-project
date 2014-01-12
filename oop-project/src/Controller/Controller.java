@@ -1,6 +1,13 @@
 package Controller;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.HierarchyBoundsListener;
@@ -8,15 +15,21 @@ import java.awt.event.HierarchyEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+
+import org.jfree.chart.JFreeChart;
 
 import Formules.Formule;
 import Gui.Graph;
@@ -31,14 +44,22 @@ import OOP.Spreadsheet;
 public class Controller implements ActionListener, KeyListener, HierarchyBoundsListener, DocumentListener, TableModelListener, ListSelectionListener{
 	private View view;
 	private Spreadsheet spreadsheet;
+	private int currentSearchRow = 0;
+	private int currentSearchColumn = 0;
+	private CellRenderer cellrenderer;
 
-	public Controller(View view, Spreadsheet spreadsheet){
+	public Controller(View view, Spreadsheet spreadsheet, CellRenderer cellrenderer){
 		this.view = view;
 		this.spreadsheet = spreadsheet;
+		this.cellrenderer = cellrenderer;
 	}
 	
 //	ActionListener-----------------------------------------------------------------------------------------------------------
 	
+	/**
+	 * ActionPerformed handles all the actionevents that are thrown by any components that have the Actionlistener added.
+	 * It handles what should be done when any button, or any menu item is clicked
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 //		if(e.getActionCommand().equals("+10 Rows")){
@@ -50,22 +71,19 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 //		}
 //		above is not needed as long as the buttons are disabled
 		String command = e.getActionCommand();
-		if(e.getActionCommand().equals("openfilechooser")){
-			//the open button from the menubar is pressed
-			view.openFileChooser();
-		}
+	
 		if(e.getActionCommand().equals("ApproveSelection")){
 			//user presses open in the filechooser menu
-			loadFile(view.getFileChooser().getSelectedFile());
-			view.closeFileChooser();
-		}
-		if(e.getActionCommand().equals("CancelSelection")){
-			//user presses cancel in the filechooser menu
-			view.closeFileChooser();
+			if(view.getFileChooser().getDialogType() == JFileChooser.OPEN_DIALOG){
+				spreadsheet.clearSheet();
+				view.clearTable();
+				loadFile(view.getFileChooser().getSelectedFile());
+			}
 		}
 		if(e.getActionCommand().equals("Graph")){
 			view.graphChooser();
 			view.resetGraphChooser();
+
 		}
 		if(e.getActionCommand().equals("CreateGraph")){
 			if(view.getSelectedGraph().equals("Pie Chart")){
@@ -84,7 +102,7 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 					}
 				}
 				Graph newGraph = new Graph(parsedData, graphname);
-				newGraph.createPieChart(legend, d3, type, columnNames);
+				JFreeChart chart = newGraph.createPieChart(legend, d3, type, columnNames);
 				view.closeGraphChooser();
 			}
 			if(view.getSelectedGraph().equals("Bar Chart")){
@@ -129,6 +147,105 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 		}
 		if(e.getActionCommand().equals("Pie")){
 			view.enable3D(true);
+		}
+		if(e.getSource() instanceof JMenuItem){
+			if(e.getActionCommand().equals("Copy")){
+				String contents = view.getTable().getValueAt(view.getTable().getSelectedRow(), view.getTable().getSelectedColumn()).toString();
+				Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+				clipboard.setContents(new StringSelection(contents), null);
+			}
+			else if(e.getActionCommand().equals("Cut")){
+				String contents = view.getTable().getValueAt(view.getTable().getSelectedRow(), view.getTable().getSelectedColumn()).toString();
+				Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+				clipboard.setContents(new StringSelection(contents), null);
+				view.getTable().setValueAt("", view.getTable().getSelectedRow(), view.getTable().getSelectedColumn());
+			}
+			else if(e.getActionCommand().equals("Paste")){
+				String result = "";
+			    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+			    Transferable contents = clipboard.getContents(null);
+			    if (contents != null) {
+			      try {
+			        result = (String)contents.getTransferData(DataFlavor.stringFlavor);
+			      }
+			      catch (UnsupportedFlavorException | IOException ex){
+			      }
+			    }
+			    view.getModel().setValueAt(result, view.getTable().getSelectedRow(), view.getTable().getSelectedColumn());
+			}
+			else if(e.getActionCommand().equals("Select All")){
+				view.getTable().selectAll();
+			}
+			else if(e.getActionCommand().equals("Find")){
+				view.openSearchWindow();
+			}
+			else if(e.getActionCommand().equals("Delete Contents")){
+				int[] rows = view.getTable().getSelectedRows();
+				int[] cols = view.getTable().getSelectedColumns();
+				for(int row = 0; row < rows.length; row++){
+					for (int col = 0; col < cols.length; col++) {
+						view.getModel().setValueAt("", rows[row], cols[col]);
+					}
+				}
+			}
+			else if(e.getActionCommand().equals("Save")){
+				int actionDialog = view.getFileChooser().showSaveDialog(view);
+				if(actionDialog == JFileChooser.APPROVE_OPTION){
+					File fileName;
+					if(view.getFileChooser().getSelectedFile().toString().endsWith(".xml")){
+						fileName = new File(view.getFileChooser().getSelectedFile().toString());
+					}
+					else{
+						fileName = new File(view.getFileChooser().getSelectedFile() + ".xml");
+					}
+					if(fileName.exists()){
+				        actionDialog = JOptionPane.showConfirmDialog(view,
+				                           "Replace existing file?");
+				        if (actionDialog == JOptionPane.NO_OPTION || actionDialog == JOptionPane.CANCEL_OPTION){
+				            return;
+				        }
+				    }
+				    spreadsheet.writeXML(fileName.toString());
+				}
+			}
+			else if(e.getActionCommand().equals("openfilechooser")){
+					//the open button from the menubar is pressed
+					view.getFileChooser().showOpenDialog(view);
+			}
+		}
+		if(e.getActionCommand().equals("Search")){
+			String value = view.getSearchText();
+
+            for (int row = 0; row <= view.getTable().getRowCount() - 1; row++) {
+                for (int col = 0; col <= view.getTable().getColumnCount() - 1; col++) {
+                    if (value.equals(view.getTable().getValueAt(row, col))) {
+                    	view.getTable().scrollRectToVisible(view.getTable().getCellRect(row, col, true));
+
+                    	view.getTable().setRowSelectionInterval(row, row);
+                    	view.getTable().setColumnSelectionInterval(col, col);
+                    	currentSearchRow = row;
+                    	currentSearchColumn = col;
+                    	return;
+                    }
+                }
+            }
+		}
+		if(e.getActionCommand().equals("Next")){
+			String value = view.getSearchText();
+
+            for (int row = currentSearchRow; row <= view.getTable().getRowCount() - 1; row++) {
+                for (int col = currentSearchColumn+1; col <= view.getTable().getColumnCount() - 1; col++) {
+                    if (value.equals(view.getTable().getValueAt(row, col))) {
+                    	view.getTable().scrollRectToVisible(view.getTable().getCellRect(row, col, true));
+
+                    	view.getTable().setRowSelectionInterval(row, row);
+                    	view.getTable().setColumnSelectionInterval(col, col);
+                    	currentSearchRow = row;
+                    	currentSearchColumn = col;
+                    	return;
+                    }
+                }
+            }
 		}
 	}
 
@@ -182,7 +299,7 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 	}
 	
 //	DocumentListener--------------------------------------------------------------------------------------------------------
-
+	
 	@Override
 	public void insertUpdate(DocumentEvent e) {
 		try{
@@ -216,27 +333,33 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 
 //	TableModelListener-------------------------------------------------------------------------------------------------------
 	
+	/**
+	 * The TableChanged method is called when a  change is made to the JTable, it responds by adding the cell to the 
+	 * internal ArrayList containing all the cells, as long as the cell is not empty.
+	 */
 	@Override
 	public void tableChanged(TableModelEvent e) {
 		try{
-			String formule = view.getModel().getValueAt(e.getFirstRow(), e.getColumn()).toString();
-			String content = parseFunction(formule);
-			if(content != null){
-				Cell newCell = new Cell(e.getFirstRow()+1, e.getColumn()+1, content, formule);
-				view.setCell(e.getFirstRow(), e.getColumn(), content);
+			String cellcontents = view.getModel().getValueAt(e.getFirstRow(), e.getColumn()).toString();
+			String parsedcontents = parseFunction(cellcontents);
+			if(parsedcontents != null){
+				Cell newCell = new Cell(e.getFirstRow()+1, e.getColumn()+1, parsedcontents, cellcontents);
+				view.setCell(e.getFirstRow(), e.getColumn(), parsedcontents);
 				spreadsheet.add(newCell);
 			}
 			else{
+				if(cellcontents.equals("")){
+					return;  //empty cells are not created
+				}
 				int row = e.getFirstRow()+1;
 				int col = e.getColumn()+1;
-				Cell newCell = new Cell(e.getFirstRow()+1, e.getColumn()+1, view.getModel().getValueAt(e.getFirstRow(), e.getColumn()).toString());
+				Cell newCell = new Cell(e.getFirstRow()+1, e.getColumn()+1, cellcontents);
 				spreadsheet.add(newCell);
 			}
 		}
-		catch(ArrayIndexOutOfBoundsException ex){
+		catch(ArrayIndexOutOfBoundsException | NullPointerException ex){
 		}
 	}
-	
 	
 //	ListSelectionListener-----------------------------------------------------------------------------------------------------
 	
@@ -410,7 +533,6 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 			values = new String[1];
 			values[0] = "";
 			return values;
-			
 		}
 		int i = 0;
 		for(int row = startRow; row <= lastRow; row++){
@@ -427,7 +549,4 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 		}
 		return values;
 	}
-	
-	
-	
 }

@@ -41,14 +41,18 @@ public class Spreadsheet extends Observable{
 	 */
 	public boolean add(Object cell) {
 		if (cell instanceof Cell) {
-			Cell add = (Cell) cell;
+			Cell newCell = (Cell) cell;
+			if(newCell.getContent().equals("")){
+				//A cell with nothing in its contents is not added
+				return true;
+			}
 			for(int i = 0; i< Spreadsheet.size(); i++){
 				if(Spreadsheet.get(i).equals(cell)){
-					Spreadsheet.set(i, add);
+					Spreadsheet.set(i, newCell);
 					return false;
 				}
 			}
-			Spreadsheet.add(add);
+			Spreadsheet.add(newCell);
 			return true;
 		}
 		return false;
@@ -198,4 +202,7 @@ public class Spreadsheet extends Observable{
 		return null;
 	}
 	
+	public void clearSheet(){
+		Spreadsheet.clear();	
+	}
 }
