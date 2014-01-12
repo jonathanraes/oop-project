@@ -129,7 +129,7 @@ public class ISLOGICAL extends Formule{
 		/* Controleert of de eerste character van de String een letter is en of de laatste character een getal is.
 		 * Indien dit waar is returnt deze methode de boolean true, indien niet dan returnt de methode de boolean false.
 		 */
-		if(cel.matches("[a-zA-Z]+[1-9]+")){
+		if(cel.matches("[a-zA-Z]+[0-9]+")){
 			return true;
 		}else
 			return false;
