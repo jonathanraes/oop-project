@@ -168,6 +168,8 @@ public class View extends JFrame{
 	    model.addTableModelListener(controller);
 	    table.getSelectionModel().addListSelectionListener(controller);
 	    table.getColumnModel().getSelectionModel().addListSelectionListener(controller);
+	    table.setBackground(new Color(236,236,236));
+	    table.setGridColor(new Color(4,4,180));
 	}
 	
 	/**
@@ -183,7 +185,8 @@ public class View extends JFrame{
 	 */
 	public void createColumnHeader(){
 		header = table.getTableHeader();
-		header.setBackground(new Color(95,170,246));
+		header.setBackground(new Color(4,4,180));
+		header.setForeground(new Color(236,236,236));
 	}
 
 	/**

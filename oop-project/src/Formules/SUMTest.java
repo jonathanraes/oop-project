@@ -14,7 +14,7 @@ public class SUMTest {
 	public void test1() {
 		String[] test = { "13583","354","This is not going to work!" };
 		SUM sum = new SUM();
-		assertEquals(sum.executable(test), "Error: parseDouble bij SUM!");
+		assertEquals(sum.executable(test), "13937.0");
 	}
 	
 	//Test met 3 geheel getallen

@@ -15,7 +15,6 @@ public class MIN extends Formule {
 				double parse = Double.parseDouble(a[i]);
 				waardes.add(parse);
 			}catch(NumberFormatException e){
-				waardes.add(0.0);
 			}	
 		}
 		double min = waardes.get(0);

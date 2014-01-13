@@ -17,7 +17,7 @@ public class MINTest {
 	public void test() {
 		String[] test = { "Hamza", "74.0", "78" };
 		MIN min = new MIN();
-		assertEquals(min.executable(test), "Error: parseDouble bij MIN!");
+		assertEquals(min.executable(test), "74.0");
 	}
 
 	@Test

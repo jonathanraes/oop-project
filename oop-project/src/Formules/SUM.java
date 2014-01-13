@@ -22,7 +22,6 @@ public class SUM extends Formule{
 				double parse = Double.parseDouble(a[i]);
 				numbers.add(parse);
 			}catch(NumberFormatException e){
-				return "Error: parseDouble bij SUM!";
 			}	
 		}
 		
