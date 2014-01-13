@@ -157,7 +157,12 @@ public class Spreadsheet extends Observable{
 				
 				
 				// Cell content
-				cellElem.appendChild(doc.createTextNode(cell.getContent()));
+				if(cell.getFunction() != null){
+					cellElem.appendChild(doc.createTextNode(cell.getFunction()));
+				}
+				else{
+					cellElem.appendChild(doc.createTextNode(cell.getContent()));
+				}
 			}
 			
 			// Nu schrijven naar xml file

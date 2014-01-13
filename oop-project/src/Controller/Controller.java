@@ -245,6 +245,23 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
                 }
             }
 		}
+		if(e.getActionCommand().equals("Previous")){
+			String value = view.getSearchText();
+
+            for (int row = currentSearchRow; row > 0; row--) {
+                for (int col = currentSearchColumn-1; col > 0; col--) {
+                    if (value.equals(view.getTable().getValueAt(row, col))) {
+                    	view.getTable().scrollRectToVisible(view.getTable().getCellRect(row, col, true));
+
+                    	view.getTable().setRowSelectionInterval(row, row);
+                    	view.getTable().setColumnSelectionInterval(col, col);
+                    	currentSearchRow = row;
+                    	currentSearchColumn = col;
+                    	return;
+                    }
+                }
+            }
+		}
 	}
 
 //	KeyListener--------------------------------------------------------------------------------------------------------------

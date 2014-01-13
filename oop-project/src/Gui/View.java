@@ -7,14 +7,15 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
 import javax.swing.AbstractListModel;
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
-import javax.swing.CellRendererPane;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -26,11 +27,12 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.border.Border;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
+
 import Controller.ColorEditor;
 import Controller.Controller;
 import OOP.Spreadsheet;
@@ -83,7 +85,6 @@ public class View extends JFrame{
 	private JFrame searchframe;
 	private JTextField searchfield;
 	
-	CellRendererPane cellrenderer;
 	public View(Spreadsheet spreadsheet){
 		controller = new Controller(this, spreadsheet);
 		colorEditor = new ColorEditor(this);
@@ -110,6 +111,16 @@ public class View extends JFrame{
 	 * The buttons are used to set a cell's background color and to add additional rows and columns in the table
 	 */
 	public void createTopPanel(){
+		JLabel label = new JLabel();
+		Font font = new Font("Helvetica", Font.ITALIC, 13);
+		label.setForeground(Color.blue);
+		label.setFont(font);
+		label.setText("F(x)=");
+		label.setBackground(Color.white);
+		Border paddingBorder = BorderFactory.createEmptyBorder(0,3,0,3);
+		label.setBorder(BorderFactory.createCompoundBorder(paddingBorder,paddingBorder));
+		label.setSize(60, 50);
+		
 		JButton graph = new JButton("Graph");
 		JButton colorbutton = new JButton("Set Color");
 				
@@ -120,6 +131,7 @@ public class View extends JFrame{
 		colorbutton.setBorderPainted(false);
 		graph.setBorderPainted(false);
 		
+		topPanel.add(label);
 		topPanel.add(textfield);
 //		topPanel.add(colorbutton);
 		topPanel.add(graph);
@@ -151,7 +163,6 @@ public class View extends JFrame{
 	    table.setColumnSelectionAllowed(true);
 	    tablePanel.add(table);
 	    add(tablePanel);
-	    
 	    table.addHierarchyBoundsListener(controller);
 	    table.addKeyListener(controller);
 	    model.addTableModelListener(controller);
@@ -172,7 +183,7 @@ public class View extends JFrame{
 	 */
 	public void createColumnHeader(){
 		header = table.getTableHeader();
-		header.setBackground(new Color(255,0,255));
+		header.setBackground(new Color(95,170,246));
 	}
 
 	/**
@@ -512,7 +523,11 @@ public class View extends JFrame{
 		searchframe.setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 		searchfield = new JTextField();
-		JTextField search = new JTextField("What do you want to find?");
+		
+		
+		JTextField search = new JTextField();
+		search.setFont(new Font("Helvetica", Font.BOLD, 15));
+		search.setText("What do you want to find?");
 		search.setBorder(null);
 		JButton find = new JButton("Find");
 		find.setActionCommand("Search");
@@ -538,11 +553,11 @@ public class View extends JFrame{
 		searchframe.add(find, constraints);
 		constraints.gridy = 4;
 		constraints.gridx = 0;
-		searchframe.add(next, constraints);
-		constraints.gridx = 1;
 		searchframe.add(previous, constraints);
+		constraints.gridx = 1;
+		searchframe.add(next, constraints);
 		
-		searchframe.setSize(200, 120);
+		searchframe.setSize(200, 130);
 		searchframe.setVisible(true);
 		find.addActionListener(controller);
 		next.addActionListener(controller);
@@ -559,7 +574,7 @@ public class View extends JFrame{
 		graphpanel = new JPanel();
 		graphpanel.setLayout(null);
 		
-		Font font = new Font("Arial", Font.BOLD, 18);
+		Font font = new Font("Helvetica", Font.BOLD, 18);
 		titlefield = new JTextField();
 		titlefield.setFont(font);
 		titlefield.setText("What Graph would you like to make?");
