@@ -1,5 +1,4 @@
 package Formules;
-import Controller.Controller;
 
 /**
  * IF klasse. Hierin wordt de formule IF uitgevoerd. Bij de formule moet je 3 parameters specificeren.

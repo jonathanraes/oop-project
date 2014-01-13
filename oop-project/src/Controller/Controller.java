@@ -462,6 +462,7 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 				ArrayList<String> valuesList = new ArrayList<String>();
 				String[] parameters = formula[1].split(", |,");
 				int counter = 0;
+				ArrayList<String> expressieList = new ArrayList<String>();
 				for(int i=0; i<parameters.length; i++){
 					if(parameters[i].contains(":")){
 						String[] cellrange = parameters[i].split(":");
@@ -469,38 +470,49 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 						String lastcell = cellrange[1];
 						String[] interval = parseCellData(firstcell, lastcell);
 						for(int j = 0; j<interval.length;j++){
+							/*
 							if(i==0&&j==0){
 								valuesList.add("");
 								valuesList.add("");
 								valuesList.add("");
 							}
+							*/
 							valuesList.add(interval[j]);
 						}
 					}else if(parameters[i].matches("[a-zA-Z]+[0-9]+")){
 						String[] celvalue = parseCellData(parameters[i],parameters[i]);
+						/*
 						if(i==0){
 							valuesList.add("");
 							valuesList.add("");
 							valuesList.add("");
 						}
+						*/
 						valuesList.add(celvalue[0]);
 						
 					}else{
 						try{
 							Double.parseDouble(parameters[i]);
+							/*
 							if(i==0){
 								valuesList.add("");
 								valuesList.add("");
 								valuesList.add("");
 							}
+							*/
 							valuesList.add(parameters[i]);
 						}catch(NumberFormatException NFE){
+							/*
 							if(i==0){
 								valuesList.add("");
 								valuesList.add("");
 								valuesList.add("");
 							}
+							
 							valuesList.set(0, parameters[i]);
+							*/
+
+							// expressieList.add(parameters[i]);
 							
 							// Hier moet ik zijn <------------------------------------------------------
 							
@@ -510,15 +522,21 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 							 * Als het namelijk wel een logische expressie is, ontstaat er een array met een lengte van 2.
 							 */
 							if(cellen.length == 2){
+
+								expressieList.add(parameters[i]);
+								
 								// Echter als de expressie een 1 cellige expressie is, bijv "<B4", dan is de eerste leeg of een aantal spaties afhankelijk van de invoer.
 								if(cellen[0].isEmpty() || cellen[0].matches("[ ]+")){
 									for(int count = 0; count<cellen.length;count++){
 										if(cellen[count].matches("[a-zA-Z]+[0-9]+")){
-											valuesList.set(count+1, parseCellData(cellen[count],cellen[count])[0]);
+											expressieList.add(parseCellData(cellen[count],cellen[count])[0]);
+											// valuesList.set(count+1, parseCellData(cellen[count],cellen[count])[0]);
 										}
 										
 									}
 								}
+							}else{
+								valuesList.add(parameters[i]);
 							}
 							
 						}
@@ -526,8 +544,16 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 				}
 				// valuesList -> values
 				String[] values;
+				values = new String[valuesList.size() + expressieList.size()];
+				for(int i = 0; i<expressieList.size();i++){
+					values[i] = expressieList.get(i);
+				}
+				for(int i=0; i<valuesList.size();i++){
+					values[i+expressieList.size()] = valuesList.get(i);
+				}
+				/*
 				if(valuesList.get(0).isEmpty()){
-					values = new String[valuesList.size() - 3];
+					values = new String[valuesList.size() -3];
 					for(int i=0;i<valuesList.size()-3;i++){
 						values[i] = valuesList.get(i+3);
 					}
@@ -537,6 +563,7 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 						values[i] = valuesList.get(i);
 					}
 				}
+				*/
 	// --------------------------------Einde nieuwe code------------------------------------------------
 				String content = f.executable(values);
 				return content;
