@@ -429,6 +429,10 @@ public class View extends JFrame{
 		return columnNames.getText();
 	}
 	
+	/**
+	 * returns the input that was put in the textfield asking for the graph's row names.
+	 * @return String
+	 */
 	public String getRowNames(){
 		return rowNames.getText();
 	}
@@ -694,7 +698,7 @@ public class View extends JFrame{
 		JTextField enterRowNames=null;
 		JTextField enterXAxisName=null;
 		JTextField enterYAxisName=null;
-		if(graph.equals("Bar Chart")){
+		if(graph.equals("Bar Chart") || graph.equals("Line Graph")){
 			enterRowNames = new JTextField("Please enter names for the series (for all the rows) seperated by a ;");
 			enterRowNames.setEditable(false);
 			enterRowNames.setBackground(null);
@@ -744,17 +748,19 @@ public class View extends JFrame{
 			vertical.setBounds(385, 220, 150, 15);
 			vertical.setSelected(true);
 			
-			stacked = new JCheckBox("Stacked");
-			stacked.setBackground(null);
-			stacked.setBounds(235, 245, 150, 15);
+			if(graph.equals("Bar Chart")){
+				stacked = new JCheckBox("Stacked");
+				stacked.setBackground(null);
+				stacked.setBounds(235, 245, 150, 15);
+			}
 			
 			ButtonGroup group = new ButtonGroup();
 			group.add(horizontal);
 			group.add(vertical);
 			
-			ok.setBounds(414, 590, 70, 30);
-			cancel.setBounds(300, 590, 80, 30);
-			graphpanel.setSize(500, 655);
+			ok.setBounds(414, 595, 70, 30);
+			cancel.setBounds(300, 595, 80, 30);
+			graphpanel.setSize(500, 660);
 			graphchooserframe.setSize(500, 655);
 		}
 		enternamefield.setText("New " + graph);
@@ -777,7 +783,7 @@ public class View extends JFrame{
 			graphpanel.add(pie);
 			graphpanel.add(ring);
 		}
-		if(graph.equals("Bar Chart")){
+		if(graph.equals("Bar Chart") || graph.equals("Line Graph")){
 			graphpanel.add(enterColumnNames);
 			graphpanel.add(columnNames);
 			graphpanel.add(enterRowNames);
@@ -788,7 +794,9 @@ public class View extends JFrame{
 			graphpanel.add(enterYAxisName);
 			graphpanel.add(horizontal);
 			graphpanel.add(vertical);
-			graphpanel.add(stacked);
+			if(graph.equals("Bar Chart")){
+				graphpanel.add(stacked);
+			}
 		}
 		graphchooserframe.add(graphpanel);
 		graphchooserframe.setResizable(false);

@@ -44,16 +44,24 @@ public class Spreadsheet extends Observable{
 			Cell newCell = (Cell) cell;
 			if(newCell.getContent().equals("")){
 				//A cell with nothing in its contents is not added
+				for(int i = 0; i< Spreadsheet.size(); i++){
+					if(Spreadsheet.get(i).equals(cell)){
+						Spreadsheet.remove(i);
+						return true;
+					}
+				}
+				return false;
+			}
+			else{
+				for(int i = 0; i< Spreadsheet.size(); i++){
+					if(Spreadsheet.get(i).equals(cell)){
+						Spreadsheet.set(i, newCell);
+						return true;
+					}
+				}
+				Spreadsheet.add(newCell);
 				return true;
 			}
-			for(int i = 0; i< Spreadsheet.size(); i++){
-				if(Spreadsheet.get(i).equals(cell)){
-					Spreadsheet.set(i, newCell);
-					return false;
-				}
-			}
-			Spreadsheet.add(newCell);
-			return true;
 		}
 		return false;
 	}

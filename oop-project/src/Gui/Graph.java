@@ -5,6 +5,7 @@ import java.awt.Font;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import org.hamcrest.internal.ArrayIterator;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -76,11 +77,22 @@ public class Graph extends JFrame{
 		
 		for(int row = 0; row <= rows; row++){
 			for(int col = 0; col <= columns; col++){
-				dataset.setValue(data[count], series[row], categories[col]);
-				count++;
+				String seriesname = null;
+				String categoriesname = null;
+				try{
+					seriesname = series[row];
+					categoriesname = categories[col];
+					dataset.setValue(data[count], seriesname, categoriesname);
+				}
+				catch(ArrayIndexOutOfBoundsException e){
+					dataset.setValue(data[count], seriesname != null ? seriesname : ""+count, categoriesname != null ? categoriesname : ""+count);
+				}
+				finally{
+					count++;
+				}
 			}			
 		}
-		 JFreeChart chart = null;
+		JFreeChart chart = null;
 		if(d3){
 			if(stacked){
 				chart = ChartFactory.createStackedBarChart3D(
@@ -110,13 +122,13 @@ public class Graph extends JFrame{
 		else{
 			if(stacked){
 				chart = ChartFactory.createStackedBarChart(
-			            title,         // chart title
+			            title,         				// chart title
 			            horizontalAxis,               // domain axis label
 			            verticalAxis,                  // range axis label
 			            dataset,                  // data
 			            orientation.equals("horizontal") ? PlotOrientation.HORIZONTAL : PlotOrientation.VERTICAL, // orientation
 			            legend,                     // include legend
-			            true,                     // tooltips?
+			            true,                    	 // tooltips?
 			            false                     // URLs?
 			       );
 			}
@@ -137,6 +149,62 @@ public class Graph extends JFrame{
         chartFrame.add(panel);
         chartFrame.setSize(400, 400);
         chartFrame.setVisible(true);
+	}
+	
+	public JFreeChart createLineGraph(boolean legend, boolean d3, int rows, int columns, String[] series, String[] categories, String horizontalAxis, String verticalAxis, String orientation){
+		JFrame chartFrame = new JFrame();
+		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+		int count = 0;
+		//rows = series
+		//cols = categories
+		
+		for(int row = 0; row <= rows; row++){
+			for(int col = 0; col <= columns; col++){
+				String seriesname = null;
+				String categoriesname = null;
+				try{
+					seriesname = series[row];
+					categoriesname = categories[col];
+					dataset.setValue(data[count], seriesname, categoriesname);
+				}
+				catch(ArrayIndexOutOfBoundsException e){
+					dataset.setValue(data[count], seriesname != null ? seriesname : ""+count, categoriesname != null ? categoriesname : ""+count);
+				}
+				finally{
+					count++;
+				}
+			}			
+		}
+		JFreeChart chart = null;
+		if(d3){
+			chart = ChartFactory.createLineChart3D(
+		            title,       // chart title
+		            horizontalAxis,                    // domain axis label
+		            verticalAxis,                   // range axis label
+		            dataset,                   // data
+		            orientation.equals("horizontal") ? PlotOrientation.HORIZONTAL : PlotOrientation.VERTICAL,  // orientation
+		            legend,                      // include legend
+		            true,                      // tooltips
+		            false                      // urls
+		        );
+		}
+		else{
+			chart = ChartFactory.createLineChart(
+		            title,       // chart title
+		            horizontalAxis,                    // domain axis label
+		            verticalAxis,                   // range axis label
+		            dataset,                   // data
+		            orientation.equals("horizontal") ? PlotOrientation.HORIZONTAL : PlotOrientation.VERTICAL,  // orientation
+		            legend,                      // include legend
+		            true,                      // tooltips
+		            false                      // urls
+		        );
+		}
+		JPanel panel = new ChartPanel(chart);
+        chartFrame.add(panel);
+        chartFrame.setSize(400, 400);
+        chartFrame.setVisible(true);
+        return chart;
 	}
 	
 }
