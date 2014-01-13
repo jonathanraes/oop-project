@@ -443,7 +443,7 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 			String formule = function;
 			if(function.substring(0, 1).equals("=")){ //Check to see if there is a function at all
 				//getting the required function
-				function = function.substring(1);
+				function = function.substring(1).toUpperCase();
 				String[] formula = function.split("\\(|\\)");
 				String functionname = "Formules."+formula[0];
 				Class c = Class.forName(functionname);
