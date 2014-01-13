@@ -9,6 +9,7 @@ import java.awt.GridBagLayout;
 import javax.swing.AbstractListModel;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.CellRendererPane;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -30,8 +31,6 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
-
-import Controller.CellRenderer;
 import Controller.ColorEditor;
 import Controller.Controller;
 import OOP.Spreadsheet;
@@ -84,7 +83,7 @@ public class View extends JFrame{
 	private JFrame searchframe;
 	private JTextField searchfield;
 	
-	CellRenderer cellrenderer;
+	CellRendererPane cellrenderer;
 	public View(Spreadsheet spreadsheet){
 		controller = new Controller(this, spreadsheet);
 		colorEditor = new ColorEditor(this);
@@ -173,7 +172,7 @@ public class View extends JFrame{
 	 */
 	public void createColumnHeader(){
 		header = table.getTableHeader();
-		header.setBackground(new Color(95,170,246));
+		header.setBackground(new Color(255,0,255));
 	}
 
 	/**
