@@ -551,15 +551,16 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 								expressieList.add(parameters[i]);
 								
 								// Echter als de expressie een 1 cellige expressie is, bijv "<B4", dan is de eerste leeg of een aantal spaties afhankelijk van de invoer.
-								if(cellen[0].isEmpty() || cellen[0].matches("[ ]+")){
 									for(int count = 0; count<cellen.length;count++){
 										if(cellen[count].matches("[a-zA-Z]+[0-9]+")){
 											expressieList.add(parseCellData(cellen[count],cellen[count])[0]);
 											// valuesList.set(count+1, parseCellData(cellen[count],cellen[count])[0]);
+										}else{
+											expressieList.add(cellen[count]);
 										}
 										
 									}
-								}
+								
 							}else{
 								valuesList.add(parameters[i]);
 							}
@@ -590,7 +591,11 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 				}
 				*/
 	// --------------------------------Einde nieuwe code------------------------------------------------
+				for(int i=0; i<values.length; i++){
+					System.out.println(values[i]);
+				}
 				String content = f.executable(values);
+				
 				return content;
 			}
 		} 
