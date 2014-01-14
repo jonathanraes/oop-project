@@ -103,7 +103,7 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 				JFreeChart chart = newGraph.createPieChart(legend, d3, type, columnNames);
 				view.closeGraphChooser();
 			}
-			if(view.getSelectedGraph().equals("Bar Chart")){
+			else if(view.getSelectedGraph().equals("Bar Chart")){
 				int startColumn = view.getStartCell().substring(0, 1).toLowerCase().charAt(0) - 'a' +  1;
 				int startRow = Integer.parseInt(view.getStartCell().substring(1));
 				int lastColumn = view.getEndCell().substring(0, 1).toLowerCase().charAt(0) - 'a' +  1;
@@ -130,6 +130,34 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 				}
 				Graph newGraph = new Graph(parsedData, graphName);
 				newGraph.createBarChart(legend, d3, rowsAmount, columnsAmount, rowNames, columnNames, xAxisName, yAxisName, orientation, stacked);
+				view.closeGraphChooser();
+			}
+			else if(view.getSelectedGraph().equals("Line Graph")){
+				int startColumn = view.getStartCell().substring(0, 1).toLowerCase().charAt(0) - 'a' +  1;
+				int startRow = Integer.parseInt(view.getStartCell().substring(1));
+				int lastColumn = view.getEndCell().substring(0, 1).toLowerCase().charAt(0) - 'a' +  1;
+				int lastRow = Integer.parseInt(view.getEndCell().substring(1));
+				int rowsAmount = lastRow - startRow;
+				int columnsAmount = lastColumn - startColumn;
+				String graphName = view.getGraphTitle();
+				String xAxisName = view.getXAxisName();
+				String yAxisName = view.getYAxisName();
+				String orientation = view.getOrientation();
+				String[] columnNames = view.getColumnNames().split(";");
+				String[] rowNames = view.getRowNames().split(";");
+				String[] data = parseCellData(view.getStartCell(), view.getEndCell());
+				double[] parsedData = new double[data.length];
+				boolean legend = view.getLegendSetting();
+				boolean d3 = view.get3DSetting();
+				for(int i = 0; i < data.length; i++){
+					try{
+						parsedData[i] = Double.parseDouble(data[i]);
+					}
+					catch(NumberFormatException ex){
+					}
+				}
+				Graph newGraph = new Graph(parsedData, graphName);
+				newGraph.createLineGraph(legend, d3, rowsAmount, columnsAmount, rowNames, columnNames, xAxisName, yAxisName, orientation);
 				view.closeGraphChooser();
 			}
 		}
@@ -245,6 +273,23 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
                 }
             }
 		}
+		if(e.getActionCommand().equals("Previous")){
+			String value = view.getSearchText();
+
+            for (int row = currentSearchRow; row > 0; row--) {
+                for (int col = currentSearchColumn-1; col > 0; col--) {
+                    if (value.equals(view.getTable().getValueAt(row, col))) {
+                    	view.getTable().scrollRectToVisible(view.getTable().getCellRect(row, col, true));
+
+                    	view.getTable().setRowSelectionInterval(row, row);
+                    	view.getTable().setColumnSelectionInterval(col, col);
+                    	currentSearchRow = row;
+                    	currentSearchColumn = col;
+                    	return;
+                    }
+                }
+            }
+		}
 	}
 
 //	KeyListener--------------------------------------------------------------------------------------------------------------
@@ -346,9 +391,6 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 				spreadsheet.add(newCell);
 			}
 			else{
-				if(cellcontents.equals("")){
-					return;  //empty cells are not created
-				}
 				int row = e.getFirstRow()+1;
 				int col = e.getColumn()+1;
 				Cell newCell = new Cell(e.getFirstRow()+1, e.getColumn()+1, cellcontents);
@@ -426,7 +468,7 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 			String formule = function;
 			if(function.substring(0, 1).equals("=")){ //Check to see if there is a function at all
 				//getting the required function
-				function = function.substring(1);
+				function = function.substring(1).toUpperCase();
 				String[] formula = function.split("\\(|\\)");
 				String functionname = "Formules."+formula[0];
 				Class c = Class.forName(functionname);
@@ -445,6 +487,7 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 				ArrayList<String> valuesList = new ArrayList<String>();
 				String[] parameters = formula[1].split(", |,");
 				int counter = 0;
+				ArrayList<String> expressieList = new ArrayList<String>();
 				for(int i=0; i<parameters.length; i++){
 					if(parameters[i].contains(":")){
 						String[] cellrange = parameters[i].split(":");
@@ -452,38 +495,49 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 						String lastcell = cellrange[1];
 						String[] interval = parseCellData(firstcell, lastcell);
 						for(int j = 0; j<interval.length;j++){
+							/*
 							if(i==0&&j==0){
 								valuesList.add("");
 								valuesList.add("");
 								valuesList.add("");
 							}
+							*/
 							valuesList.add(interval[j]);
 						}
 					}else if(parameters[i].matches("[a-zA-Z]+[0-9]+")){
 						String[] celvalue = parseCellData(parameters[i],parameters[i]);
+						/*
 						if(i==0){
 							valuesList.add("");
 							valuesList.add("");
 							valuesList.add("");
 						}
+						*/
 						valuesList.add(celvalue[0]);
 						
 					}else{
 						try{
 							Double.parseDouble(parameters[i]);
+							/*
 							if(i==0){
 								valuesList.add("");
 								valuesList.add("");
 								valuesList.add("");
 							}
+							*/
 							valuesList.add(parameters[i]);
 						}catch(NumberFormatException NFE){
+							/*
 							if(i==0){
 								valuesList.add("");
 								valuesList.add("");
 								valuesList.add("");
 							}
+							
 							valuesList.set(0, parameters[i]);
+							*/
+
+							// expressieList.add(parameters[i]);
 							
 							// Hier moet ik zijn <------------------------------------------------------
 							
@@ -493,15 +547,21 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 							 * Als het namelijk wel een logische expressie is, ontstaat er een array met een lengte van 2.
 							 */
 							if(cellen.length == 2){
+
+								expressieList.add(parameters[i]);
+								
 								// Echter als de expressie een 1 cellige expressie is, bijv "<B4", dan is de eerste leeg of een aantal spaties afhankelijk van de invoer.
 								if(cellen[0].isEmpty() || cellen[0].matches("[ ]+")){
 									for(int count = 0; count<cellen.length;count++){
 										if(cellen[count].matches("[a-zA-Z]+[0-9]+")){
-											valuesList.set(count+1, parseCellData(cellen[count],cellen[count])[0]);
+											expressieList.add(parseCellData(cellen[count],cellen[count])[0]);
+											// valuesList.set(count+1, parseCellData(cellen[count],cellen[count])[0]);
 										}
 										
 									}
 								}
+							}else{
+								valuesList.add(parameters[i]);
 							}
 							
 						}
@@ -509,8 +569,16 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 				}
 				// valuesList -> values
 				String[] values;
+				values = new String[valuesList.size() + expressieList.size()];
+				for(int i = 0; i<expressieList.size();i++){
+					values[i] = expressieList.get(i);
+				}
+				for(int i=0; i<valuesList.size();i++){
+					values[i+expressieList.size()] = valuesList.get(i);
+				}
+				/*
 				if(valuesList.get(0).isEmpty()){
-					values = new String[valuesList.size() - 3];
+					values = new String[valuesList.size() -3];
 					for(int i=0;i<valuesList.size()-3;i++){
 						values[i] = valuesList.get(i+3);
 					}
@@ -520,6 +588,7 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 						values[i] = valuesList.get(i);
 					}
 				}
+				*/
 	// --------------------------------Einde nieuwe code------------------------------------------------
 				String content = f.executable(values);
 				return content;

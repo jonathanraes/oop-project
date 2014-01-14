@@ -7,6 +7,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
 import javax.swing.AbstractListModel;
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -14,6 +15,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -25,13 +27,12 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.border.Border;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 
-import Controller.CellRenderer;
 import Controller.ColorEditor;
 import Controller.Controller;
 import OOP.Spreadsheet;
@@ -84,7 +85,6 @@ public class View extends JFrame{
 	private JFrame searchframe;
 	private JTextField searchfield;
 	
-	CellRenderer cellrenderer;
 	public View(Spreadsheet spreadsheet){
 		controller = new Controller(this, spreadsheet);
 		colorEditor = new ColorEditor(this);
@@ -111,6 +111,16 @@ public class View extends JFrame{
 	 * The buttons are used to set a cell's background color and to add additional rows and columns in the table
 	 */
 	public void createTopPanel(){
+		JLabel label = new JLabel();
+		Font font = new Font("Helvetica", Font.ITALIC, 13);
+		label.setForeground(Color.blue);
+		label.setFont(font);
+		label.setText("F(x)=");
+		label.setBackground(Color.white);
+		Border paddingBorder = BorderFactory.createEmptyBorder(0,3,0,3);
+		label.setBorder(BorderFactory.createCompoundBorder(paddingBorder,paddingBorder));
+		label.setSize(60, 50);
+		
 		JButton graph = new JButton("Graph");
 		JButton colorbutton = new JButton("Set Color");
 				
@@ -121,6 +131,7 @@ public class View extends JFrame{
 		colorbutton.setBorderPainted(false);
 		graph.setBorderPainted(false);
 		
+		topPanel.add(label);
 		topPanel.add(textfield);
 //		topPanel.add(colorbutton);
 		topPanel.add(graph);
@@ -152,12 +163,13 @@ public class View extends JFrame{
 	    table.setColumnSelectionAllowed(true);
 	    tablePanel.add(table);
 	    add(tablePanel);
-	    
 	    table.addHierarchyBoundsListener(controller);
 	    table.addKeyListener(controller);
 	    model.addTableModelListener(controller);
 	    table.getSelectionModel().addListSelectionListener(controller);
 	    table.getColumnModel().getSelectionModel().addListSelectionListener(controller);
+	    table.setBackground(new Color(236,236,236));
+	    table.setGridColor(new Color(4,4,180));
 	}
 	
 	/**
@@ -173,7 +185,8 @@ public class View extends JFrame{
 	 */
 	public void createColumnHeader(){
 		header = table.getTableHeader();
-		header.setBackground(new Color(95,170,246));
+		header.setBackground(new Color(4,4,180));
+		header.setForeground(new Color(236,236,236));
 	}
 
 	/**
@@ -419,6 +432,10 @@ public class View extends JFrame{
 		return columnNames.getText();
 	}
 	
+	/**
+	 * returns the input that was put in the textfield asking for the graph's row names.
+	 * @return String
+	 */
 	public String getRowNames(){
 		return rowNames.getText();
 	}
@@ -513,7 +530,11 @@ public class View extends JFrame{
 		searchframe.setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 		searchfield = new JTextField();
-		JTextField search = new JTextField("What do you want to find?");
+		
+		
+		JTextField search = new JTextField();
+		search.setFont(new Font("Helvetica", Font.BOLD, 15));
+		search.setText("What do you want to find?");
 		search.setBorder(null);
 		JButton find = new JButton("Find");
 		find.setActionCommand("Search");
@@ -539,11 +560,11 @@ public class View extends JFrame{
 		searchframe.add(find, constraints);
 		constraints.gridy = 4;
 		constraints.gridx = 0;
-		searchframe.add(next, constraints);
-		constraints.gridx = 1;
 		searchframe.add(previous, constraints);
+		constraints.gridx = 1;
+		searchframe.add(next, constraints);
 		
-		searchframe.setSize(200, 120);
+		searchframe.setSize(200, 130);
 		searchframe.setVisible(true);
 		find.addActionListener(controller);
 		next.addActionListener(controller);
@@ -560,7 +581,7 @@ public class View extends JFrame{
 		graphpanel = new JPanel();
 		graphpanel.setLayout(null);
 		
-		Font font = new Font("Arial", Font.BOLD, 18);
+		Font font = new Font("Helvetica", Font.BOLD, 18);
 		titlefield = new JTextField();
 		titlefield.setFont(font);
 		titlefield.setText("What Graph would you like to make?");
@@ -680,7 +701,7 @@ public class View extends JFrame{
 		JTextField enterRowNames=null;
 		JTextField enterXAxisName=null;
 		JTextField enterYAxisName=null;
-		if(graph.equals("Bar Chart")){
+		if(graph.equals("Bar Chart") || graph.equals("Line Graph")){
 			enterRowNames = new JTextField("Please enter names for the series (for all the rows) seperated by a ;");
 			enterRowNames.setEditable(false);
 			enterRowNames.setBackground(null);
@@ -730,17 +751,19 @@ public class View extends JFrame{
 			vertical.setBounds(385, 220, 150, 15);
 			vertical.setSelected(true);
 			
-			stacked = new JCheckBox("Stacked");
-			stacked.setBackground(null);
-			stacked.setBounds(235, 245, 150, 15);
+			if(graph.equals("Bar Chart")){
+				stacked = new JCheckBox("Stacked");
+				stacked.setBackground(null);
+				stacked.setBounds(235, 245, 150, 15);
+			}
 			
 			ButtonGroup group = new ButtonGroup();
 			group.add(horizontal);
 			group.add(vertical);
 			
-			ok.setBounds(414, 590, 70, 30);
-			cancel.setBounds(300, 590, 80, 30);
-			graphpanel.setSize(500, 655);
+			ok.setBounds(414, 595, 70, 30);
+			cancel.setBounds(300, 595, 80, 30);
+			graphpanel.setSize(500, 660);
 			graphchooserframe.setSize(500, 655);
 		}
 		enternamefield.setText("New " + graph);
@@ -763,7 +786,7 @@ public class View extends JFrame{
 			graphpanel.add(pie);
 			graphpanel.add(ring);
 		}
-		if(graph.equals("Bar Chart")){
+		if(graph.equals("Bar Chart") || graph.equals("Line Graph")){
 			graphpanel.add(enterColumnNames);
 			graphpanel.add(columnNames);
 			graphpanel.add(enterRowNames);
@@ -774,7 +797,9 @@ public class View extends JFrame{
 			graphpanel.add(enterYAxisName);
 			graphpanel.add(horizontal);
 			graphpanel.add(vertical);
-			graphpanel.add(stacked);
+			if(graph.equals("Bar Chart")){
+				graphpanel.add(stacked);
+			}
 		}
 		graphchooserframe.add(graphpanel);
 		graphchooserframe.setResizable(false);

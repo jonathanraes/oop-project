@@ -11,21 +11,15 @@ public class ROUNDDOWN extends Formule {
 		/**
 		 * 
 		 */
-		double number;
-		try{
-			number = Double.parseDouble(a[0]); 
-		}catch(NumberFormatException e){
-			return "Error: parseDouble bij ROUNDDOWN!";
-		}
+		String waarde= a[0];
+	
+		int dec = Integer.parseInt(a[1]);
 		
-		double rest= number;
+		String[] temp = waarde.split("[.]");
 		
-		for(int i = 0; rest > 1.0; i++){
-			rest = rest - 1;	
-			}
+		temp[1]=temp[1].substring(0, dec);
 		
-		double result = number-rest;
-		return "" + result + "";
+		return temp[0] + "." + temp[1];		
 
 	}
 }
