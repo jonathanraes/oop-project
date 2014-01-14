@@ -61,9 +61,9 @@ public class NOT extends Formule {
 		}
 		
 		if(uitkomst){
-			return "false";
+			return "FALSE";
 		}else
-			return "true";
+			return "TRUE";
 		
 	}
 	public boolean expression(String[] a, String deel1, String deel2, String operator){
