@@ -8,7 +8,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({ AVERAGETest.class, COUNTATest.class, COUNTEST.class,
 		COUNTIFTest.class, IFTest.class, INTTest.class, ISEVENTest.class,
 		ISLOGICALTest.class, ISNUMBERTest.class, LOWERTest.class,
-		MAXTest.class, MEDIANTest.class, MINTest.class, MODTest.class,
+		MAXTest.class, MEDIANTest.class, MINTest.class, MODTest.class, NOTTest.class, ORTest.class,
 		POWERTest.class, PRODUCTTest.class, PROPERTest.class, SIGNTest.class,
 		SQRTTest.class, SUMTest.class })
 public class AllTests {
