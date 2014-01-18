@@ -45,7 +45,7 @@ public class Spreadsheet extends Observable{
 			if(newCell.getContent().equals("")){
 				//A cell with nothing in its contents is not added
 				for(int i = 0; i< Spreadsheet.size(); i++){
-					if(Spreadsheet.get(i).equals(cell)){
+					if(Spreadsheet.get(i).equals(newCell)){
 						Spreadsheet.remove(i);
 						return true;
 					}
