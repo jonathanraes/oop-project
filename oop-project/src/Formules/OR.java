@@ -6,7 +6,7 @@ package Formules;
 **/
 public class OR extends Formule {
 	/**
-	 * OR(logical_test1,logical_test2,logical_test3)      zoveel mogelijk logical test.
+	 * OR(logical_test1,logical_test2,logical_test3)  zoveel mogelijk logical tests..
 	 */
 	
 	
@@ -116,7 +116,7 @@ public class OR extends Formule {
 				// Eerst wordt gekeken naar of deel1 een cel is.
 				if(celcontrole(deel1)){
 					
-					String deel1cel = a[1]; // Haal String op uit cel
+					String deel1cel = a; // Haal String op uit cel
 					double deel1getal = Double.parseDouble(deel1cel);
 					// Als deel1 een cel is, wordt gekeken naar of deel2 een cel is.
 						double deel2getal;
