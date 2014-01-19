@@ -9,13 +9,13 @@ public class SUMIF extends Formule {
 		// De verabelen waarde en operator worden hier alvast geinitizializeerd.
 		String waarde;
 		String operator;
-		double sum = 0;
+		double sum = 0.0;
 		int range = a.length - 3;
 		int helft = 0;
 		if (range % 2 == 1) {
 			return "RANGES DID NOT MATCH";
-		}else{
-			helft = range/2;
+		} else {
+			helft = range / 2;
 		}
 		/*
 		 * Hier wordt eerste gekeken naar of de logische expressie een operator
@@ -67,7 +67,7 @@ public class SUMIF extends Formule {
 			 * logische expressie staat. Indien die waarde een getal is, lukt de
 			 * parse hierboven en bereiken we dit gedeelte.
 			 */
-			for (int i = 3; i < 3+helft; i++) {
+			for (int i = 3; i < 3 + helft; i++) {
 				if (operator.equals("<>")) {
 
 					/*
@@ -82,7 +82,7 @@ public class SUMIF extends Formule {
 					 */
 					try {
 						if (Double.parseDouble(a[i]) != waardegetal)
-							sum = sum + Double.parseDouble(a[i+helft]);
+							sum = sum + Double.parseDouble(a[i + helft]);
 					} catch (NumberFormatException NFE2) {
 					}
 
@@ -91,7 +91,7 @@ public class SUMIF extends Formule {
 
 					try {
 						if (Double.parseDouble(a[i]) <= waardegetal)
-							sum = sum + Double.parseDouble(a[i+helft]);
+							sum = sum + Double.parseDouble(a[i + helft]);
 					} catch (NumberFormatException NFE2) {
 					}
 
@@ -100,7 +100,7 @@ public class SUMIF extends Formule {
 
 					try {
 						if (Double.parseDouble(a[i]) >= waardegetal)
-							sum = sum + Double.parseDouble(a[i+helft]);
+							sum = sum + Double.parseDouble(a[i + helft]);
 					} catch (NumberFormatException NFE2) {
 					}
 
@@ -109,7 +109,7 @@ public class SUMIF extends Formule {
 
 					try {
 						if (Double.parseDouble(a[i]) > waardegetal)
-							sum = sum + Double.parseDouble(a[i+helft]);
+							sum = sum + Double.parseDouble(a[i + helft]);
 					} catch (NumberFormatException NFE2) {
 					}
 
@@ -118,7 +118,7 @@ public class SUMIF extends Formule {
 
 					try {
 						if (Double.parseDouble(a[i]) < waardegetal)
-							sum = sum + Double.parseDouble(a[i+helft]);
+							sum = sum + Double.parseDouble(a[i + helft]);
 					} catch (NumberFormatException NFE2) {
 
 					}
@@ -127,7 +127,7 @@ public class SUMIF extends Formule {
 
 					try {
 						if (Double.parseDouble(a[i]) == waardegetal)
-							sum = sum + Double.parseDouble(a[i+helft]);
+							sum = sum + Double.parseDouble(a[i + helft]);
 					} catch (NumberFormatException NFE2) {
 					}
 				}
@@ -154,9 +154,9 @@ public class SUMIF extends Formule {
 									// Controller en al meegegeven.
 				if (cel.matches("[0-9]+|[0-9]+.[0-9]+|-[0-9]+|-[0-9]+.[0-9]+")) {
 					double celgetal = Double.parseDouble(cel);
-					for (int i = 3; i < a.length; i++) {
-					if (operator.equals("<>")) {
-						
+					for (int i = 3; i < 3+helft; i++) {
+						if (operator.equals("<>")) {
+
 							/*
 							 * Elke waarde uit de binnenkomende selectie wordt
 							 * geprobeerd te parsen als een getal en vervolgens
@@ -170,61 +170,72 @@ public class SUMIF extends Formule {
 							 */
 							try {
 								if (Double.parseDouble(a[i]) != celgetal)
-									sum = sum + Double.parseDouble(a[i+helft]);
+									sum = sum
+											+ Double.parseDouble(a[i + helft]);
 							} catch (NumberFormatException NFE2) {
 							}
-						
-						// Zelfde gedeelte als hierboven, maar dan voor operator
-						// <=
-					} else if (operator.equals("<=")) {
-						
+
+							// Zelfde gedeelte als hierboven, maar dan voor
+							// operator
+							// <=
+						} else if (operator.equals("<=")) {
+
 							try {
 								if (Double.parseDouble(a[i]) <= celgetal)
-									sum = sum + Double.parseDouble(a[i+helft]);
+									sum = sum
+											+ Double.parseDouble(a[i + helft]);
 							} catch (NumberFormatException NFE2) {
 							}
-						
-						// Zelfde gedeelte als hierboven, maar dan voor operator
-						// >=
-					} else if (operator.equals(">=")) {
-						
+
+							// Zelfde gedeelte als hierboven, maar dan voor
+							// operator
+							// >=
+						} else if (operator.equals(">=")) {
+
 							try {
 								if (Double.parseDouble(a[i]) >= celgetal)
-									sum = sum + Double.parseDouble(a[i+helft]);
+									sum = sum
+											+ Double.parseDouble(a[i + helft]);
 							} catch (NumberFormatException NFE2) {
 							}
-						
-						// Zelfde gedeelte als hierboven, maar dan voor operator
-						// >
-					} else if (operator.equals(">")) {
-						
+
+							// Zelfde gedeelte als hierboven, maar dan voor
+							// operator
+							// >
+						} else if (operator.equals(">")) {
+
 							try {
 								if (Double.parseDouble(a[i]) > celgetal)
-									sum = sum + Double.parseDouble(a[i+helft]);
+									sum = sum
+											+ Double.parseDouble(a[i + helft]);
 							} catch (NumberFormatException NFE2) {
 							}
-						
-					// Zelfde gedeelte als hierboven, maar dan voor operator
-						// <
-					} else if (operator.equals("<")) {
-						
+
+							// Zelfde gedeelte als hierboven, maar dan voor
+							// operator
+							// <
+						} else if (operator.equals("<")) {
+
 							try {
 								if (Double.parseDouble(a[i]) < celgetal)
-									sum = sum + Double.parseDouble(a[i+helft]);
+									sum = sum
+											+ Double.parseDouble(a[i + helft]);
 							} catch (NumberFormatException NFE2) {
 							}
-						
-						// Zelfde gedeelte als hierboven, maar dan voor operator
-						// =
-					} else {
-						
+
+							// Zelfde gedeelte als hierboven, maar dan voor
+							// operator
+							// =
+						} else {
+
 							try {
 								if (Double.parseDouble(a[i]) == celgetal)
-									sum = sum + Double.parseDouble(a[i+helft]);
+									sum = sum
+											+ Double.parseDouble(a[i + helft]);
 							} catch (NumberFormatException NFE2) {
 							}
-						
-					}
+
+						}
 					}
 					/*
 					 * Als de inhoud van de cel geen getal is, is het een String
@@ -234,16 +245,16 @@ public class SUMIF extends Formule {
 					 */
 				} else if (operator.equals("=")) {
 					for (int i = 3; i < a.length; i++) {
-						if (a[i].equalsIgnoreCase(cel)){
-							try{
-								sum = sum + Double.parseDouble(a[i+helft]);
-							}catch(NumberFormatException NFE3){
-								
+						if (a[i].equalsIgnoreCase(cel)) {
+							try {
+								sum = sum + Double.parseDouble(a[i + helft]);
+							} catch (NumberFormatException NFE3) {
+
 							}
 						}
 					}
 				} else {
-					return "0";
+					return "0.0";
 				}
 				/*
 				 * Als de waarde uit de logische expressie geen getal en geen
@@ -255,14 +266,14 @@ public class SUMIF extends Formule {
 			} else if (operator.equals("=")) {
 				for (int i = 3; i < a.length; i++) {
 					if (a[i].equalsIgnoreCase(waarde))
-						try{
-							sum = sum + Double.parseDouble(a[i+helft]);
-						}catch(NumberFormatException NFE3){
-							
+						try {
+							sum = sum + Double.parseDouble(a[i + helft]);
+						} catch (NumberFormatException NFE3) {
+
 						}
 				}
 			} else {
-				return "0";
+				return "0.0";
 			}
 		}
 		// Als laatste wordt dan de counter gereturnt als een String tussen
