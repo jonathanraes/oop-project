@@ -1,5 +1,8 @@
 package Formules;
-
+/**
+ * Klasse SIGN: Met deze wordt uitgezocht of een getal positief is of negatief.
+ *
+ */
 public class SIGN extends Formule {
 
 	public String executable(String[] a) {
@@ -8,6 +11,9 @@ public class SIGN extends Formule {
 		 * Als het getal positief is retourneert deze methode een 1
 		 * Als het getal negatief is retourneert deze methode een -1
 		 * Als het getal gelijk is aan 0 dan wordt er een 0 geretourneerd
+		 * 
+		 * @param String[] waardes: String array met de waarde te controleren
+		 * @return String: Hierin wordt 1 ,-1 of 0 teruggegeven.
 		 */
 		
 		double number;
