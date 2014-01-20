@@ -30,10 +30,10 @@ public class Graph extends JFrame{
 		 DefaultPieDataset dataset = new DefaultPieDataset();
 	      for(int i = 0 ; i < data.length; i++){
 	    	  try{
-	    		  dataset.setValue(names[i], data[i]);
+	    		  dataset.setValue(names[i].equals("") ? ""+(i+1): names[i] , data[i]);
 	    	  }
 	    	  catch(ArrayIndexOutOfBoundsException e){
-	    		  dataset.setValue("", data[i]);
+	    		  dataset.setValue(""+(i+1), data[i]);
 	    	  }
 	      }
 	      JFreeChart chart = null;
@@ -82,10 +82,14 @@ public class Graph extends JFrame{
 				try{
 					seriesname = series[row];
 					categoriesname = categories[col];
-					dataset.setValue(data[count], seriesname, categoriesname);
+					dataset.setValue(data[count], 
+							seriesname.equals("") ? "Row "+(row+1) : seriesname, 
+							categoriesname.equals("") ? "Column "+(col+1) : categoriesname);
 				}
 				catch(ArrayIndexOutOfBoundsException e){
-					dataset.setValue(data[count], seriesname != null ? seriesname : ""+count, categoriesname != null ? categoriesname : ""+count);
+					dataset.setValue(data[count], 
+							(seriesname == null || seriesname.equals("")) ? "Row "+(row+1) : seriesname, 
+							(categoriesname == null || categoriesname.equals("")) ?  "Column "+(col+1) : categoriesname);
 				}
 				finally{
 					count++;
@@ -165,10 +169,14 @@ public class Graph extends JFrame{
 				try{
 					seriesname = series[row];
 					categoriesname = categories[col];
-					dataset.setValue(data[count], seriesname, categoriesname);
+					dataset.setValue(data[count], 
+							seriesname.equals("") ? "Row "+(row+1) : seriesname, 
+							categoriesname.equals("") ? "Column "+(col+1) : categoriesname);
 				}
 				catch(ArrayIndexOutOfBoundsException e){
-					dataset.setValue(data[count], seriesname != null ? seriesname : ""+count, categoriesname != null ? categoriesname : ""+count);
+					dataset.setValue(data[count], 
+							(seriesname == null || seriesname.equals("")) ? "Row "+(row+1) : seriesname, 
+							(categoriesname == null || categoriesname.equals("")) ?  "Column "+(col+1) : categoriesname);
 				}
 				finally{
 					count++;
