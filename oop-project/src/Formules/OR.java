@@ -98,7 +98,7 @@ public class OR extends Formule {
 			 * formule TRUE.
 			 */
 			if (celcontrole(deel2)) {
-				String deel2cel = b; // Ophalen van de waarde uit de cel.
+				String deel2cel = c; // Ophalen van de waarde uit de cel.
 				try {
 					double deel2getal = Double.parseDouble(deel2cel);
 					return compare(deel1getal, deel2getal, operator);
@@ -125,13 +125,13 @@ public class OR extends Formule {
 				// Eerst wordt gekeken naar of deel1 een cel is.
 				if (celcontrole(deel1)) {
 
-					String deel1cel = a; // Haal String op uit cel
+					String deel1cel = b; // Haal String op uit cel
 					double deel1getal = Double.parseDouble(deel1cel);
 					// Als deel1 een cel is, wordt gekeken naar of deel2 een cel
 					// is.
 					double deel2getal;
 					if (celcontrole(deel2)) {
-						deel2getal = Double.parseDouble(b); // Haal String op
+						deel2getal = Double.parseDouble(c); // Haal String op
 																// uit cel
 						return compare(deel1getal, deel2getal, operator);
 					}
