@@ -26,7 +26,13 @@ public class SUM extends Formule{
 		}
 		
 		//Deze stap berekent de som van alle waarden.
-		double sum = numbers.get(0);
+		double sum = 0;
+		try{
+			sum = numbers.get(0);
+		}
+		catch(IndexOutOfBoundsException e){
+			return null;
+		}
 		for(int i = 1; i < numbers.size(); i++){
 			sum = sum+numbers.get(i);
 		}

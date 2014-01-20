@@ -118,13 +118,10 @@ public class View extends JFrame{
 		label.setSize(60, 50);
 		
 		JButton graph = new JButton("Graph");
-		JButton colorbutton = new JButton("Set Color");
-				
+		
 		textfield = new JTextField();
 		topPanel = new JPanel();
 		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.LINE_AXIS));
-		colorbutton.setActionCommand("edit");
-		colorbutton.setBorderPainted(false);
 		graph.setBorderPainted(false);
 		
 		topPanel.add(label);
@@ -144,11 +141,6 @@ public class View extends JFrame{
 		tablePanel.setLayout(new BorderLayout());
 		model = new DefaultTableModel(15,10000);
 		table = new JTable(1,5);
-//		{
-//			public TableCellRenderer getCellRenderer(int row, int column) {
-//				return cellrenderer;
-//			}
-//		};
 		table.setAutoCreateColumnsFromModel(false);
 		table.setModel(model);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -223,6 +215,7 @@ public class View extends JFrame{
 		editMenu.add(find);
 		editMenu.add(deletecontents);
 		
+		newfile.addActionListener(controller);
 		open.setActionCommand("openfilechooser");
 		open.addActionListener(controller);
 		copy.addActionListener(controller);
@@ -529,9 +522,11 @@ public class View extends JFrame{
 		search.setFont(new Font("Helvetica", Font.BOLD, 15));
 		search.setText("What do you want to find?");
 		search.setBorder(null);
+		search.setEditable(false);
 		JButton find = new JButton("Find");
 		find.setActionCommand("Search");
 		JButton cancel = new JButton("Cancel");
+		cancel.setActionCommand("CancelSearch");
 		JButton next = new JButton("Next");
 		JButton previous = new JButton("Previous");
 		
@@ -557,12 +552,13 @@ public class View extends JFrame{
 		constraints.gridx = 1;
 		searchframe.add(next, constraints);
 		
-		searchframe.setSize(200, 130);
-		searchframe.setVisible(true);
+		searchframe.setSize(200, 125);
 		find.addActionListener(controller);
 		next.addActionListener(controller);
 		previous.addActionListener(controller);
 		cancel.addActionListener(controller);
+		searchframe.setVisible(true);
+		searchframe.setResizable(false);
 	}
 	
 	/**

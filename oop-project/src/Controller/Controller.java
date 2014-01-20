@@ -46,6 +46,7 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 	private Spreadsheet spreadsheet;
 	private int currentSearchRow = 0;
 	private int currentSearchColumn = 0;
+	boolean firstsearch = true;
 
 	public Controller(View view, Spreadsheet spreadsheet){
 		this.view = view;
@@ -82,6 +83,9 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 			view.graphChooser();
 			view.resetGraphChooser();
 
+		}
+		if(e.getActionCommand().equals("CancelSearch")){
+			view.closeSearchWindow();
 		}
 		if(e.getActionCommand().equals("CreateGraph")){
 			if(view.getSelectedGraph().equals("Pie Chart")){
@@ -175,6 +179,12 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 			view.enable3D(true);
 		}
 		if(e.getSource() instanceof JMenuItem){
+			if(e.getActionCommand().equals("New")){
+				for(int i = 0; i < spreadsheet.getCells().size(); i++){
+					view.setCell(spreadsheet.get(i).getRow()-1, spreadsheet.get(i).getCol()-1, "");
+				}
+				spreadsheet.clearSheet();
+			}
 			if(e.getActionCommand().equals("Copy")){
 				String contents = view.getTable().getValueAt(view.getTable().getSelectedRow(), view.getTable().getSelectedColumn()).toString();
 				Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -241,7 +251,7 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 		}
 		if(e.getActionCommand().equals("Search")){
 			String value = view.getSearchText();
-
+			firstsearch = true;
             for (int row = 0; row <= view.getTable().getRowCount() - 1; row++) {
                 for (int col = 0; col <= view.getTable().getColumnCount() - 1; col++) {
                     if (value.equals(view.getTable().getValueAt(row, col))) {
@@ -258,34 +268,68 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 		}
 		if(e.getActionCommand().equals("Next")){
 			String value = view.getSearchText();
-
+			int rowcount = view.getTable().getRowCount();
+			int colcount = view.getTable().getColumnCount();
             for (int row = currentSearchRow; row <= view.getTable().getRowCount() - 1; row++) {
-                for (int col = currentSearchColumn+1; col <= view.getTable().getColumnCount() - 1; col++) {
-                    if (value.equals(view.getTable().getValueAt(row, col))) {
-                    	view.getTable().scrollRectToVisible(view.getTable().getCellRect(row, col, true));
-
-                    	view.getTable().setRowSelectionInterval(row, row);
-                    	view.getTable().setColumnSelectionInterval(col, col);
-                    	currentSearchRow = row;
-                    	currentSearchColumn = col;
-                    	return;
+            	if(firstsearch){
+            		for (int col = currentSearchColumn+1; col <= view.getTable().getColumnCount() - 1; col++) {
+            			firstsearch = false;
+	                    if (value.equals(view.getTable().getValueAt(row, col))) {
+	                    	firstsearch = true;
+	                    	view.getTable().scrollRectToVisible(view.getTable().getCellRect(row, col, true));
+	                    	view.getTable().setRowSelectionInterval(row, row);
+	                    	view.getTable().setColumnSelectionInterval(col, col);
+	                    	currentSearchRow = row;
+	                    	currentSearchColumn = col;
+	                    	return;
+	                    }
+            		}
+            	}
+            	else{
+            		for (int col = 0; col <= view.getTable().getColumnCount() - 1; col++) {
+	                    if (value.equals(view.getTable().getValueAt(row, col))) {
+	                    	view.getTable().scrollRectToVisible(view.getTable().getCellRect(row, col, true));
+	                    	firstsearch = true;
+	                    	view.getTable().setRowSelectionInterval(row, row);
+	                    	view.getTable().setColumnSelectionInterval(col, col);
+	                    	currentSearchRow = row;
+	                    	currentSearchColumn = col;
+	                    	return;
+	                    }
                     }
                 }
             }
 		}
 		if(e.getActionCommand().equals("Previous")){
 			String value = view.getSearchText();
-
-            for (int row = currentSearchRow; row > 0; row--) {
-                for (int col = currentSearchColumn-1; col > 0; col--) {
-                    if (value.equals(view.getTable().getValueAt(row, col))) {
-                    	view.getTable().scrollRectToVisible(view.getTable().getCellRect(row, col, true));
-
-                    	view.getTable().setRowSelectionInterval(row, row);
-                    	view.getTable().setColumnSelectionInterval(col, col);
-                    	currentSearchRow = row;
-                    	currentSearchColumn = col;
-                    	return;
+			int rowcount = view.getTable().getRowCount();
+			int colcount = view.getTable().getColumnCount();
+            for (int row = currentSearchRow; row >= 0; row--) {
+            	if(firstsearch){
+            		firstsearch = false;
+            		for (int col = currentSearchColumn-1; col >= 0; col--) {
+	                    if (value.equals(view.getTable().getValueAt(row, col))) {
+	                    	firstsearch = true;
+	                    	view.getTable().scrollRectToVisible(view.getTable().getCellRect(row, col, true));
+	                    	view.getTable().setRowSelectionInterval(row, row);
+	                    	view.getTable().setColumnSelectionInterval(col, col);
+	                    	currentSearchRow = row;
+	                    	currentSearchColumn = col;
+	                    	return;
+	                    }
+            		}
+            	}
+            	else{
+            		for (int col = view.getTable().getColumnCount()-1; col >= 0; col--) {
+	                    if (value.equals(view.getTable().getValueAt(row, col))) {
+	                    	view.getTable().scrollRectToVisible(view.getTable().getCellRect(row, col, true));
+	                    	firstsearch = true;
+	                    	view.getTable().setRowSelectionInterval(row, row);
+	                    	view.getTable().setColumnSelectionInterval(col, col);
+	                    	currentSearchRow = row;
+	                    	currentSearchColumn = col;
+	                    	return;
+	                    }
                     }
                 }
             }
