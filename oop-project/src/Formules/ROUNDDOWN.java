@@ -40,13 +40,26 @@ public class ROUNDDOWN extends Formule {
 		} catch (NumberFormatException NFS) {
 			return "Error2: Not a number!";
 		}
-
+			
+		
+		
+		
+		
 		// Als dec(aantal cijfers achter de komma) groter dan 1 is..
 		if (dec > 0) {
 			// Er wordt gechekt of er daadwerkelijk 2 elementen zitten in de
 			// String[] temp
 			// Oftwel of er een komma in het getal zat die afgerond moest worden
 			if (temp.length == 2) {
+			
+				/*-----------------------------------*/
+				// in geval dat er minder cijfers achter de getallen staan dan er moet worden afgerond!
+				if(dec>temp[1].length()){
+					return a[0];
+				} else {
+				/*-----------------------------------*/
+				
+				
 				// er wordt dan bij de deel van het getal die achter de komma
 				// staat verder een substring
 				// gemaakt om alleen aantal cijfers achter de komma te houden
@@ -63,7 +76,7 @@ public class ROUNDDOWN extends Formule {
 				// Er wordt weer van de losse delen een getal gemaakt in een
 				// vorm van een string.
 				// Deze deel wordt dan geretourneerd
-				return temp[0] + "." + e;
+				return temp[0] + "." + e;}
 			} else {
 				// Als de String[] temp geen 2 elementen bevat, dan betekent het
 				// dat er geen komma in het getal zat

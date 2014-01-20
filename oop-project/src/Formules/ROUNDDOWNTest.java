@@ -54,8 +54,7 @@ public class ROUNDDOWNTest {
 		assertEquals(r.executable(test), "Error1: Not a number!");
 	}
 
-	
-	//2 kommas!
+	// 2 kommas!
 	@Test
 	public void test7() {
 		String[] test = { "357.34.24", "2" };
@@ -63,7 +62,6 @@ public class ROUNDDOWNTest {
 		assertEquals(r.executable(test), "Error1: Not a number!");
 	}
 
-	
 	// verkeerde parameter
 	@Test
 	public void test8() {
@@ -72,7 +70,6 @@ public class ROUNDDOWNTest {
 		assertEquals(r.executable(test), "Error1: Not a number!");
 	}
 
-	
 	// 0 afronden
 	@Test
 	public void test9() {
@@ -104,13 +101,23 @@ public class ROUNDDOWNTest {
 		ROUNDDOWN r = new ROUNDDOWN();
 		assertEquals(r.executable(test), "780000");
 	}
-	
-	// negatieve afronding die is meer dan het aantal cijfers in de linker deel van getal om af to ronden! 
-		@Test
-		public void test14() {
-			String[] test = { "78.98", "-4" };
-			ROUNDDOWN r = new ROUNDDOWN();
-			assertEquals(r.executable(test), "0");
-		}
+
+	// Afronding naar 6 cjifers cijfers achter de komma
+	// terwijl er maar 2 cijfers achter de komma staan
+	@Test
+	public void test13() {
+		String[] test = { "213.12", "6" };
+		ROUNDDOWN r = new ROUNDDOWN();
+		assertEquals(r.executable(test), "213.12");
+	}
+
+	// negatieve afronding die is meer dan het aantal cijfers in de linker deel
+	// van getal om af to ronden!
+	@Test
+	public void test14() {
+		String[] test = { "78.98", "-4" };
+		ROUNDDOWN r = new ROUNDDOWN();
+		assertEquals(r.executable(test), "0");
+	}
 
 }

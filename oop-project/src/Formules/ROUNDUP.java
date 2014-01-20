@@ -57,6 +57,14 @@ public class ROUNDUP extends Formule {
 			 * afgerond moest worden
 			 */
 			if (temp.length == 2) {
+			
+				/*-----------------------------------*/
+				// in geval dat er minder cijfers achter de getallen staan dan er moet worden afgerond!
+				if(dec>temp[1].length()){
+					return a[0];
+				} else {
+				/*-----------------------------------*/
+				
 				// er wordt dan bij de deel van het getal die achter de komma
 				// staat verder een substring
 				// gemaakt om alleen aantal cijfers achter de komma te houden
@@ -73,7 +81,7 @@ public class ROUNDUP extends Formule {
 				// Er wordt weer van de losse delen een getal gemaakt in een
 				// vorm van een string.
 				// Deze deel wordt dan geretourneerd
-				return temp[0] + "." + e;
+				return temp[0] + "." + e;}
 			} else {
 				// Als de String[] temp geen 2 elementen bevat, dan betekent het
 				// dat er geen komma in het getal zat
@@ -102,7 +110,6 @@ public class ROUNDUP extends Formule {
 				// Wij willen nu eerst het getal naar boven ronden dus wij
 				// parsen het naar int en verhogen het met 1.
 				int ans = Integer.parseInt(answer);
-				System.out.println(ans);
 
 				// wij maken weer een string ervan
 				if (Double.parseDouble(a[0]) >= 0) {

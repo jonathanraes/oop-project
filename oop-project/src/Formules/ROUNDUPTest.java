@@ -106,6 +106,17 @@ public class ROUNDUPTest {
 		assertEquals(r.executable(test), "Error1: Not a number!");
 	}
 
+	
+	// Afronding naar 6 cjifers cijfers achter de komma
+	// terwijl er maar 2 cijfers achter de komma staan
+	@Test
+	public void test16() {
+		String[] test = { "213.12", "6" };
+		ROUNDUP r = new ROUNDUP();
+		assertEquals(r.executable(test), "213.12");
+	}
+
+	
 	// negatieve afronding die is meer dan het aantal cijfers in de linker deel
 	// van getal om af to ronden!
 	@Test
