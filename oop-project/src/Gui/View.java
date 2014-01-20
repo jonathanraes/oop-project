@@ -33,7 +33,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 
-import Controller.ColorEditor;
 import Controller.Controller;
 import OOP.Spreadsheet;
 /**
@@ -52,11 +51,9 @@ public class View extends JFrame{
 	private JScrollPane pane;
 	private DefaultTableModel model;
 	private Controller controller;
-	private ColorEditor colorEditor;
 	private final String headers[];
 	private JList rowHeader;
-	private JFrame fileChooserFrame;
-	private final JFileChooser fileChooser = new JFileChooser();
+	private JFileChooser fileChooser;
 	
 	//Graph Chooser window attributes
 	private JTextField textfield;
@@ -87,7 +84,6 @@ public class View extends JFrame{
 	
 	public View(Spreadsheet spreadsheet){
 		controller = new Controller(this, spreadsheet);
-		colorEditor = new ColorEditor(this);
 		headers = new String[100000];
 		setLayout(new BorderLayout());
 		createTable();
@@ -133,10 +129,8 @@ public class View extends JFrame{
 		
 		topPanel.add(label);
 		topPanel.add(textfield);
-//		topPanel.add(colorbutton);
 		topPanel.add(graph);
 		add(topPanel, BorderLayout.NORTH);
-//		colorbutton.addActionListener(colorEditor);
 		graph.addActionListener(controller);
 		textfield.getDocument().addDocumentListener(controller);
 	}
@@ -214,7 +208,6 @@ public class View extends JFrame{
 	    JMenuItem selectall = new JMenuItem("Select All");
 	    JMenuItem find = new JMenuItem("Find");
 	    JMenuItem deletecontents = new JMenuItem("Delete Contents");
-	    JMenuItem changecolor = new JMenuItem("Set Color");
 
 	    //adding the menu items to the right JMenu
 	    fileMenu.add(newfile);
@@ -229,7 +222,6 @@ public class View extends JFrame{
 		editMenu.add(selectall);
 		editMenu.add(find);
 		editMenu.add(deletecontents);
-		editMenu.add(changecolor);
 		
 		open.setActionCommand("openfilechooser");
 		open.addActionListener(controller);
@@ -497,6 +489,7 @@ public class View extends JFrame{
 	 * openFileChooser creates a JFrame for the JFileChooser, adds it and sets visible.
 	 */
 	public void createFileChooser(){
+		fileChooser = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("XML Files", "xml");
 		fileChooser.setFileFilter(filter);
 		fileChooser.addActionListener(controller);
