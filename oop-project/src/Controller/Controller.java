@@ -509,7 +509,6 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 	 */
 	public String parseFunction(String function){
 		try{
-			String formule = function;
 			if(function.substring(0, 1).equals("=")){ //Check to see if there is a function at all
 				//getting the required function
 				function = function.substring(1).toUpperCase();
@@ -518,97 +517,49 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 				Class c = Class.forName(functionname);
 				Object o = c.newInstance();
 				Formule f = (Formule)o;
-				
 				//getting the range of cells
-				/*
-				String[] cellrange = formula[1].split(":");
-				String firstcell = cellrange[0];
-				String lastcell = cellrange[1];
-			
-				//retrieving the cells contents
-				String[] values = parseCellData(firstcell,lastcell);
-				*/
 				ArrayList<String> valuesList = new ArrayList<String>();
 				String[] parameters = formula[1].split(", |,");
-				int counter = 0;
 				ArrayList<String> expressieList = new ArrayList<String>();
 				for(int i=0; i<parameters.length; i++){
 					if(parameters[i].contains(":")){
 						String[] cellrange = parameters[i].split(":");
 						String firstcell = cellrange[0];
 						String lastcell = cellrange[1];
+						//retrieving the cells contents
 						String[] interval = parseCellData(firstcell, lastcell);
 						for(int j = 0; j<interval.length;j++){
-							/*
-							if(i==0&&j==0){
-								valuesList.add("");
-								valuesList.add("");
-								valuesList.add("");
-							}
-							*/
 							valuesList.add(interval[j]);
 						}
 					}else if(parameters[i].matches("[a-zA-Z]+[0-9]+")){
+						//retrieving the cells contents
 						String[] celvalue = parseCellData(parameters[i],parameters[i]);
-						/*
-						if(i==0){
-							valuesList.add("");
-							valuesList.add("");
-							valuesList.add("");
-						}
-						*/
 						valuesList.add(celvalue[0]);
 						
 					}else{
 						try{
 							Double.parseDouble(parameters[i]);
-							/*
-							if(i==0){
-								valuesList.add("");
-								valuesList.add("");
-								valuesList.add("");
-							}
-							*/
 							valuesList.add(parameters[i]);
 						}catch(NumberFormatException NFE){
-							/*
-							if(i==0){
-								valuesList.add("");
-								valuesList.add("");
-								valuesList.add("");
-							}
-							
-							valuesList.set(0, parameters[i]);
-							*/
-
-							// expressieList.add(parameters[i]);
-							
-							// Hier moet ik zijn <------------------------------------------------------
-							
 							// Split de String met een operator. 
 							String[] cellen = parameters[i].split("<>|<=|>=|<|>|=");
 							/* Als het geen logische expressie is, krijg je maar een array van 1 lang, hierop controleren we hier.
 							 * Als het namelijk wel een logische expressie is, ontstaat er een array met een lengte van 2.
 							 */
 							if(cellen.length == 2){
-
 								expressieList.add(parameters[i]);
-								
 								// Echter als de expressie een 1 cellige expressie is, bijv "<B4", dan is de eerste leeg of een aantal spaties afhankelijk van de invoer.
 									for(int count = 0; count<cellen.length;count++){
 										if(cellen[count].matches("[a-zA-Z]+[0-9]+")){
+											//retrieving the cells contents
 											expressieList.add(parseCellData(cellen[count],cellen[count])[0]);
-											// valuesList.set(count+1, parseCellData(cellen[count],cellen[count])[0]);
 										}else{
 											expressieList.add(cellen[count]);
 										}
-										
 									}
-								
 							}else{
 								valuesList.add(parameters[i]);
 							}
-							
 						}
 					}
 				}
@@ -621,26 +572,12 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 				for(int i=0; i<valuesList.size();i++){
 					values[i+expressieList.size()] = valuesList.get(i);
 				}
-				/*
-				if(valuesList.get(0).isEmpty()){
-					values = new String[valuesList.size() -3];
-					for(int i=0;i<valuesList.size()-3;i++){
-						values[i] = valuesList.get(i+3);
-					}
-				}else{
-					values = new String[valuesList.size()];
-					for(int i=0;i<valuesList.size();i++){
-						values[i] = valuesList.get(i);
-					}
-				}
-				*/
-	// --------------------------------Einde nieuwe code------------------------------------------------
+				
 				for(int i = 0; i< values.length; i++){
 					System.out.println(values[i]);
 				}
 				
 				String content = f.executable(values);
-				
 				return content;
 			}
 		} 
