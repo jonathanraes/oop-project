@@ -10,7 +10,7 @@ import org.junit.runners.Suite.SuiteClasses;
 		ISLOGICALTest.class, ISNUMBERTest.class, LOWERTest.class,
 		MAXTest.class, MEDIANTest.class, MINTest.class, MODTest.class, NOTTest.class, ORTest.class,
 		POWERTest.class, PRODUCTTest.class, PROPERTest.class, SIGNTest.class,
-		SQRTTest.class, SUMIFTest.class, SUMTest.class })
+		SQRTTest.class, SUMIFTest.class, SUMTest.class, ROUNDUPTest.class, ROUNDDOWNTest.class, ORTest.class })
 public class AllTests {
 
 }

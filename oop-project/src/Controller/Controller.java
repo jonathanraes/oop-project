@@ -635,6 +635,10 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 				}
 				*/
 	// --------------------------------Einde nieuwe code------------------------------------------------
+				for(int i = 0; i< values.length; i++){
+					System.out.println(values[i]);
+				}
+				
 				String content = f.executable(values);
 				
 				return content;
