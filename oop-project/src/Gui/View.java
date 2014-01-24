@@ -111,7 +111,7 @@ public class View extends JFrame{
 		Font font = new Font("Helvetica", Font.ITALIC, 13);
 		label.setForeground(Color.blue);
 		label.setFont(font);
-		label.setText("F(x)=");
+		label.setText("F(x)");
 		label.setBackground(Color.white);
 		Border paddingBorder = BorderFactory.createEmptyBorder(0,3,0,3);
 		label.setBorder(BorderFactory.createCompoundBorder(paddingBorder,paddingBorder));

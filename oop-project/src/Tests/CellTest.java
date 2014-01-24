@@ -1,5 +1,6 @@
 package Tests;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -20,6 +21,7 @@ public class CellTest {
 		cell1 = new Cell(1,1,"Een");
 		cell2 = new Cell(1,1,"Een");
 		cell3 = new Cell(2,2,"Twee");
+		cell4 = new Cell(2,1, "Drie");
 		cell5 = new Cell(5,6,"Vijf");
 	}
 	
@@ -74,7 +76,13 @@ public class CellTest {
 		assertEquals(cell1.toString(), "Rij: 1\nKolom: 1\nContents: Een");
 		
 	}
-	
+	@Test
+	public void testEquals() {
+		assertFalse(cell1.equals(cell3));
+		assertFalse(cell1.equals(null));
+		assertFalse(cell1.equals(cell4));
+		assertFalse(cell3.equals(cell4));
+	}
 	@Test
 	public void testAddFunction(){
 		cell1.addFunction("=SUM(1,1)");
