@@ -21,7 +21,7 @@ public class SpreadSheetTest {
 	Cell cell5;
 	Cell emptycell1;
 	Cell emptycell;
-	
+	String XML;
 	@Before
 	public void setUp() throws Exception {
 		testsheet = new Spreadsheet();
@@ -31,13 +31,14 @@ public class SpreadSheetTest {
 		cell5 = new Cell(5,6,"Vijf");
 		emptycell1 = new Cell(1,1,"");
 		emptycell = new Cell(55,3,"");
+		XML = "TestingFIles/simpel.xml";
 	}
 
 	@After
 	public void tearDown() throws Exception {
 		//testsheet.clearSheet();
 	}
-
+	
 	@Test
 	public void testSpreadsheet() {
 		assertNotNull(testsheet);
@@ -75,10 +76,15 @@ public class SpreadSheetTest {
 
 	@Test
 	public void testReadXML() {
+		testsheet = Spreadsheet.readXML(XML);
+		Spreadsheet failsheet = Spreadsheet.readXML("TestingFiles/simple.xml");
 	}
 
 	@Test
 	public void testWriteXML() {
+		testsheet = Spreadsheet.readXML(XML);
+		testsheet.writeXML("TestingFiles/output.xml");
+		testsheet.writeXML("TestFiles/output.xml");
 	}
 
 	@Test

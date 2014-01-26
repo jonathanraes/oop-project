@@ -124,7 +124,8 @@ public class Spreadsheet extends Observable{
 			}			
 						
 		} catch (ParserConfigurationException | IOException | SAXException | NumberFormatException e) {
-			e.printStackTrace();
+			System.out.println("Error bij readXML.");
+			//e.printStackTrace();
 		}
 		return readSheet;
 	}
@@ -185,7 +186,7 @@ public class Spreadsheet extends Observable{
 			
 		}catch(Exception e){
 			// TODO: precieze exception/ per exception apparte prints.
-			System.out.println("Foutmelding in writeXML");
+			System.out.println("Foutmelding in writeXML.");
 		}
 	}
 	
