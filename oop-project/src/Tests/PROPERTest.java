@@ -1,10 +1,12 @@
-package Formules;
+package Tests;
 /**
  * Testklasse voor de Klasse PROPER
  */
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import Formules.PROPER;
 
 public class PROPERTest {
 

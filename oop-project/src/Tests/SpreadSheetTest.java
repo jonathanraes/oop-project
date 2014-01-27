@@ -75,10 +75,18 @@ public class SpreadSheetTest {
 
 	@Test
 	public void testReadXML() {
+		testsheet.readXML("C:/Users/Jonathan/git/oop-project/oop-project/bin/Tests/test.xml");
+		assertEquals(testsheet.getCellAt(1, 1), new Cell(1,1,"A1"));
+		assertEquals(testsheet.getCellAt(5, 3).getContent(), "=SUM(A5:B5)");
 	}
 
 	@Test
 	public void testWriteXML() {
+		testsheet.add(cell1);
+		testsheet.add(cell2);
+		Cell func = new Cell(15,3,"4","=SUM(1,4)");
+		testsheet.add(func);
+		testsheet.writeXML("C:/Users/Jonathan/git/oop-project/oop-project/bin/Tests/testwrite.xml");
 	}
 
 	@Test

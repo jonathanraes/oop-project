@@ -1,10 +1,12 @@
-package Formules;
+package Tests;
 /**
  * Test voor de klasse POWER
  */
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import Formules.POWER;
 
 public class POWERTest {
 

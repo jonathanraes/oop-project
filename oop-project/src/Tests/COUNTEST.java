@@ -1,4 +1,4 @@
-package Formules;
+package Tests;
 /**
  * Test case van COUNT
  * @author Maiko
@@ -6,6 +6,8 @@ package Formules;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import Formules.COUNT;
 
 public class COUNTEST {
 

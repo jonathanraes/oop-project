@@ -1,4 +1,4 @@
-package Formules;
+package Tests;
 
 /**
  * Testklasse voor Klasse MIN
@@ -6,6 +6,8 @@ package Formules;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import Formules.MIN;
 
 public class MINTest {
 

@@ -1,6 +1,5 @@
 package OOP;
 
-import Formules.Formule;
 
 /**
  * The Class Cell represents a Cell object.

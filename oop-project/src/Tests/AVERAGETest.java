@@ -1,4 +1,4 @@
-package Formules;
+package Tests;
 /**
  * Junit test van AVERAGE
  * @author Maiko
@@ -6,6 +6,8 @@ package Formules;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import Formules.AVERAGE;
 
 public class AVERAGETest {
 	//test met 3 identieke int

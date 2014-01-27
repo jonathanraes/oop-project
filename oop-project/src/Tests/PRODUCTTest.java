@@ -1,8 +1,10 @@
-package Formules;
+package Tests;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import Formules.PRODUCT;
 
 public class PRODUCTTest {
 
