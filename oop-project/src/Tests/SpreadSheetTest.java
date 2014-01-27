@@ -21,7 +21,7 @@ public class SpreadSheetTest {
 	Cell cell5;
 	Cell emptycell1;
 	Cell emptycell;
-	
+	String XML;
 	@Before
 	public void setUp() throws Exception {
 		testsheet = new Spreadsheet();
@@ -31,13 +31,14 @@ public class SpreadSheetTest {
 		cell5 = new Cell(5,6,"Vijf");
 		emptycell1 = new Cell(1,1,"");
 		emptycell = new Cell(55,3,"");
+		XML = "TestingFIles/simpel.xml";
 	}
 
 	@After
 	public void tearDown() throws Exception {
 		//testsheet.clearSheet();
 	}
-
+	
 	@Test
 	public void testSpreadsheet() {
 		assertNotNull(testsheet);
@@ -75,16 +76,16 @@ public class SpreadSheetTest {
 
 	@Test
 	public void testReadXML() {
-		testsheet.readXML("C:/Users/Jonathan/git/oop-project/oop-project/bin/Tests/test.xml");
-		assertEquals(testsheet.getCellAt(1, 1), new Cell(1,1,"A1"));
+		testsheet = Spreadsheet.readXML(XML);
+		Spreadsheet failsheet = Spreadsheet.readXML("TestingFiles/simple.xml");
 		assertEquals(testsheet.getCellAt(5, 3).getContent(), "=SUM(A5:B5)");
 	}
 
 	@Test
 	public void testWriteXML() {
-		testsheet.add(cell1);
-		testsheet.add(cell2);
-		Cell func = new Cell(15,3,"4","=SUM(1,4)");
+		testsheet = Spreadsheet.readXML(XML);
+		testsheet.writeXML("TestingFiles/output.xml");
+		testsheet.writeXML("TestFiles/output.xml");
 		testsheet.add(func);
 		testsheet.writeXML("C:/Users/Jonathan/git/oop-project/oop-project/bin/Tests/testwrite.xml");
 	}
