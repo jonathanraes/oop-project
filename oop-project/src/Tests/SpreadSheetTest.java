@@ -78,7 +78,6 @@ public class SpreadSheetTest {
 	public void testReadXML() {
 		testsheet = Spreadsheet.readXML(XML);
 		Spreadsheet failsheet = Spreadsheet.readXML("TestingFiles/simple.xml");
-		assertEquals(testsheet.getCellAt(5, 3).getContent(), "=SUM(A5:B5)");
 	}
 
 	@Test
@@ -86,8 +85,6 @@ public class SpreadSheetTest {
 		testsheet = Spreadsheet.readXML(XML);
 		testsheet.writeXML("TestingFiles/output.xml");
 		testsheet.writeXML("TestFiles/output.xml");
-		testsheet.add(func);
-		testsheet.writeXML("C:/Users/Jonathan/git/oop-project/oop-project/bin/Tests/testwrite.xml");
 	}
 
 	@Test
