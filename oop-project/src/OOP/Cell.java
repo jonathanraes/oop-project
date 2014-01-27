@@ -27,6 +27,13 @@ public class Cell {
 		setContent(content);
 	}
 	
+	/**
+	 * Constructor for the cell also adding a function.
+	 * @param row int - row number
+	 * @param col int - column number
+	 * @param content String - contents 
+	 * @param function String - the function as a string
+	 */
 	public Cell(int row, int col, String content, String function){
 		setRow(row);
 		setCol(col);		
@@ -102,10 +109,18 @@ public class Cell {
 		return false;
 	}
 	
+	/**
+	 * Adds a function to the cell
+	 * @param function String: the function
+	 */
 	public void addFunction(String function){
 		this.formule = function;
 	}
 	
+	/**
+	 * returns the cells function.
+	 * @return String: the cells function.
+	 */
 	public String getFunction(){
 		return formule;
 	}

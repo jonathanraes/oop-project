@@ -1,6 +1,5 @@
 package Controller;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -186,15 +185,21 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 				spreadsheet.clearSheet();
 			}
 			if(e.getActionCommand().equals("Copy")){
-				String contents = view.getTable().getValueAt(view.getTable().getSelectedRow(), view.getTable().getSelectedColumn()).toString();
-				Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-				clipboard.setContents(new StringSelection(contents), null);
+				try{
+					String contents = view.getTable().getValueAt(view.getTable().getSelectedRow(), view.getTable().getSelectedColumn()).toString();
+					Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+					clipboard.setContents(new StringSelection(contents), null);
+				}catch(NullPointerException ex){
+				}
 			}
 			else if(e.getActionCommand().equals("Cut")){
-				String contents = view.getTable().getValueAt(view.getTable().getSelectedRow(), view.getTable().getSelectedColumn()).toString();
-				Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-				clipboard.setContents(new StringSelection(contents), null);
-				view.getTable().setValueAt("", view.getTable().getSelectedRow(), view.getTable().getSelectedColumn());
+				try{
+					String contents = view.getTable().getValueAt(view.getTable().getSelectedRow(), view.getTable().getSelectedColumn()).toString();
+					Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+					clipboard.setContents(new StringSelection(contents), null);
+					view.getTable().setValueAt("", view.getTable().getSelectedRow(), view.getTable().getSelectedColumn());
+				}catch(NullPointerException ex){
+				}
 			}
 			else if(e.getActionCommand().equals("Paste")){
 				String result = "";
@@ -206,7 +211,7 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 			      }
 			      catch (UnsupportedFlavorException | IOException ex){
 			      }
-			    }
+			  }
 			    view.getModel().setValueAt(result, view.getTable().getSelectedRow(), view.getTable().getSelectedColumn());
 			}
 			else if(e.getActionCommand().equals("Select All")){
@@ -338,6 +343,11 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 
 //	KeyListener--------------------------------------------------------------------------------------------------------------
 	
+	/**
+	 * This method listens for key presses in the JTable. 
+	 * It only responds to left arrow key and down arrow key presses. 
+	 * In response it expands the JTable by adding rows and/or columns.
+	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if(e.getExtendedKeyCode() == 39){
@@ -354,12 +364,18 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 			}
 		}
 	}
-
+	
+	/**
+	 * This method is required but not used by the application.
+	 */
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub	
 	}
-
+	
+	/**
+	 * This method is required but not used by the application.
+	 */
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub	
@@ -367,12 +383,19 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 	
 //	HierarchyBoundsListener----------------------------------------------------------------------------------------------------
 	
+	/**
+	 * This method is required but not used by the application.
+	 */
 	@Override
 	public void ancestorMoved(HierarchyEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	/**
+	 * This method listens to changes in the size of the JFrame.
+	 * It responds by adding row and or columns in order to fill the screen entirely with cells.
+	 */
 	@Override
 	public void ancestorResized(HierarchyEvent e) {
 		Dimension size = view.getSize();
@@ -387,6 +410,11 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 	
 //	DocumentListener--------------------------------------------------------------------------------------------------------
 	
+	/**
+	 * This method listens to changes in the textfield in the top bar.
+	 * It responds by putting the text in the current selected cell.
+	 * If no cell is selected the contents will be put in cell A1.
+	 */
 	@Override
 	public void insertUpdate(DocumentEvent e) {
 		try{
@@ -399,12 +427,15 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 			//No cell was selected while text was put in the TextField: the first cell will be used.
 			view.getTable().setColumnSelectionInterval(0, 0);
 			view.getTable().setRowSelectionInterval(0, 0);
-			int col = view.getTable().getSelectedColumn();				
-			int row = view.getTable().getSelectedRow();
-			view.setCell(row, col, view.getTextField().getText());			
+			view.setCell(0, 0, view.getTextField().getText());			
 		}
 	}
-
+	
+	/**
+	 * This method effectively does the same thing as insertupdate. 
+	 * The try catch block is unnecessary since before something can be removed from the textframe
+	 * something has to be added first, and when that happens cell A1 will be selected.
+	 */
 	@Override
 	public void removeUpdate(DocumentEvent e) {
 		//When text is removed from the TextField the selected cell is also updated.
@@ -413,6 +444,9 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 		view.setCell(row, col, view.getTextField().getText());			
 	}
 	
+	/**
+	 * This method is required but not used by the application.
+	 */
 	@Override
 	public void changedUpdate(DocumentEvent e) {
 		//Event is never fired
@@ -493,7 +527,13 @@ public class Controller implements ActionListener, KeyListener, HierarchyBoundsL
 				int extraRowsNeeded = row - view.getModel().getRowCount();
 				for(int j = 0; j <= extraRowsNeeded; j++){
 					view.updateRowHeader();
-					view.getModel().setRowCount(view.getRowCount()+1);
+					view.addRows();
+				}
+			}
+			if(col >= view.getTable().getColumnCount()){
+				int extraColsNeeded = col - view.getTable().getColumnCount();
+				for(int j = 0; j <= extraColsNeeded; j++){
+					view.addColumns();
 				}
 			}
 			view.setCell(row, col, value);
